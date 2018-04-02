@@ -6,7 +6,12 @@ module Minesweeper_2pl
       self.bcli.print(self.board)
     end
 
-    def setup
+    def setup(size)
+      bcli = BoardCli.new
+      board = Board.new
+      self.board = board
+      self.board.size = size
+      self.bcli = bcli
     end
   end
 end

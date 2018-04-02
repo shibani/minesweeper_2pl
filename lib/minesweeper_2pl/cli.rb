@@ -4,6 +4,6 @@ module Minesweeper_2pl
     def print(msg)
       puts msg
     end
-    
+
   end
 end
