@@ -1,9 +1,9 @@
 module Minesweeper_2pl
   class Game
-    attr_accessor :cli, :board
+    attr_accessor :bcli, :board
 
     def printBoard
-      self.cli.print(self.board)
+      self.bcli.print(self.board)
     end
 
     def setup

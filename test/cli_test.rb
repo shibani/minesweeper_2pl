@@ -10,7 +10,7 @@ class CliTest < Minitest::Test
   def test_that_cli_can_write_to_the_console
     cli = Minesweeper_2pl::CLI.new
     out, err = capture_io do
-      cli.output
+      cli.print("welcome to minesweeper\n")
     end
     assert_equal("welcome to minesweeper\n", out)
   end
