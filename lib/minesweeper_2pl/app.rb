@@ -1,7 +1,9 @@
 module Minesweeper_2pl
   class App
+    attr_accessor :game, :cli
+
     def call
-      "Hello World"
+      self.game.setup
     end
   end
 end
