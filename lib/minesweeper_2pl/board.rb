@@ -11,8 +11,8 @@ module Minesweeper_2pl
       set_row_size(positions)
       set_bombs
       @positions = []
-      positions.times do |count|
-        if self.bomb_positions.include?(count)
+      positions.times do |position|
+        if self.bomb_positions.include?(position)
           @positions << "B"
         else
           @positions << " "
@@ -21,8 +21,9 @@ module Minesweeper_2pl
     end
 
     def set_bombs
+      @bomb_positions = []
       bombs = (0..self.size-1).to_a.shuffle
-      @bomb_positions = bombs.slice(0, bomb_count)
+      @bomb_positions = bombs.first(bomb_count)
     end
 
     def set_row_size(size)

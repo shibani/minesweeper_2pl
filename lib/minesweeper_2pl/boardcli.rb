@@ -23,7 +23,7 @@ module Minesweeper_2pl
     def set_board(positions, rowsize)
       @board = NEWLINE + INTRO
       rowsize.to_i.times do |count|
-        @board += HEADER_CELL_LEFT + count.to_s + HEADER_CELL_RIGHT
+        @board += HEADER_CELL_LEFT + (count).to_s + HEADER_CELL_RIGHT
       end
       @board += NEWLINE + INTRO
       rowsize.to_i.times do
@@ -34,9 +34,9 @@ module Minesweeper_2pl
       rowsize.to_i.times do |i|
         rowsize.to_i.times do |j|
           if self.show_bombs
-            cell_content = positions[i*j] == "B" ? "\u{1f4a3}" : "  "
+            cell_content = positions[(i*rowsize)+(j)-1] == "B" ? "\u{1f4a3}" : "  "
           else
-            cell_content = positions[i*j] == "B" ? "  " : "  "
+            cell_content = "  "
           end
           if j == rowsize - 1
             @board += CELL_LEFT + cell_content + CELL_END

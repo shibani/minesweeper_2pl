@@ -16,7 +16,7 @@ module Minesweeper_2pl
     def printBoard
       positions = self.board_positions
       rowsize = self.board.row_size
-      self.bcli.show_bombs = false
+      self.bcli.show_bombs = true
       self.bcli.set_board(positions, rowsize)
       self.bcli.print_message(self.bcli.board)
     end

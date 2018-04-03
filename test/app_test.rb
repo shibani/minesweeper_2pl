@@ -92,7 +92,7 @@ class AppTest < Minitest::Test
     app = Minesweeper_2pl::App.new
 
     mocked_method = MiniTest::Mock.new
-    mocked_method.expect :setup, nil, [100, 60]
+    mocked_method.expect :setup, nil, [100, 10]
 
     app.stub(:game, mocked_method) do
       app.setup
