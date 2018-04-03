@@ -18,7 +18,7 @@ module Minesweeper_2pl
     end
 
     def play_game
-      self.game.printBoard
+      self.game.print_board
     end
   end
 end

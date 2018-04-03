@@ -7,14 +7,14 @@ class GameTest < Minitest::Test
     @bcli = Minesweeper_2pl::BoardCli.new
     @game.board = @board
   end
-  
+
   def test_that_it_has_a_game_class
     game = Minesweeper_2pl::Game.new
     refute_nil @game
   end
 
-  def test_that_it_has_a_printBoard_method
-    assert @game.respond_to?(:printBoard)
+  def test_that_it_has_a_print_board_method
+    assert @game.respond_to?(:print_board)
   end
 
   def test_that_it_has_a_setup_method
@@ -53,58 +53,58 @@ class GameTest < Minitest::Test
     assert_equal 60, result
   end
 
-  def test_that_it_calls_printBoard
+  def test_that_it_calls_print_board
     mocked_method = MiniTest::Mock.new
-    @game.stub(:printBoard, mocked_method) do
-      @game.printBoard
+    @game.stub(:print_board, mocked_method) do
+      @game.print_board
     end
     mocked_method.verify
   end
 
-  def test_that_printBoard_can_call_the_boardclis_print_message_method
+  def test_that_print_board_can_call_the_boardclis_print_message_method
     @game.bcli = @bcli
     @game.board = @board
 
     mocked_method = MiniTest::Mock.new
 
     @game.bcli.stub(:print_message, mocked_method) do
-      @game.printBoard
+      @game.print_board
     end
     mocked_method.verify
   end
 
-  def test_that_printBoard_can_call_the_boardclis_print_method
+  def test_that_print_board_can_call_the_boardclis_print_method
     @game.bcli = @bcli
     @game.board = @board
 
     mocked_method = MiniTest::Mock.new
 
     @game.bcli.stub(:print, mocked_method) do
-      @game.printBoard
+      @game.print_board
     end
     mocked_method.verify
   end
 
-  def test_that_printBoard_can_call_the_boardclis_set_board_method
+  def test_that_print_board_can_call_the_boardclis_set_board_method
     @game.bcli = @bcli
     @game.board = @board
 
     mocked_method = MiniTest::Mock.new
 
     @game.bcli.stub(:set_board, mocked_method) do
-      @game.printBoard
+      @game.print_board
     end
     mocked_method.verify
   end
 
-  def test_that_printBoard_can_call_the_boardclis_show_bombs_method
+  def test_that_print_board_can_call_the_boardclis_show_bombs_method
     @game.bcli = @bcli
     @game.board = @board
 
     mocked_method = MiniTest::Mock.new
 
     @game.bcli.stub(:show_bombs, mocked_method) do
-      @game.printBoard
+      @game.print_board
     end
     mocked_method.verify
   end

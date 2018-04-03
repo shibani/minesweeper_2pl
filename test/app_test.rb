@@ -91,12 +91,12 @@ class AppTest < Minitest::Test
     mocked_method.verify
   end
 
-  def test_play_game_calls_games_printboard_method
+  def test_play_game_calls_games_print_board_method
     @app.setup
 
     mocked_method = MiniTest::Mock.new
 
-    @app.game.stub(:printBoard, mocked_method) do
+    @app.game.stub(:print_board, mocked_method) do
       @app.play_game
     end
     mocked_method.verify
