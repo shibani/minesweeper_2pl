@@ -24,6 +24,10 @@ module Minesweeper_2pl
         self.cli.ask_for_move
         move = self.cli.get_player_input(self.game)
       end
+      self.game.move_to_coordinates(move)
+      #check if position is a bomb
+      #place on board
+      #show message
     end
   end
 end

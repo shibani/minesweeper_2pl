@@ -1,9 +1,7 @@
 module Minesweeper_2pl
   class BoardCli
 
-    attr_accessor :message
-    attr_accessor :board
-    attr_accessor :show_bombs
+    attr_accessor :message, :board, :show_bombs
 
     NEWLINE = "\n"
     ALPHA_LEFT = "  "

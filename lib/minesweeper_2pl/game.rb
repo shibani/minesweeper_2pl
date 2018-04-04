@@ -36,5 +36,9 @@ module Minesweeper_2pl
     def set_board_positions(size)
       self.board.set_positions(size)
     end
+
+    def move_to_coordinates(move)
+      move[0] + self.board.row_size * move[1]
+    end
   end
 end

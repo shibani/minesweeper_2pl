@@ -5,7 +5,7 @@ class GameTest < Minitest::Test
     @game = Minesweeper_2pl::Game.new
     @board = Minesweeper_2pl::Board.new
     @bcli = Minesweeper_2pl::BoardCli.new
-    @game.board = @board
+    @game.setup(100,10)
   end
 
   def test_that_it_has_a_game_class
@@ -156,4 +156,9 @@ class GameTest < Minitest::Test
     mocked_method.verify
   end
 
+  def test_that_it_can_convert_user_input_to_a_move_on_the_board
+    move = [7,6]
+    result = @game.move_to_coordinates(move)
+    assert_equal 67, result
+  end
 end

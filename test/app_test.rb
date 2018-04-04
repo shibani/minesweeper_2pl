@@ -111,4 +111,11 @@ class AppTest < Minitest::Test
     mocked_cli.verify
   end
 
+  def test_play_game_calls_the_convert_coordinates_method
+    mocked_game = MiniTest::Mock.new
+    @mocked_app.game.stub(:move_to_coordinates, mocked_game) do
+      @mocked_app.setup
+    end
+    mocked_game.verify
+  end
 end

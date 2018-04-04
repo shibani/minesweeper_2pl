@@ -24,6 +24,7 @@ module Minesweeper_2pl
 
     def set_row_size(size)
       @row_size = Math.sqrt(size)
+      @row_size.to_i
     end
   end
 end
