@@ -1,3 +1,4 @@
+require 'stringio'
 require "test_helper"
 require "io_test_helpers"
 
@@ -46,6 +47,18 @@ class CliTest < Minitest::Test
     assert_output "Please try again!\n" do
       simulate_stdin("bad input") { @cli.get_player_input }
     end
+  end
+
+  def test_that_it_returns_an_array_if_input_is_valid
+    io = StringIO.new
+    io.puts "1,1"
+    io.rewind
+    $stdin = io
+
+    result = @cli.get_player_input
+    $stdin = STDIN
+
+    assert_equal([1,1], result)
   end
 
 end

@@ -16,12 +16,16 @@ module Minesweeper_2pl
         coords = input.split(",")
         if (coords[0].match(/^(\d)+$/)) && (coords[1].match(/^(\d)+$/))
           puts "You selected #{input}. Placing your move."
+          coords = [coords[0].to_i, coords[1].to_i]
         else
           puts "Please try again!"
+          coords = nil
         end
       else
         puts "Please try again!"
+        coords = nil
       end
+      coords
     end
 
   end
