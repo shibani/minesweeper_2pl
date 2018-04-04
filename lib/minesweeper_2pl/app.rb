@@ -19,6 +19,8 @@ module Minesweeper_2pl
 
     def play_game
       self.game.print_board
+      self.cli.ask_for_move
+      self.cli.get_player_input
     end
   end
 end

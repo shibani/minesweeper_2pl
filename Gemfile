@@ -8,4 +8,5 @@ gemspec
 #group :test do
   gem "minitest"
   gem "spy"
+  gem 'minitest-stub_any_instance'
 #end

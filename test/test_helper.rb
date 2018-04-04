@@ -4,3 +4,4 @@ require "minesweeper_2pl"
 #require 'minitest/unit'
 require 'minitest/autorun'
 #require 'minitest/pride'
+require 'minitest/stub_any_instance'
