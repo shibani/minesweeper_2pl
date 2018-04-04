@@ -17,15 +17,19 @@ module Minesweeper_2pl
     end
 
     def set_board_size(board_size)
+      self.board.size = board_size
     end
 
     def set_bomb_count(bomb_count)
+      self.board.bomb_count = bomb_count
     end
 
     def board_positions
+      self.board.positions
     end
 
     def set_board_positions(size)
+      self.board.set_positions(size)
     end
   end
 end

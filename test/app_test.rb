@@ -33,9 +33,10 @@ class AppTest < Minitest::Test
   def test_that_it_calls_the_apps_setup_method
     mocked_method = MiniTest::Mock.new
     @mocked_app.stub(:setup, mocked_method) do
-      @mocked_app.start
+      @mocked_app.stub(:play_game, nil) do
+        @mocked_app.start
+      end
     end
-
     mocked_method.verify
   end
 

@@ -10,19 +10,19 @@ module Minesweeper_2pl
       self.print(string)
     end
 
-    def get_player_input
+    def get_player_input(game)
       input = gets.chomp
       if input.include? ","
         coords = input.split(",")
-        if (coords[0].match(/^(\d)+$/)) && (coords[1].match(/^(\d)+$/))
+        if ((coords[0].match(/^(\d)+$/)) && (coords[1].match(/^(\d)+$/)) && (coords[0].to_i <= game.board.row_size) && (coords[1].to_i <= game.board.row_size))
           puts "You selected #{input}. Placing your move."
           coords = [coords[0].to_i, coords[1].to_i]
         else
-          puts "Please try again!"
+          puts "Expecting one digit for the row and one digit for the column. Please try again!"
           coords = nil
         end
       else
-        puts "Please try again!"
+        puts "Expecting one digit for the row and one digit for the column. Please try again!"
         coords = nil
       end
       coords

@@ -19,8 +19,11 @@ module Minesweeper_2pl
 
     def play_game
       self.game.print_board
-      self.cli.ask_for_move
-      self.cli.get_player_input
+      move = nil
+      while move == nil
+        self.cli.ask_for_move
+        move = self.cli.get_player_input(self.game)
+      end
     end
   end
 end

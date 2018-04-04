@@ -7,6 +7,8 @@ class CliTest < Minitest::Test
 
   def setup
     @cli = Minesweeper_2pl::CLI.new
+    @mocked_game = Minesweeper_2pl::MockedGame.new
+    @mocked_game.setup(100, 10)
   end
 
   def test_that_it_has_a_cli_class
@@ -32,33 +34,39 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_input_from_the_player
-    assert_output "You selected 1,1. Placing your move.\n" do
-      simulate_stdin("1,1") { @cli.get_player_input }
+    assert_output "You selected 3,9. Placing your move.\n" do
+      simulate_stdin("3,9") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid
-    assert_output "Please try again!\n" do
-      simulate_stdin("A,8") { @cli.get_player_input }
+    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+      simulate_stdin("A,8") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid
-    assert_output "Please try again!\n" do
-      simulate_stdin("bad input") { @cli.get_player_input }
+    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+      simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
+    end
+  end
+
+  def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
+    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+      simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_returns_an_array_if_input_is_valid
     io = StringIO.new
-    io.puts "1,1"
+    io.puts "3,3"
     io.rewind
     $stdin = io
 
-    result = @cli.get_player_input
+    result = @cli.get_player_input(@mocked_game)
     $stdin = STDIN
 
-    assert_equal([1,1], result)
+    assert_equal([3,3], result)
   end
 
 end
