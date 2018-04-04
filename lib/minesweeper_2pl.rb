@@ -6,5 +6,5 @@ require "minesweeper_2pl/board"
 require "minesweeper_2pl/boardcli"
 require "minesweeper_2pl/player"
 
-require "minesweeper_2pl/mocked_cli"
-require "minesweeper_2pl/mocked_game"
+require "minesweeper_2pl/mocks/mocked_cli"
+require "minesweeper_2pl/mocks/mocked_game"
