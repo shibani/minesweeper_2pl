@@ -11,5 +11,7 @@ module Minesweeper_2pl
       [3,3]
     end
 
+    def show_game_over_message
+    end
   end
 end

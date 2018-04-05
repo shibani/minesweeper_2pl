@@ -15,9 +15,5 @@ module Minesweeper_2pl
     def print_board
     end
 
-    def play_game
-      
-    end
-
   end
 end

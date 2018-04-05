@@ -104,37 +104,54 @@ class AppTest < Minitest::Test
     mocked_cli.verify
   end
 
-  # def test_play_game_calls_clis_get_player_input_method
-  #   mocked_cli = MiniTest::Mock.new
-  #   @mocked_app.cli.stub(:get_player_input, mocked_cli) do
-  #     @mocked_app.play_game
-  #   end
-  #   mocked_cli.verify
-  # end
+  def test_play_game_calls_clis_get_player_input_method
+    mocked_cli = MiniTest::Mock.new
+    mocked_cli.expect :get_player_input, true, [@mocked_game]
+    @mocked_cli.instance_exec(mocked_cli) do |mocked_cli|
+      @mock = mocked_cli
+      def get_player_input(game)
+        @mock.get_player_input(game)
+      end
+    end
+    @mocked_app.cli.get_player_input(@mocked_game)
+    mocked_cli.verify
+  end
 
-  # def test_play_game_calls_the_convert_coordinates_method
-  #   mocked_game = MiniTest::Mock.new
-  #   @mocked_app.game.stub(:move_to_coordinates, mocked_game) do
-  #     @mocked_app.play_game
-  #   end
-  #   mocked_game.verify
-  # end
 
-  # def test_play_game_can_place_a_move_on_the_board
-  #   mocked_game = MiniTest::Mock.new
-  #   @mocked_app.game.stub(:place_move, mocked_game) do
-  #     @mocked_app.play_game
-  #   end
-  #   mocked_game.verify
-  # end
+  def test_play_game_calls_the_convert_coordinates_method
+    mocked_game = MiniTest::Mock.new
+    mocked_game.expect :move_to_coordinates, Integer, [Integer]
+    @mocked_app.instance_exec(mocked_game) do |mocked_game|
+      @mock = mocked_game
+      def move_to_coordinates(game)
+        @mock.move_to_coordinates(game)
+      end
+    end
+    @mocked_app.move_to_coordinates(35)
+    mocked_game.verify
+  end
 
-  # def test_play_game_can_check_if_the_game_is_over
-  #   mocked_game = MiniTest::Mock.new
-  #   @mocked_app.game.stub(:game_over, mocked_game) do
-  #     @mocked_app.play_game
-  #   end
-  #   mocked_game.verify
-  # end
+  def test_play_game_can_place_a_move_on_the_board
+    mocked_game = MiniTest::Mock.new
+    mocked_game.expect :place_move, nil, [Integer]
+    @mocked_app.instance_exec(mocked_game) do |mocked_game|
+      @mock = mocked_game
+      def place_move(game)
+        @mock.place_move(game)
+      end
+    end
+    @mocked_app.place_move(35)
+    mocked_game.verify
+  end
+
+  def test_play_game_can_check_if_the_game_is_over
+    mocked_game = MiniTest::Mock.new
+    mocked_game.expect(:!=, nil, [true])
+    @mocked_app.game.stub(:game_over, mocked_game) do
+      @mocked_app.play_game
+    end
+    mocked_game.verify
+  end
 
   def test_play_game_can_show_bombs_if_the_game_is_over
     mocked_game = MiniTest::Mock.new
