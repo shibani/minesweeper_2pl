@@ -5,7 +5,7 @@ class GameTest < Minitest::Test
     @game = Minesweeper_2pl::Game.new
     @board = Minesweeper_2pl::Board.new
     @bcli = Minesweeper_2pl::BoardCli.new
-    @game.setup(100,10)
+    @game.setup(100,100)
   end
 
   def test_that_it_has_a_game_class
@@ -160,5 +160,33 @@ class GameTest < Minitest::Test
     move = [7,6]
     result = @game.move_to_coordinates(move)
     assert_equal 67, result
+  end
+
+  def test_that_it_can_place_a_move_on_the_board
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    coords = 67
+    @game.place_move(coords)
+    assert_equal "X", @game.board.positions[coords]
+  end
+
+  def test_that_it_has_a_game_over_attribute
+    @game.respond_to?("game_over")
+  end
+
+  def test_that_it_can_set_the_game_to_game_over
+    coords = 67
+    @game.place_move(coords)
+    assert @game.game_over
+  end
+
+  def test_that_it_can_set_the_BoardCLis_show_bombs_attribute
+    @game.show_bombs = true
+    assert @game.bcli.show_bombs
+  end
+
+  def test_that_it_can_turn_off_the_BoardCLis_show_bombs_attribute
+    @game.show_bombs = "random string"
+    refute @game.bcli.show_bombs
   end
 end

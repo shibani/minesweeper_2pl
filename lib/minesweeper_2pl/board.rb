@@ -26,5 +26,6 @@ module Minesweeper_2pl
       @row_size = Math.sqrt(size)
       @row_size.to_i
     end
+
   end
 end

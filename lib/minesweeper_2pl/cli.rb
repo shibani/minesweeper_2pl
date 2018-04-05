@@ -6,7 +6,7 @@ module Minesweeper_2pl
     end
 
     def ask_for_move
-      string = "\nPlayer 1, enter one digit for the row and one digit for the column to make your move, eg. 3,1: "
+      string = "\nPlayer 1, enter one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1: "
       self.print(string)
     end
 
@@ -18,15 +18,18 @@ module Minesweeper_2pl
           puts "You selected #{input}. Placing your move."
           coords = [coords[0].to_i, coords[1].to_i]
         else
-          puts "Expecting one digit for the row and one digit for the column. Please try again!"
+          puts "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!"
           coords = nil
         end
       else
-        puts "Expecting one digit for the row and one digit for the column. Please try again!"
+        puts "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!"
         coords = nil
       end
       coords
     end
 
+    def show_game_over_message
+      puts "Game over! You lose."
+    end
   end
 end

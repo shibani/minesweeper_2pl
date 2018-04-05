@@ -30,7 +30,7 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.ask_for_move
     end
-    assert_equal("\nPlayer 1, enter one digit for the row and one digit for the column to make your move, eg. 3,1: \n", out)
+    assert_equal("\nPlayer 1, enter one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1: \n", out)
   end
 
   def test_that_it_can_capture_input_from_the_player
@@ -40,19 +40,19 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_check_if_the_input_is_valid
-    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
       simulate_stdin("A,8") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid
-    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
       simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
-    assert_output "Expecting one digit for the row and one digit for the column. Please try again!\n" do
+    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
       simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
     end
   end
@@ -67,6 +67,13 @@ class CliTest < Minitest::Test
     $stdin = STDIN
 
     assert_equal([3,3], result)
+  end
+
+  def test_that_it_has_a_show_game_over_message
+    out, err = capture_io do
+      @cli.show_game_over_message
+    end
+    assert_equal("Game over! You lose.\n", out)
   end
 
 end

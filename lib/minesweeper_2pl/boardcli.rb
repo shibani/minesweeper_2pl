@@ -29,12 +29,12 @@ module Minesweeper_2pl
       end
       @board += "+"
       @board += NEWLINE + ALPHA_LEFT + 0.to_s + ALPHA_RIGHT
-      rowsize.to_i.times do |i|
-        rowsize.to_i.times do |j|
+      (0..rowsize.to_i-1).to_a.each do |i|
+        (0..rowsize.to_i-1).to_a.each do |j|
           if self.show_bombs
-            cell_content = positions[(i*rowsize)+(j)-1] == "B" ? "\u{1f4a3}" : "  "
+            cell_content = positions[(i*rowsize.to_i)+(j)] == "B" ? "\u{1f4a3}" : "  "
           else
-            cell_content = "  "
+            cell_content = positions[(i*rowsize.to_i)+(j)] == "X" ? "X " : "  "
           end
           if j == rowsize - 1
             @board += CELL_LEFT + cell_content + CELL_END

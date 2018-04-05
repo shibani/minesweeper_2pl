@@ -7,7 +7,7 @@ class BoardTest < Minitest::Test
     @board.bomb_count = 10
     @board.set_positions(100)
   end
-  
+
   def test_that_it_has_a_board_class
     refute_nil @board
   end

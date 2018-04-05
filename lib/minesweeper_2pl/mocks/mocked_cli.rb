@@ -7,7 +7,8 @@ module Minesweeper_2pl
     def ask_for_move
     end
 
-    def get_player_input
+    def get_player_input(game)
+      [3,3]
     end
 
   end

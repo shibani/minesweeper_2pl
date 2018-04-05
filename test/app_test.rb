@@ -8,6 +8,7 @@ class AppTest < Minitest::Test
     @mocked_cli = Minesweeper_2pl::MockedCli.new
     @mocked_app.game = @mocked_game
     @mocked_app.cli = @mocked_cli
+    @mocked_app.game.setup(100,100)
   end
 
   def test_that_it_has_an_app_class
@@ -88,34 +89,86 @@ class AppTest < Minitest::Test
 
   def test_play_game_calls_games_print_board_method
     mocked_game = MiniTest::Mock.new
-
     @mocked_app.game.stub(:print_board, mocked_game) do
-      @mocked_app.setup
+      @mocked_app.play_game
     end
     mocked_game.verify
   end
 
   def test_play_game_calls_clis_ask_for_move_method
     mocked_cli = MiniTest::Mock.new
+    @mocked_app.game.game_over = false
     @mocked_app.cli.stub(:ask_for_move, mocked_cli) do
-      @mocked_app.setup
+      @mocked_app.play_game
     end
     mocked_cli.verify
   end
 
-  def test_play_game_calls_clis_get_player_input_method
-    mocked_cli = MiniTest::Mock.new
-    @mocked_app.cli.stub(:get_player_input, mocked_cli) do
-      @mocked_app.setup
-    end
-    mocked_cli.verify
-  end
+  # def test_play_game_calls_clis_get_player_input_method
+  #   mocked_cli = MiniTest::Mock.new
+  #   @mocked_app.cli.stub(:get_player_input, mocked_cli) do
+  #     @mocked_app.play_game
+  #   end
+  #   mocked_cli.verify
+  # end
 
-  def test_play_game_calls_the_convert_coordinates_method
+  # def test_play_game_calls_the_convert_coordinates_method
+  #   mocked_game = MiniTest::Mock.new
+  #   @mocked_app.game.stub(:move_to_coordinates, mocked_game) do
+  #     @mocked_app.play_game
+  #   end
+  #   mocked_game.verify
+  # end
+
+  # def test_play_game_can_place_a_move_on_the_board
+  #   mocked_game = MiniTest::Mock.new
+  #   @mocked_app.game.stub(:place_move, mocked_game) do
+  #     @mocked_app.play_game
+  #   end
+  #   mocked_game.verify
+  # end
+
+  # def test_play_game_can_check_if_the_game_is_over
+  #   mocked_game = MiniTest::Mock.new
+  #   @mocked_app.game.stub(:game_over, mocked_game) do
+  #     @mocked_app.play_game
+  #   end
+  #   mocked_game.verify
+  # end
+
+  def test_play_game_can_show_bombs_if_the_game_is_over
     mocked_game = MiniTest::Mock.new
-    @mocked_app.game.stub(:move_to_coordinates, mocked_game) do
-      @mocked_app.setup
+    @mocked_app.game.game_over = true
+    @mocked_app.game.stub(:show_bombs=, mocked_game) do
+      @mocked_app.play_game
     end
     mocked_game.verify
+  end
+
+  def test_play_game_calls_the_games_show_bombs_method_if_the_game_is_over
+    mocked_game = MiniTest::Mock.new
+    @mocked_app.game.game_over = true
+    @mocked_app.game.stub(:show_bombs=, mocked_game) do
+      @mocked_app.play_game
+    end
+    mocked_game.verify
+  end
+
+  def test_play_game_calls_the_games_print_board_method_if_the_game_is_over
+    mocked_game = MiniTest::Mock.new
+    @mocked_app.game.game_over = true
+    @mocked_app.game.stub(:print_board, mocked_game) do
+      @mocked_app.play_game
+    end
+    mocked_game.verify
+  end
+
+  def test_play_game_calls_the_games_show_game_over_message_method
+    mocked_cli = MiniTest::Mock.new
+    @mocked_app.game.game_over = true
+    @mocked_app.cli.stub(:show_game_over_message, mocked_cli) do
+      @mocked_app.play_game
+    end
+    mocked_cli.verify
   end
 end
