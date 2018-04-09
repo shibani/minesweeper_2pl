@@ -1,7 +1,7 @@
 module Minesweeper_2pl
   class App
     SIZE = 100
-    BOMB_COUNT = 10
+    BOMB_COUNT = 80
     attr_accessor :game, :cli
 
     def start
@@ -25,8 +25,7 @@ module Minesweeper_2pl
           self.cli.ask_for_move
           move = self.cli.get_player_input(self.game)
         end
-        coords = self.game.move_to_coordinates(move)
-        self.game.place_move(coords)
+        self.game.place_move(move)
       end
       if self.game.game_over
         self.game.show_bombs = true

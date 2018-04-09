@@ -28,6 +28,11 @@ module Minesweeper_2pl
       self.board.bomb_count = bomb_count
     end
 
+    def get_position(move)
+      position = move_to_position(move)
+      board_positions[position]
+    end
+
     def board_positions
       self.board.positions
     end
@@ -36,11 +41,8 @@ module Minesweeper_2pl
       self.board.set_positions(size)
     end
 
-    def move_to_coordinates(move)
-      move[0] + self.board.row_size * move[1]
-    end
-
-    def place_move(coords)
+    def place_move(move)
+      coords = move_to_position(move)
       if self.board.bomb_positions.include?(coords)
         self.game_over = true
       else
@@ -55,5 +57,23 @@ module Minesweeper_2pl
         self.bcli.show_bombs = false
       end
     end
+
+    private
+
+    def move_to_position(move)
+      if move.is_a? Array
+        move[0] + self.board.row_size * move[1]
+      else
+        raise
+      end
+    end
+
+    def position_to_move(position)
+      [
+        (position % board.row_size).to_i,
+        (position / board.row_size).to_i
+      ]
+    end
+
   end
 end

@@ -156,18 +156,19 @@ class GameTest < Minitest::Test
     mocked_method.verify
   end
 
-  def test_that_it_can_convert_user_input_to_a_move_on_the_board
-    move = [7,6]
-    result = @game.move_to_coordinates(move)
-    assert_equal 67, result
+  def test_that_it_can_access_position_by_coordinates
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    move = [1,3]
+    assert_equal "B", @game.get_position(move)
   end
 
   def test_that_it_can_place_a_move_on_the_board
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    coords = 67
-    @game.place_move(coords)
-    assert_equal "X", @game.board.positions[coords]
+    move = [7,6]
+    @game.place_move(move)
+    assert_equal "X", @game.get_position(move)
   end
 
   def test_that_it_has_a_game_over_attribute
@@ -175,7 +176,9 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_game_to_game_over
-    coords = 67
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    coords = [3,1]
     @game.place_move(coords)
     assert @game.game_over
   end

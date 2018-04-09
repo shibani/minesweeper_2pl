@@ -70,7 +70,7 @@ class AppTest < Minitest::Test
 
   def test_setup_sets_the_game
     mocked_method = MiniTest::Mock.new
-    mocked_method.expect :setup, nil, [100, 10]
+    mocked_method.expect :setup, nil, [Integer, Integer]
 
     @app.stub(:game, mocked_method) do
       @app.setup

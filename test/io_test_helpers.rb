@@ -12,3 +12,7 @@ module IoTestHelpers
     $stdin = actual_stdin
   end
 end
+
+def assert_matched_arrays expected, actual
+  assert_equal expected.to_ary.sort, actual.to_ary.sort
+end

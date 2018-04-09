@@ -59,14 +59,14 @@ class CliTest < Minitest::Test
 
   def test_that_it_returns_an_array_if_input_is_valid
     io = StringIO.new
-    io.puts "3,3"
+    io.puts "5,6"
     io.rewind
     $stdin = io
 
     result = @cli.get_player_input(@mocked_game)
     $stdin = STDIN
 
-    assert_equal([3,3], result)
+    assert_equal([5,6], result)
   end
 
   def test_that_it_has_a_show_game_over_message
