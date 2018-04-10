@@ -42,11 +42,12 @@ module Minesweeper_2pl
     end
 
     def place_move(move)
-      coords = move_to_position(move)
-      if self.board.bomb_positions.include?(coords)
+      position = move_to_position(move)
+      if self.board.bomb_positions.include?(position)
         self.game_over = true
       else
-        self.board.positions[coords] = "X"
+        self.board.positions[position] = "X"
+        self.board.spaces_to_clear(position)
       end
     end
 

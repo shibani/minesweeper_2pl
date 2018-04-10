@@ -1,7 +1,7 @@
 module Minesweeper_2pl
   class App
     SIZE = 100
-    BOMB_COUNT = 80
+    BOMB_COUNT = 10
     attr_accessor :game, :cli
 
     def start

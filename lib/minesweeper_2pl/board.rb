@@ -30,10 +30,10 @@ module Minesweeper_2pl
       @row_size = Math.sqrt(size).to_i
     end
 
-    def neighboring_cells(position)
+    def neighboring_cells(position, empty=false)
       positions_array = []
 
-      row = (position / row_size).to_i * row_size
+      middle_row = (position / row_size).to_i * row_size
       bottom_row = (position / row_size).to_i * row_size - row_size
       top_row = (position / row_size).to_i * row_size + row_size
 
@@ -46,16 +46,28 @@ module Minesweeper_2pl
       top_middle = position + row_size
       top_right = position + row_size + 1
 
-      positions_array << left if within_bounds(row, left)
-      positions_array << right if within_bounds(row, position+1)
+      cells_hash = Hash.new
 
-      positions_array << bottom_left if within_bounds(bottom_row, bottom_left)
-      positions_array << bottom_middle if within_bounds(bottom_row, bottom_middle)
-      positions_array << bottom_right if within_bounds(bottom_row, bottom_right)
+      cells_hash[left] = middle_row
+      cells_hash[right] = middle_row
 
-      positions_array << top_left if within_bounds(top_row, top_left)
-      positions_array << top_middle if within_bounds(top_row, top_middle)
-      positions_array << top_right if within_bounds(top_row, top_right)
+      cells_hash[bottom_left] = bottom_row
+      cells_hash[bottom_middle] = bottom_row
+      cells_hash[bottom_right] = bottom_row
+
+      cells_hash[top_left] = top_row
+      cells_hash[top_middle] = top_row
+      cells_hash[top_right] = top_row
+
+      if empty
+        cells_hash.each do |pos, row|
+          positions_array << pos if within_bounds(row, pos) && is_empty?(pos)
+        end
+      else
+        cells_hash.each do |pos, row|
+          positions_array << pos if within_bounds(row, pos)
+        end
+      end
 
       positions_array
     end
@@ -71,12 +83,17 @@ module Minesweeper_2pl
       sum
     end
 
-    def adjacent_empties(position)
-      empties = []
-      self.neighboring_cells(position).each do |position|
-        empties << position if is_empty?(position)
+    def spaces_to_clear(position)
+      empties = [position]
+      checked = []
+      while empties.length > 0
+        position = empties.first
+        empties.concat(self.neighboring_cells(position, true))
+        checked << position
+        empties.uniq!
+        empties = empties - checked
       end
-      empties
+      checked
     end
 
     def is_empty?(position)

@@ -171,6 +171,12 @@ class GameTest < Minitest::Test
     assert_equal "X", @game.get_position(move)
   end
 
+  def test_that_it_can_clear_adjacent_spaces_on_the_board
+    skip
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+  end
+
   def test_that_it_has_a_game_over_attribute
     @game.respond_to?("game_over")
   end
