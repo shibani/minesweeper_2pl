@@ -6,7 +6,20 @@ module Minesweeper_2pl
     end
 
     def get_player_params
-      puts "Hello World"
+      result = []
+      size = nil
+      while size == nil
+        self.ask_for_board_size
+        size = self.get_player_entered_board_size
+      end
+      result << size
+      count = nil
+      while count == nil
+        self.ask_for_bomb_count(size)
+        count = self.get_player_entered_bomb_count(size * size)
+      end
+      result << count
+      result
     end
 
     def ask_for_move
@@ -37,11 +50,11 @@ module Minesweeper_2pl
     end
 
     def ask_for_board_size
-      puts "Player 1 please enter a row size for your board, less than 20. \n(Entering 20 will give you a 20X20 board)\n"
+      puts "Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n"
     end
 
-    def ask_for_bomb_count
-      puts "Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than 3/4 of the board size)"
+    def ask_for_bomb_count(size)
+      puts "Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than #{(size * size * App::BOMB_PERCENT).to_i})"
     end
 
     def get_player_entered_board_size
@@ -76,6 +89,10 @@ module Minesweeper_2pl
         bomb_count = nil
       end
       bomb_count
+    end
+
+    def welcome
+      puts "WELCOME TO MINESWEEPER"
     end
 
   end

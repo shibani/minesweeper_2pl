@@ -11,8 +11,8 @@ module Minesweeper_2pl
     CELL_END = "  |"
     CELL_DIVIDER = "+======"
     HEADER_CELL_LEFT = "   "
-    HEADER_CELL_RIGHT = "   "
-    INTRO = "    "
+    HEADER_CELL_RIGHT = "  "
+    INTRO = "     "
 
     def print_message(string)
       puts string
@@ -21,14 +21,14 @@ module Minesweeper_2pl
     def set_board(positions, rowsize)
       @board = NEWLINE + INTRO
       rowsize.to_i.times do |count|
-        @board += HEADER_CELL_LEFT + (count).to_s + HEADER_CELL_RIGHT
+        @board += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
       end
       @board += NEWLINE + INTRO
       rowsize.to_i.times do
         @board += CELL_DIVIDER
       end
       @board += "+"
-      @board += NEWLINE + ALPHA_LEFT + 0.to_s + ALPHA_RIGHT
+      @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
       (0..rowsize.to_i-1).to_a.each do |i|
         (0..rowsize.to_i-1).to_a.each do |j|
           if j == rowsize - 1
@@ -43,7 +43,7 @@ module Minesweeper_2pl
         end
         @board += "+"
         unless i == rowsize - 1
-          @board += NEWLINE + ALPHA_LEFT + (i+1).to_s + ALPHA_RIGHT
+          @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
         end
       end
     end

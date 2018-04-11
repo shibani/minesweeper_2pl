@@ -8,7 +8,8 @@ class CliTest < Minitest::Test
   def setup
     @cli = Minesweeper_2pl::CLI.new
     @mocked_game = Minesweeper_2pl::MockedGame.new
-    @mocked_game.setup(100, 10)
+    @mocked_game.setup(10, 10)
+    @mock_cli = Minesweeper_2pl::MockedCli.new
   end
 
   def test_that_it_has_a_cli_class
@@ -80,7 +81,7 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.ask_for_board_size
     end
-    assert_equal("Player 1 please enter a row size for your board, less than 20. \n(Entering 20 will give you a 20X20 board)\n", out)
+    assert_equal("Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n", out)
   end
 
   def test_that_it_can_capture_a_board_size_from_the_player
@@ -115,9 +116,9 @@ class CliTest < Minitest::Test
 
   def test_that_it_can_ask_player_to_set_bomb_count
     out, err = capture_io do
-      @cli.ask_for_bomb_count
+      @cli.ask_for_bomb_count(10)
     end
-    assert_equal("Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than 3/4 of the board size)\n", out)
+    assert_equal("Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than 75)\n", out)
   end
 
   def test_that_it_can_capture_a_bomb_count_from_the_player
@@ -149,4 +150,25 @@ class CliTest < Minitest::Test
 
     assert_equal(70, result)
   end
+
+  def test_that_it_can_set_the_board_size_and_bomb_count
+    io = StringIO.new
+    io.puts "10"
+    io.puts "70"
+    io.rewind
+    $stdin = io
+
+    result = @mock_cli.get_player_params
+    $stdin = STDIN
+
+    assert_equal([10,70], result)
+  end
+
+  def test_that_the_welcome_method_welcomes_the_user
+    out, err = capture_io do
+      @cli.welcome
+    end
+    assert_equal("WELCOME TO MINESWEEPER\n", out)
+  end
+
 end
