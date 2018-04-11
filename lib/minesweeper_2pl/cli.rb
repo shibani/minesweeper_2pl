@@ -60,7 +60,7 @@ module Minesweeper_2pl
     def get_player_entered_board_size
       input = gets.chomp
       if input.match(/^(\d)+$/)
-        if input.to_i > 0 && input.to_i < 20
+        if input.to_i > 0 && input.to_i <= 20
           puts "You have selected a #{input} X #{input} board. Generating board."
           board_size = input.to_i
         else
@@ -92,7 +92,9 @@ module Minesweeper_2pl
     end
 
     def welcome
-      puts "WELCOME TO MINESWEEPER"
+      puts "\n==========================================="
+      puts "           WELCOME TO MINESWEEPER          "
+      puts "===========================================\n\n"
     end
 
   end

@@ -61,7 +61,7 @@ module Minesweeper_2pl
         if positions[cell] == "X"
           cell_content = "X "
         elsif positions[cell].is_a? Integer
-          if positions[cell] == 0
+          if positions[cell] == 0 || positions[cell] > 4
             cell_content = "  "
           else
             cell_content = positions[cell].to_s + " "

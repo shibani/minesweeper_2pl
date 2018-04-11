@@ -168,7 +168,7 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.welcome
     end
-    assert_equal("WELCOME TO MINESWEEPER\n", out)
+    assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER          \n===========================================\n\n", out)
   end
 
 end
