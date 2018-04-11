@@ -2,6 +2,8 @@ module Minesweeper_2pl
   class App
     SIZE = 100
     BOMB_COUNT = 10
+    BOMB_PERCENT = 0.75
+    
     attr_accessor :game, :cli
 
     def start
@@ -10,9 +12,10 @@ module Minesweeper_2pl
     end
 
     def setup
-      game = Game.new
       cli = CLI.new
       self.cli = cli
+      self.cli.get_player_params
+      game = Game.new
       self.game = game
       self.game.setup(SIZE, BOMB_COUNT)
     end

@@ -54,18 +54,28 @@ class AppTest < Minitest::Test
     assert @mocked_app.cli.instance_of?(Minesweeper_2pl::CLI)
   end
 
-  def test_setup_creates_a_new_game
-    @mocked_app.setup
-    assert @mocked_app.game.instance_of?(Minesweeper_2pl::Game)
-  end
-
   def test_setup_sets_the_cli
     mocked_method = MiniTest::Mock.new
+    mocked_method.expect :get_player_params, nil
 
     @app.stub(:cli, mocked_method) do
       @app.setup
     end
     mocked_method.verify
+  end
+
+  def test_setup_calls_clis_get_player_params_method
+    mocked_method = MiniTest::Mock.new
+
+    @mocked_app.cli.stub(:get_player_params, mocked_method) do
+      @mocked_app.setup
+    end
+    mocked_method.verify
+  end
+
+  def test_setup_creates_a_new_game
+    @mocked_app.setup
+    assert @mocked_app.game.instance_of?(Minesweeper_2pl::Game)
   end
 
   def test_setup_sets_the_game
