@@ -30,21 +30,36 @@ module Minesweeper_2pl
       @row_size = Math.sqrt(size).to_i
     end
 
+    def show_adjacent_empties(position)
+      spaces = spaces_to_clear(position)
+      spaces.each do |space|
+        self.positions[space] = "-"
+      end
+    end
+
+    def show_adjacent_empties_with_value(position)
+      spaces = spaces_to_clear(position)
+      spaces.each do |space|
+        result = assign_value(space)
+        self.positions[space] = result
+      end
+    end
+
     def neighboring_cells(position, empty=false)
       positions_array = []
 
-      middle_row = (position / row_size).to_i * row_size
-      bottom_row = (position / row_size).to_i * row_size - row_size
-      top_row = (position / row_size).to_i * row_size + row_size
+      middle_row = (position / self.row_size).to_i * self.row_size
+      bottom_row = (position / self.row_size).to_i * self.row_size - self.row_size
+      top_row = (position / self.row_size).to_i * self.row_size + self.row_size
 
       left = position - 1
       right = position + 1
-      bottom_left = position - row_size - 1
-      bottom_middle = position - row_size
-      bottom_right = position - row_size + 1
-      top_left = position + row_size - 1
-      top_middle = position + row_size
-      top_right = position + row_size + 1
+      bottom_left = position - self.row_size - 1
+      bottom_middle = position - self.row_size
+      bottom_right = position - self.row_size + 1
+      top_left = position + self.row_size - 1
+      top_middle = position + self.row_size
+      top_right = position + self.row_size + 1
 
       cells_hash = Hash.new
 
@@ -60,16 +75,30 @@ module Minesweeper_2pl
       cells_hash[top_right] = top_row
 
       if empty
-        cells_hash.each do |pos, row|
-          positions_array << pos if within_bounds(row, pos) && is_empty?(pos)
+        cells_hash.each do |cell_position, cell_row|
+          positions_array << cell_position if within_bounds(cell_position, cell_row) && is_empty?(cell_position)
         end
       else
-        cells_hash.each do |pos, row|
-          positions_array << pos if within_bounds(row, pos)
+        cells_hash.each do |cell_position, cell_row|
+          positions_array << cell_position if within_bounds(cell_position, cell_row)
         end
       end
 
       positions_array
+    end
+
+    def spaces_to_clear(position)
+      empties = [position]
+      checked = []
+      while empties.length > 0
+        position = empties.first
+        empties.concat(self.neighboring_cells(position, true))
+        checked << position
+        empties.uniq!
+        empties = empties - checked
+      end
+      checked.shift
+      checked
     end
 
     def assign_value(position)
@@ -83,26 +112,17 @@ module Minesweeper_2pl
       sum
     end
 
-    def spaces_to_clear(position)
-      empties = [position]
-      checked = []
-      while empties.length > 0
-        position = empties.first
-        empties.concat(self.neighboring_cells(position, true))
-        checked << position
-        empties.uniq!
-        empties = empties - checked
-      end
-      checked
-    end
-
     def is_empty?(position)
       !["B", "X"].include? self.positions[position]
     end
 
+    def is_won?
+      self.size - self.positions.select{|el| el == "X"}.length == self.bomb_count
+    end
+
     private
-      def within_bounds(row, relative_position)
-        relative_position >= 0 && relative_position <= size && relative_position >= row && relative_position < row + row_size
+      def within_bounds(relative_position, row)
+        relative_position >= 0 && relative_position <= size && relative_position >= row && relative_position < row + self.row_size
       end
 
       def check_position(position)

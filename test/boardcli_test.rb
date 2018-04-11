@@ -3,6 +3,7 @@ require "test_helper"
 class BoardCliTest < Minitest::Test
   def setup
     @bcli = Minesweeper_2pl::BoardCli.new
+    @bcli.board = Minesweeper_2pl::Board.new
   end
 
   def test_that_it_has_a_message_attribute
@@ -52,6 +53,62 @@ class BoardCliTest < Minitest::Test
   def test_that_it_returns_a_board_string
     @bcli.message="\n   +=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+ "
     assert @bcli.message.end_with?("=+ ")
+  end
+
+  def test_that_it_can_show_a_user_move
+    positions = [ "B", 2, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 8)
+    assert_equal("X ", result)
+  end
+
+  def test_that_it_can_show_an_empty_cell
+    positions = [ "B", "-", 0, "X", " ",
+                  "B", "-", 0, "X", " ",
+                  "B", "-", 0, "X", " ",
+                  "B", "-", 0, "X", " ",
+                  "B", "-", 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 6)
+    assert_equal("- ", result)
+  end
+
+  def test_that_it_can_show_a_cell_value_if_given_an_integer
+    positions = [ "B", 2, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 11)
+    assert_equal("3 ", result)
+  end
+
+  def test_that_it_does_not_print_zeroes
+    positions = [ "B", 2, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 7)
+    assert_equal("  ", result)
+  end
+
+  def test_that_it_can_show_a_bomb
+    @bcli.show_bombs = true
+    positions = [ "B", 2, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 10)
+    assert_equal("\u{1f4a3}", result)
   end
 
 end

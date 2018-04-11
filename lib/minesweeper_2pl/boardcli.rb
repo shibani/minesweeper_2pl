@@ -31,15 +31,10 @@ module Minesweeper_2pl
       @board += NEWLINE + ALPHA_LEFT + 0.to_s + ALPHA_RIGHT
       (0..rowsize.to_i-1).to_a.each do |i|
         (0..rowsize.to_i-1).to_a.each do |j|
-          if self.show_bombs
-            cell_content = positions[(i*rowsize.to_i)+(j)] == "B" ? "\u{1f4a3}" : "  "
-          else
-            cell_content = positions[(i*rowsize.to_i)+(j)] == "X" ? "X " : "  "
-          end
           if j == rowsize - 1
-            @board += CELL_LEFT + cell_content + CELL_END
+            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_END
           else
-            @board += CELL_LEFT + cell_content + CELL_RIGHT
+            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_RIGHT
           end
         end
         @board += NEWLINE + INTRO
@@ -51,6 +46,33 @@ module Minesweeper_2pl
           @board += NEWLINE + ALPHA_LEFT + (i+1).to_s + ALPHA_RIGHT
         end
       end
+    end
+
+    def get_cell_content(positions, cell)
+      if self.show_bombs
+        if positions[cell] == "B"
+          cell_content = "\u{1f4a3}"
+        elsif positions[cell] == "X"
+          cell_content = "X "
+        else
+          cell_content = "  "
+        end
+      else
+        if positions[cell] == "X"
+          cell_content = "X "
+        elsif positions[cell].is_a? Integer
+          if positions[cell] == 0
+            cell_content = "  "
+          else
+            cell_content = positions[cell].to_s + " "
+          end
+        elsif positions[cell] == "-"
+          cell_content = "- "
+        else
+          cell_content = "  "
+        end
+      end
+      cell_content
     end
 
   end

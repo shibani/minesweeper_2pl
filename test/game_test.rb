@@ -171,10 +171,21 @@ class GameTest < Minitest::Test
     assert_equal "X", @game.get_position(move)
   end
 
-  def test_that_it_can_clear_adjacent_spaces_on_the_board
+  def test_that_it_can_show_adjacent_empties_on_the_board
     skip
     @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @game.bcli = @bcli
+    @game.board = @board
+    @game.board.bomb_positions = [10, 11, 12, 13, 14, 15]
+    @game.board.set_row_size(100)
+    @game.board.set_board_positions(100)
+
+    mocked_method = MiniTest::Mock.new
+
+    @game.board.stub(:show_adjacent_empties, mocked_method) do
+      @game.place_move([4,4])
+    end
+    mocked_method.verify
   end
 
   def test_that_it_has_a_game_over_attribute

@@ -46,8 +46,8 @@ module Minesweeper_2pl
       if self.board.bomb_positions.include?(position)
         self.game_over = true
       else
+        self.board.show_adjacent_empties(position)
         self.board.positions[position] = "X"
-        self.board.spaces_to_clear(position)
       end
     end
 

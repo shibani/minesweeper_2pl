@@ -171,7 +171,7 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
     result = @board.spaces_to_clear(position)
-    assert_equal([21], result)
+    assert_equal([], result)
   end
 
   def test_that_it_can_clear_adjacent_spaces_1
@@ -180,7 +180,7 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
     result = @board.spaces_to_clear(position)
-    assert_equal([21, 31], result)
+    assert_equal([31], result)
   end
 
   def test_that_it_can_clear_adjacent_spaces_2
@@ -189,7 +189,7 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
     result = @board.spaces_to_clear(position)
-    assert_equal([21, 22, 31, 32], result)
+    assert_equal([22, 31, 32], result)
   end
 
   def test_that_it_can_clear_adjacent_spaces_3
@@ -198,7 +198,7 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
     result = @board.spaces_to_clear(position)
-    assert_equal([21, 22, 31, 32, 23, 33], result)
+    assert_equal([22, 31, 32, 23, 33], result)
   end
 
   def test_that_it_can_clear_adjacent_spaces_3
@@ -207,6 +207,46 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
     result = @board.spaces_to_clear(position)
-    assert_equal([21, 22, 31, 32, 23, 33, 24, 34], result)
+    assert_equal([22, 31, 32, 23, 33, 24, 34], result)
+  end
+
+  def test_that_it_can_set_empties_in_the_positions_array
+    @board.bomb_count = 12
+    @board.bomb_positions = [10, 11, 12, 13, 14, 15, 20, 25, 30, 35, 40, 41, 42, 43, 44, 45]
+    @board.set_board_positions(100)
+    position = 21
+    result = @board.spaces_to_clear(position)
+    @board.show_adjacent_empties(position)
+    assert_equal("-", @board.positions[result.last])
+  end
+
+  def test_that_it_can_assign_values_to_empties_in_the_positions_array
+    @board.bomb_count = 12
+    @board.bomb_positions = [10, 11, 12, 13, 14, 15, 20, 25, 30, 35, 40, 41, 42, 43, 44, 45]
+    @board.set_board_positions(100)
+    position = 21
+    result = @board.spaces_to_clear(position)
+    @board.show_adjacent_empties_with_value(position)
+    assert_kind_of(Integer, @board.positions[result.last])
+  end
+
+  def test_that_it_can_check_if_the_game_is_not_won
+    @board.bomb_count = 5
+    @board.bomb_positions = [10, 11, 12, 13, 14]
+    @board.set_board_positions(25)
+
+    refute(@board.is_won?)
+  end
+
+  def test_that_it_can_check_if_the_game_is_won
+    @board.bomb_count = 5
+    @board.size = 25
+    @board.bomb_positions = [10, 11, 12, 13, 14]
+    @board.positions = ["X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X",
+                        "B", "B", "B", "B", "B",
+                        "X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X"]
+    assert(@board.is_won?)
   end
 end
