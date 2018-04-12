@@ -178,11 +178,11 @@ class GameTest < Minitest::Test
     # @game.board.bomb_positions = [10, 11, 12, 13, 14, 15]
     # @game.board.set_row_size(100)
     # @game.board.set_board_positions(100)
-    #
+
     # mocked_method = MiniTest::Mock.new
     #
     # @game.board.stub(:show_adjacent_empties, mocked_method) do
-    #   @game.place_move([4,4])
+    #   @game.place_move([25,25])
     # end
     # mocked_method.verify
   end

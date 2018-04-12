@@ -53,8 +53,16 @@ class AppTest < Minitest::Test
   end
 
   def test_setup_creates_a_new_cli
-    # @mocked_app.setup
-    # assert @mocked_app.cli.instance_of?(Minesweeper_2pl::CLI)
+    io = StringIO.new
+    io.puts "10"
+    io.puts "70"
+    io.rewind
+    $stdin = io
+
+    @mocked_app.setup
+    $stdin = STDIN
+
+    @mocked_app.cli.instance_of?(Minesweeper_2pl::CLI)
   end
 
   def test_setup_sets_the_cli
@@ -69,36 +77,51 @@ class AppTest < Minitest::Test
   end
 
   def test_setup_calls_clis_get_player_params_method
+    mocked_method = MiniTest::Mock.new
+
+    @mocked_app.cli.stub(:get_player_params, mocked_method) do
+      io = StringIO.new
+      io.puts "10"
+      io.puts "70"
+      io.rewind
+      $stdin = io
+
+      @mocked_app.setup
+      $stdin = STDIN
+    end
+    mocked_method.verify
+  end
+
+  def test_setup_creates_a_new_game
+    io = StringIO.new
+    io.puts "10"
+    io.puts "70"
+    io.rewind
+    $stdin = io
+
+    @mocked_app.setup
+    $stdin = STDIN
+
+    assert @mocked_app.game.instance_of?(Minesweeper_2pl::Game)
+  end
+
+  def test_setup_sets_the_game
     # mocked_method = MiniTest::Mock.new
+    # mocked_method.expect :setup, nil, [Integer, Integer]
     #
-    # @mocked_app.cli.stub(:get_player_params, mocked_method) do
-    #   @mocked_app.setup
+    # @app.stub(:game, mocked_method) do
+    #   @app.setup
     # end
     # mocked_method.verify
   end
 
-  def test_setup_creates_a_new_game
-  #   @mocked_app.setup
-  #   assert @mocked_app.game.instance_of?(Minesweeper_2pl::Game)
-  end
-
-  def test_setup_sets_the_game
-  #   mocked_method = MiniTest::Mock.new
-  #   mocked_method.expect :setup, nil, [Integer, Integer]
-  #
-  #   @app.stub(:game, mocked_method) do
-  #     @app.setup
-  #   end
-  #   mocked_method.verify
-  end
-
   def test_setup_calls_games_setup_method
-  #   mocked_method = MiniTest::Mock.new
-  #
-  #   @mocked_app.game.stub(:setup, mocked_method) do
-  #     @mocked_app.setup
-  #   end
-  #   mocked_method.verify
+    # mocked_method = MiniTest::Mock.new
+    # mocked_method.expect :setup, nil, [Integer, Integer]
+    # @mocked_app.game.stub(:setup, mocked_method) do
+    #   @mocked_app.setup
+    # end
+    # mocked_method.verify
   end
 
   def test_play_game_calls_games_print_board_method

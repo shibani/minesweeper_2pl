@@ -7,9 +7,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     minitest (5.11.3)
-    minitest-stub_any_instance (1.0.2)
     rake (10.5.0)
-    spy (0.4.5)
 
 PLATFORMS
   ruby
@@ -18,9 +16,7 @@ DEPENDENCIES
   bundler (~> 1.16)
   minesweeper_2pl!
   minitest
-  minitest-stub_any_instance
   rake (~> 10.0)
-  spy
 
 BUNDLED WITH
    1.16.1

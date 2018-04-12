@@ -62,16 +62,16 @@ module Minesweeper_2pl
       if input.match(/^(\d)+$/)
         if input.to_i > 0 && input.to_i <= 20
           puts "You have selected a #{input} X #{input} board. Generating board."
-          board_size = input.to_i
+          row_size = input.to_i
         else
           puts "That is not a valid row size. Please try again."
-          board_size = nil
+          row_size = nil
         end
       else
         puts "That is not a valid row size. Please try again."
-        board_size = nil
+        row_size = nil
       end
-      board_size
+      row_size
     end
 
     def get_player_entered_bomb_count(board_size)
