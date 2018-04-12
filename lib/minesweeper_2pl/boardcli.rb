@@ -54,6 +54,8 @@ module Minesweeper_2pl
           cell_content = "\u{1f4a3}"
         elsif positions[cell] == "X"
           cell_content = "X "
+        elsif positions[cell].is_a? Integer
+          cell_content = positions[cell].to_s + " "
         else
           cell_content = "  "
         end
@@ -61,11 +63,7 @@ module Minesweeper_2pl
         if positions[cell] == "X"
           cell_content = "X "
         elsif positions[cell].is_a? Integer
-          if positions[cell] == 0 || positions[cell] > 4
-            cell_content = "  "
-          else
-            cell_content = positions[cell].to_s + " "
-          end
+          cell_content = positions[cell].to_s + " "
         elsif positions[cell] == "-"
           cell_content = "- "
         else
