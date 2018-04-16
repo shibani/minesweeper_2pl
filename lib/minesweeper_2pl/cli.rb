@@ -23,7 +23,7 @@ module Minesweeper_2pl
     end
 
     def ask_for_move
-      string = "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
+      string = "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
       self.print(string)
     end
 
@@ -36,11 +36,11 @@ module Minesweeper_2pl
           puts "You selected #{input}. Placing your #{move[0]}."
           coords = [coords[0].to_i, coords[1].to_i, move[0]]
         else
-          puts "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!"
+          puts "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!"
           coords = nil
         end
       else
-        puts "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!"
+        puts "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!"
         coords = nil
       end
       coords

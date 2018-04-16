@@ -258,7 +258,7 @@ class BoardTest < Minitest::Test
     @board.bomb_positions = [10, 11, 12, 13, 14]
     @board.positions = ["X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X",
-                        "B", "B", "B", "B", "B",
+                        "BF", "BF", "BF", "BF", "BF",
                         "X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X"]
     assert(@board.is_won?)

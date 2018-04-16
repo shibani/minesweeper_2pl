@@ -64,12 +64,6 @@ module Minesweeper_2pl
           cell_content = "  "
         elsif positions[cell].length == 1
           cell_content = positions[cell] + " "
-        # if positions[cell] == "X"
-        #   cell_content = "X "
-        # elsif positions[cell] == "-"
-        #   cell_content = "- "
-        # else
-        #   cell_content = "  "
         end
       end
       cell_content

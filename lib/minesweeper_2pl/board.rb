@@ -121,7 +121,7 @@ module Minesweeper_2pl
     end
 
     def is_won?
-      self.size - self.positions.select{|el| el == "X"}.length == self.bomb_count
+      (self.size - self.bomb_count == self.positions.select{|el| el == "X"}.length) && (self.bomb_count == self.positions.select{|el| el.include?("F")}.length)
     end
 
     private

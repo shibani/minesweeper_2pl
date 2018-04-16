@@ -31,7 +31,7 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.ask_for_move
     end
-    assert_equal("\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n", out)
+    assert_equal("\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n", out)
   end
 
   def test_that_it_can_capture_input_from_the_player_1
@@ -47,19 +47,19 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_check_if_the_input_is_valid_1
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
       simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_2
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
       simulate_stdin("flag A,8") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
       simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
     end
   end

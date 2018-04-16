@@ -201,12 +201,14 @@ class GameTest < Minitest::Test
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
     coords = [3,1, "move"]
+
     @game.place_move(coords)
+
     assert @game.game_over
   end
 
   def test_that_it_can_set_a_flag
-    @game.setup(10,5)
+    @game.setup(10,0)
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
     move = [3,7, "flag"]
