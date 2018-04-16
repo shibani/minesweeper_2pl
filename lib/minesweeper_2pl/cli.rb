@@ -29,7 +29,7 @@ module Minesweeper_2pl
 
     def get_player_input(game)
       input = gets.chomp
-      if input =~ (/[flag|move]\s*[(\d){1,2}],\s*[(\d){1,2}]/)
+      if input =~ (/[flag|move]\s+[(\d){1,2}],\s*[(\d){1,2}]/)
         move = input.split(" ")
         coords = move[1].split(",")
         if ((coords[0].to_i <= game.board.row_size) && (coords[1].to_i <= game.board.row_size))

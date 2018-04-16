@@ -40,8 +40,12 @@ module Minesweeper_2pl
     def show_adjacent_empties_with_value(position)
       spaces = spaces_to_clear(position)
       spaces.each do |space|
-        result = assign_value(space)
-        self.positions[space] = result
+        result = assign_value(space).to_s
+        if self.positions[space].nil? || self.positions[space] == " "
+          self.positions[space] = result
+        elsif self.positions[space].include? "F"
+          self.positions[space] = result + "F"
+        end
       end
     end
 

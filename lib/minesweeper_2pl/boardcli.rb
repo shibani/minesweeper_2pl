@@ -50,32 +50,26 @@ module Minesweeper_2pl
 
     def get_cell_content(positions, cell)
       if self.show_bombs
-        if positions[cell].is_a? String
-          if positions[cell].include? "B"
-            cell_content = "\u{1f4a3}"
-          elsif positions[cell].include? "F"
-            cell_content = "\u{1f6a9}"
-          elsif positions[cell] == "X"
-              cell_content = "X "
-          else
-            cell_content = "  "
-          end
-        elsif positions[cell].is_a? Integer
-          cell_content = positions[cell].to_s + " "
+        if positions[cell].include? "B"
+          cell_content = "\u{1f4a3}"
+        elsif positions[cell].include? "F"
+          cell_content = "\u{1f6a9}"
+        else positions[cell].length == 1
+          cell_content = positions[cell] + " "
         end
       else
-        if positions[cell].is_a? String
-          if positions[cell] == "X"
-            cell_content = "X "
-          elsif positions[cell] == "-"
-            cell_content = "- "
-          elsif positions[cell].include? "F"
-            cell_content = "\u{1f6a9}"
-          else
-            cell_content = "  "
-          end
-        elsif positions[cell].is_a? Integer
-          cell_content = positions[cell].to_s + " "
+        if positions[cell].include? "F"
+          cell_content = "\u{1f6a9}"
+        elsif positions[cell] == "B"
+          cell_content = "  "
+        elsif positions[cell].length == 1
+          cell_content = positions[cell] + " "
+        # if positions[cell] == "X"
+        #   cell_content = "X "
+        # elsif positions[cell] == "-"
+        #   cell_content = "- "
+        # else
+        #   cell_content = "  "
         end
       end
       cell_content

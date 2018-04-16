@@ -28,7 +28,12 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_board
-    @bcli.set_board(100, 10)
+    positions = [ "B", "2", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
+    @bcli.set_board(positions, 5)
     assert @bcli.board.end_with?('===+')
   end
 
@@ -56,44 +61,44 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_show_a_user_move
-    positions = [ "B", 2, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 8)
     assert_equal("X ", result)
   end
 
   def test_that_it_can_show_an_empty_cell
-    positions = [ "B", "-", 0, "X", " ",
-                  "B", "-", 0, "X", " ",
-                  "B", "-", 0, "X", " ",
-                  "B", "-", 0, "X", " ",
-                  "B", "-", 0, "X", " "]
+    positions = [ "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 6)
     assert_equal("- ", result)
   end
 
   def test_that_it_can_show_a_cell_value_if_given_an_integer
-    positions = [ "B", 2, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 11)
     assert_equal("3 ", result)
   end
 
   def test_that_it_does_print_zeroes
-    positions = [ "B", 2, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 7)
     assert_equal("0 ", result)
@@ -101,11 +106,11 @@ class BoardCliTest < Minitest::Test
 
   def test_that_it_can_show_a_bomb
     @bcli.show_bombs = true
-    positions = [ "B", 2, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 10)
     assert_equal("\u{1f4a3}", result)
@@ -113,44 +118,44 @@ class BoardCliTest < Minitest::Test
 
   def test_that_it_can_show_bombs_1
     @bcli.show_bombs = true
-    positions = [ "B", 2, 0, "X", " ",
-                  "FB", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "FB", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f4a3}", result)
   end
 
   def test_that_it_can_show_flags_1
-    positions = [ "B", 2, 0, "X", " ",
-                  "BF", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "BF", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f6a9}", result)
   end
 
   def test_that_it_can_show_flags_2
-    positions = [ "B", 2, 0, "X", " ",
-                  "F", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "F", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f6a9}", result)
   end
 
   def test_that_it_can_show_flags_2
-    positions = [ "B", 2, 0, "X", " ",
-                  "F", 3, 0, "X", " ",
-                  "B", 3, "0F", "X", " ",
-                  "B", 3, 0, "X", " ",
-                  "B", 2, 0, "X", " "]
+    positions = [ "B", "2", "0", "X", " ",
+                  "F", "3", "0", "X", " ",
+                  "B", "3", "0F", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 12)
     assert_equal("\u{1f6a9}", result)
