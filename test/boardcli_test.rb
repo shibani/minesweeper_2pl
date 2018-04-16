@@ -111,4 +111,49 @@ class BoardCliTest < Minitest::Test
     assert_equal("\u{1f4a3}", result)
   end
 
+  def test_that_it_can_show_bombs_1
+    @bcli.show_bombs = true
+    positions = [ "B", 2, 0, "X", " ",
+                  "FB", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 5)
+    assert_equal("\u{1f4a3}", result)
+  end
+
+  def test_that_it_can_show_flags_1
+    positions = [ "B", 2, 0, "X", " ",
+                  "BF", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 5)
+    assert_equal("\u{1f6a9}", result)
+  end
+
+  def test_that_it_can_show_flags_2
+    positions = [ "B", 2, 0, "X", " ",
+                  "F", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 5)
+    assert_equal("\u{1f6a9}", result)
+  end
+
+  def test_that_it_can_show_flags_2
+    positions = [ "B", 2, 0, "X", " ",
+                  "F", 3, 0, "X", " ",
+                  "B", 3, "0F", "X", " ",
+                  "B", 3, 0, "X", " ",
+                  "B", 2, 0, "X", " "]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 12)
+    assert_equal("\u{1f6a9}", result)
+  end
+
 end
