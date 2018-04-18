@@ -99,6 +99,5 @@ module Minesweeper_2pl
         (position / board.row_size).to_i
       ]
     end
-
   end
 end

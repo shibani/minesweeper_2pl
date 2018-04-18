@@ -249,21 +249,19 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_calls_the_games_is_won_method
-    mocked_game = MiniTest::Mock.new
-    mocked_game.expect(:is_won?, true)
-    @app.instance_exec(mocked_game) do |mocked_game|
-      @mock = mocked_game
-      def is_won?
-        @mock.is_won?
-      end
-    end
+    @app.game.setup(5,0)
+    @app.game.board.bomb_count = 5
+    @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @app.game.board.positions = ["X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X",
+                        "BF", "BF", "BF", "BF", "BF",
+                        "X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X"]
     @app.game.game_over = true
-    @app.play_game
-    mocked_game.verify
-  end
-
-  def test_that_it_can_call_the_games_is_valid_method
-
+    out, err = capture_io do
+      @app.end_game
+    end
+    assert_equal("Game over! You win!\n", out)
   end
 
 end

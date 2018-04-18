@@ -5,7 +5,7 @@ module Minesweeper_2pl
       puts msg
     end
 
-    def get_player_params
+    def get_player_params()
       result = []
       size = nil
       while size == nil
@@ -100,6 +100,11 @@ module Minesweeper_2pl
       puts "\n==========================================="
       puts "           WELCOME TO MINESWEEPER          "
       puts "===========================================\n\n"
+    end
+
+    def start
+      welcome
+      get_player_params
     end
   end
 end

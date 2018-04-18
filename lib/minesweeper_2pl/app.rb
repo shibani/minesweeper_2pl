@@ -9,16 +9,12 @@ module Minesweeper_2pl
     def start
       self.setup
       self.play_game
+      self.end_game
     end
 
     def setup
-      cli = CLI.new
-      self.cli = cli
-      self.cli.welcome
-      result = self.cli.get_player_params
-      game = Game.new
-      self.game = game
-      self.game.setup(result.first, result.last)
+      result = ui_setup
+      create_game(result)
     end
 
     def play_game
@@ -31,6 +27,9 @@ module Minesweeper_2pl
         end
         game.place_move(move)
       end
+    end
+
+    def end_game
       if self.game.game_over
         if game.is_won?
           self.game.show_bombs = "won"
@@ -43,5 +42,18 @@ module Minesweeper_2pl
         end
       end
     end
+
+    def ui_setup
+      cli = CLI.new
+      self.cli = cli
+      cli.start
+    end
+
+    def create_game(game_config)
+      game = Game.new
+      self.game = game
+      game.setup(game_config.first, game_config.last)
+    end
+
   end
 end
