@@ -28,11 +28,11 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_board
-    positions = [ "B", "2", "0", "X", " ",
-                  "B", "3", "0", "X", " ",
-                  "B", "3", "0", "X", " ",
-                  "B", "3", "0", "X", " ",
-                  "B", "2", "0", "X", " "]
+    positions = [ "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " ",
+                  "B", "-", "0", "X", " "]
     @bcli.set_board(positions, 5)
     assert @bcli.board.end_with?('===+')
   end
@@ -128,6 +128,18 @@ class BoardCliTest < Minitest::Test
     assert_equal("\u{1f4a3}", result)
   end
 
+  def test_that_it_can_show_trophies
+    @bcli.show_bombs = "won"
+    positions = [ "BF", "X", "X", "X", "X",
+                  "BF", "X", "X", "X", "X",
+                  "BF", "X", "X", "X", "X",
+                  "BF", "X", "X", "X", "X",
+                  "BF", "X", "X", "X", "X"]
+    @bcli.set_board(positions, 5)
+    result = @bcli.get_cell_content(positions, 10)
+    assert_equal("\u{1f3c6}", result)
+  end
+
   def test_that_it_can_show_flags_1
     positions = [ "B", "2", "0", "X", " ",
                   "BF", "3", "0", "X", " ",
@@ -150,7 +162,7 @@ class BoardCliTest < Minitest::Test
     assert_equal("\u{1f6a9}", result)
   end
 
-  def test_that_it_can_show_flags_2
+  def test_that_it_can_show_flags_3
     positions = [ "B", "2", "0", "X", " ",
                   "F", "3", "0", "X", " ",
                   "B", "3", "0F", "X", " ",

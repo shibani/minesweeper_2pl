@@ -3,7 +3,6 @@ require "test_helper"
 class AppTest < Minitest::Test
   def setup
     @app = Minesweeper_2pl::App.new
-    @second_app = Minesweeper_2pl::App.new
     @mocked_app = Minesweeper_2pl::MockedApp.new
     @mocked_game = Minesweeper_2pl::MockedGame.new
     @mocked_cli = Minesweeper_2pl::MockedCli.new
@@ -238,6 +237,33 @@ class AppTest < Minitest::Test
       @app.play_game
     end
     mocked_cli.verify
+  end
+
+  def test_play_game_calls_the_games_show_game_over_message_method_2
+    mocked_cli = MiniTest::Mock.new
+    @app.game.game_over = true
+    @app.cli.stub(:show_game_over_message, mocked_cli) do
+      @app.play_game
+    end
+    mocked_cli.verify
+  end
+
+  def test_play_game_calls_the_games_is_won_method
+    mocked_game = MiniTest::Mock.new
+    mocked_game.expect(:is_won?, true)
+    @app.instance_exec(mocked_game) do |mocked_game|
+      @mock = mocked_game
+      def is_won?
+        @mock.is_won?
+      end
+    end
+    @app.game.game_over = true
+    @app.play_game
+    mocked_game.verify
+  end
+
+  def test_that_it_can_call_the_games_is_valid_method
+
   end
 
 end

@@ -29,12 +29,18 @@ module Minesweeper_2pl
           self.cli.ask_for_move
           move = self.cli.get_player_input(self.game)
         end
-        self.game.place_move(move)
+        game.place_move(move)
       end
       if self.game.game_over
-        self.game.show_bombs = true
-        self.game.print_board
-        self.cli.show_game_over_message
+        if game.is_won?
+          self.game.show_bombs = "won"
+          self.game.print_board
+          cli.show_game_won_message
+        else
+          self.game.show_bombs = true
+          self.game.print_board
+          cli.show_game_over_message
+        end
       end
     end
   end

@@ -239,6 +239,54 @@ class GameTest < Minitest::Test
     assert_equal "B", @game.get_position(move)
   end
 
+  def test_that_it_can_check_if_a_game_is_over_1
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = [3,3, "flag"]
+
+    @game.place_move(move)
+
+    assert @game.game_over
+  end
+
+  def test_that_it_can_check_if_a_game_is_over_2
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = [3,3, "move"]
+
+    @game.place_move(move)
+
+    assert @game.game_over
+  end
+
+  def test_that_it_can_check_if_a_game_is_over_3
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = [0,1, "flag"]
+
+    @game.place_move(move)
+
+    refute @game.game_over
+  end
+
   def test_that_it_can_set_the_BoardClis_show_bombs_attribute
     @game.setup(10,100)
     @game.show_bombs = true
@@ -252,4 +300,63 @@ class GameTest < Minitest::Test
 
     refute @game.bcli.show_bombs
   end
+
+  def test_that_it_can_set_the_BoardClis_show_bombs_attribute_to_won
+    @game.setup(10,100)
+    @game.show_bombs = "won"
+
+    assert_equal("won", @game.bcli.show_bombs) 
+  end
+
+  def test_that_it_can_check_if_a_game_is_won
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = [3,3, "flag"]
+
+    @game.place_move(move)
+
+    assert(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_the_game_is_not_won
+    @game.setup(4,0)
+    @game.board.bomb_count = 5
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @game.board.set_board_positions(25)
+
+    refute(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_the_game_is_won
+    @game.setup(5,0)
+    @game.board.bomb_count = 5
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @game.board.positions = ["X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X",
+                        "BF", "BF", "BF", "BF", "BF",
+                        "X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X"]
+    assert(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_a_move_is_valid
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = [0,0, "move"]
+
+    refute(@game.valid_move?(move))
+  end
+
 end

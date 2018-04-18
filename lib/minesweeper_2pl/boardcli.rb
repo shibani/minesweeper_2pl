@@ -49,12 +49,22 @@ module Minesweeper_2pl
     end
 
     def get_cell_content(positions, cell)
-      if self.show_bombs
-        if positions[cell].include? "B"
+      if self.show_bombs && self.show_bombs != "won"
+        if positions[cell].include? "BF"
+          cell_content = "\u{1f4a3}"
+        elsif positions[cell].include? "B"
           cell_content = "\u{1f4a3}"
         elsif positions[cell].include? "F"
           cell_content = "\u{1f6a9}"
-        else positions[cell].length == 1
+        elsif positions[cell].length == 1
+          cell_content = positions[cell] + " "
+        end
+      elsif self.show_bombs == "won"
+        if positions[cell].include? "BF"
+          cell_content = "\u{1f3c6}"
+        elsif positions[cell].include? "F"
+          cell_content = "\u{1f6a9}"
+        elsif positions[cell].length == 1
           cell_content = positions[cell] + " "
         end
       else

@@ -243,24 +243,4 @@ class BoardTest < Minitest::Test
     @board.show_adjacent_empties_with_value(position)
     assert_kind_of(String, @board.positions[result.last])
   end
-
-  def test_that_it_can_check_if_the_game_is_not_won
-    @board.bomb_count = 5
-    @board.bomb_positions = [10, 11, 12, 13, 14]
-    @board.set_board_positions(25)
-
-    refute(@board.is_won?)
-  end
-
-  def test_that_it_can_check_if_the_game_is_won
-    @board.bomb_count = 5
-    @board.size = 25
-    @board.bomb_positions = [10, 11, 12, 13, 14]
-    @board.positions = ["X", "X", "X", "X", "X",
-                        "X", "X", "X", "X", "X",
-                        "BF", "BF", "BF", "BF", "BF",
-                        "X", "X", "X", "X", "X",
-                        "X", "X", "X", "X", "X"]
-    assert(@board.is_won?)
-  end
 end

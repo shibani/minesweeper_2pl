@@ -117,11 +117,7 @@ module Minesweeper_2pl
     end
 
     def is_empty?(position)
-      !["B", "X"].include? self.positions[position]
-    end
-
-    def is_won?
-      (self.size - self.bomb_count == self.positions.select{|el| el == "X"}.length) && (self.bomb_count == self.positions.select{|el| el.include?("F")}.length)
+      !["B", "X", "BF"].include? self.positions[position]
     end
 
     private

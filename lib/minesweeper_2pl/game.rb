@@ -14,18 +14,18 @@ module Minesweeper_2pl
     end
 
     def print_board
-      positions = self.board_positions
-      rowsize = self.board.row_size
-      self.bcli.set_board(positions, rowsize)
-      self.bcli.print_message(self.bcli.board)
+      positions = board_positions
+      rowsize = board.row_size
+      bcli.set_board(positions, rowsize)
+      bcli.print_message(bcli.board)
     end
 
     def set_board_size(row_size)
-      self.board.size = row_size * row_size
+      board.size = row_size * row_size
     end
 
     def set_bomb_count(bomb_count)
-      self.board.bomb_count = bomb_count
+      board.bomb_count = bomb_count
     end
 
     def get_position(move)
@@ -34,49 +34,60 @@ module Minesweeper_2pl
     end
 
     def board_positions
-      self.board.positions
+      board.positions
     end
 
     def set_board_positions(size)
-      self.board.set_positions(size * size)
+      board.set_positions(size * size)
     end
 
     def place_move(move)
       position = move_to_position(move)
       if move.last == "move"
-        if self.board.bomb_positions.include?(position)
+        if board.bomb_positions.include?(position)
           self.game_over = true
         else
-          self.board.show_adjacent_empties_with_value(position)
-          self.board.positions[position] = "X"
+          board.show_adjacent_empties_with_value(position)
+          board.positions[position] = "X"
         end
       elsif move.last == "flag"
-        if self.board.positions[position] == " "
-          self.board.positions[position] = "F"
-        elsif self.board.positions[position] == "F"
-          self.board.positions[position] = " "
-        elsif self.board.positions[position].include?("F")
-          el = self.board.positions[position].gsub("F", "")
-          self.board.positions[position] = el
+        if board.positions[position] == " "
+          board.positions[position] = "F"
+        elsif board.positions[position] == "F"
+          board.positions[position] = " "
+        elsif board.positions[position].include?("F")
+          el = board.positions[position].gsub("F", "")
+          board.positions[position] = el
         else
-          self.board.positions[position] += "F"
+          board.positions[position] += "F"
         end
       end
+      self.game_over = true if self.is_won?
     end
 
     def show_bombs=(msg)
       if msg == true
-        self.bcli.show_bombs = true
+        bcli.show_bombs = true
+      elsif msg == "won"
+        bcli.show_bombs = "won"
       else
-        self.bcli.show_bombs = false
+        bcli.show_bombs = false
       end
+    end
+
+    def is_won?
+      (board.size - board.bomb_count == board.positions.select{|el| el == "X"}.length) && (board.bomb_count == board.positions.select{|el| el.include?("F")}.length)
+    end
+
+    def valid_move?(move)
+      get_position(move) != "X"
     end
 
     private
 
     def move_to_position(move)
       if move.is_a? Array
-        move[0] + self.board.row_size * move[1]
+        move[0] + board.row_size * move[1]
       else
         raise
       end

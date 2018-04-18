@@ -8,7 +8,7 @@ class CliTest < Minitest::Test
   def setup
     @cli = Minesweeper_2pl::CLI.new
     @mocked_game = Minesweeper_2pl::MockedGame.new
-    @mocked_game.setup(10, 10)
+    @mocked_game.setup(10, 0)
     @mock_cli = Minesweeper_2pl::MockedCli.new
   end
 
@@ -74,13 +74,6 @@ class CliTest < Minitest::Test
     $stdin = STDIN
 
     assert_equal([5,6, "flag"], result)
-  end
-
-  def test_that_it_has_a_show_game_over_message
-    out, err = capture_io do
-      @cli.show_game_over_message
-    end
-    assert_equal("Game over! You lose.\n", out)
   end
 
   def test_that_it_can_ask_player_to_set_board_size
@@ -175,6 +168,20 @@ class CliTest < Minitest::Test
       @cli.welcome
     end
     assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER          \n===========================================\n\n", out)
+  end
+
+  def test_that_it_has_a_show_game_over_message
+    out, err = capture_io do
+      @cli.show_game_over_message
+    end
+    assert_equal("Game over! You lose.\n", out)
+  end
+
+  def test_that_it_has_a_show_game_won_message
+    out, err = capture_io do
+      @cli.show_game_won_message
+    end
+    assert_equal("Game over! You win!\n", out)
   end
 
 end
