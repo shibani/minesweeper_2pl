@@ -7,9 +7,9 @@ module Minesweeper_2pl
     attr_accessor :game, :cli
 
     def start
-      self.setup
-      self.play_game
-      self.end_game
+      setup
+      play_game
+      end_game
     end
 
     def setup
@@ -18,29 +18,20 @@ module Minesweeper_2pl
     end
 
     def play_game
-      while self.game.game_over != true
-        self.game.print_board
+      while game.game_over != true
+        game.print_board
         move = nil
         while move == nil
-          self.cli.ask_for_move
-          move = self.cli.get_player_input(self.game)
+          cli.ask_for_move
+          move = cli.get_player_input(game)
         end
         game.place_move(move)
       end
     end
 
     def end_game
-      if self.game.game_over
-        if game.is_won?
-          self.game.show_bombs = "won"
-          self.game.print_board
-          cli.show_game_won_message
-        else
-          self.game.show_bombs = true
-          self.game.print_board
-          cli.show_game_over_message
-        end
-      end
+      result = game.check_game_status
+      cli.show_game_over_message(result)
     end
 
     def ui_setup

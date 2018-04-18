@@ -12,7 +12,7 @@ module Minesweeper_2pl
     def set_board_positions(positions)
       @positions = []
       positions.times do |position|
-        if self.bomb_positions.include?(position)
+        if bomb_positions.include?(position)
           @positions << "B"
         else
           @positions << " "
@@ -22,7 +22,7 @@ module Minesweeper_2pl
 
     def set_bombs
       @bomb_positions = []
-      bombs = (0..self.size-1).to_a.shuffle
+      bombs = (0..size-1).to_a.shuffle
       @bomb_positions = bombs.first(bomb_count)
     end
 
@@ -41,10 +41,10 @@ module Minesweeper_2pl
       spaces = spaces_to_clear(position)
       spaces.each do |space|
         result = assign_value(space).to_s
-        if self.positions[space].nil? || self.positions[space] == " "
-          self.positions[space] = result
-        elsif self.positions[space].include? "F"
-          self.positions[space] = result + "F"
+        if positions[space].nil? || positions[space] == " "
+          positions[space] = result
+        elsif positions[space].include? "F"
+          positions[space] = result + "F"
         end
       end
     end
@@ -52,18 +52,18 @@ module Minesweeper_2pl
     def neighboring_cells(position, empty=false)
       positions_array = []
 
-      middle_row = (position / self.row_size).to_i * self.row_size
-      bottom_row = (position / self.row_size).to_i * self.row_size - self.row_size
-      top_row = (position / self.row_size).to_i * self.row_size + self.row_size
+      middle_row = (position / row_size).to_i * row_size
+      bottom_row = (position / row_size).to_i * row_size - row_size
+      top_row = (position / row_size).to_i * row_size + row_size
 
       left = position - 1
       right = position + 1
-      bottom_left = position - self.row_size - 1
-      bottom_middle = position - self.row_size
-      bottom_right = position - self.row_size + 1
-      top_left = position + self.row_size - 1
-      top_middle = position + self.row_size
-      top_right = position + self.row_size + 1
+      bottom_left = position - row_size - 1
+      bottom_middle = position - row_size
+      bottom_right = position - row_size + 1
+      top_left = position + row_size - 1
+      top_middle = position + row_size
+      top_right = position + row_size + 1
 
       cells_hash = Hash.new
 
@@ -96,7 +96,7 @@ module Minesweeper_2pl
       checked = []
       while empties.length > 0
         position = empties.first
-        empties.concat(self.neighboring_cells(position, true))
+        empties.concat(neighboring_cells(position, true))
         checked << position
         empties.uniq!
         empties = empties - checked
@@ -117,7 +117,7 @@ module Minesweeper_2pl
     end
 
     def is_empty?(position)
-      !["B", "X", "BF"].include? self.positions[position]
+      !["B", "X", "BF"].include? positions[position]
     end
 
     private

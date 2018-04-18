@@ -83,6 +83,21 @@ module Minesweeper_2pl
       get_position(move) != "X"
     end
 
+    def check_game_status
+      if game_over
+        if is_won?
+          show_bombs = "won"
+          print_board
+          result = "won"
+        else
+          show_bombs = true
+          print_board
+          result = "lost"
+        end
+      end
+      result
+    end
+
     private
 
     def move_to_position(move)
@@ -99,5 +114,6 @@ module Minesweeper_2pl
         (position / board.row_size).to_i
       ]
     end
+
   end
 end

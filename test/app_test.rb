@@ -248,7 +248,7 @@ class AppTest < Minitest::Test
     mocked_cli.verify
   end
 
-  def test_play_game_calls_the_games_is_won_method
+  def test_play_game_calls_the_games_is_won_method_1
     @app.game.setup(5,0)
     @app.game.board.bomb_count = 5
     @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
@@ -262,6 +262,19 @@ class AppTest < Minitest::Test
       @app.end_game
     end
     assert_equal("Game over! You win!\n", out)
+  end
+
+  def test_play_game_calls_the_games_is_won_method_2
+    @app.game.setup(5,0)
+    @app.game.board.bomb_count = 5
+    @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @app.game.board.positions = ["X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X",
+                        "BF", "BF", "BF", "BF", "BF",
+                        "X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X"]
+    @app.game.game_over = true
+    assert_equal("won", @app.game.check_game_status)
   end
 
 end

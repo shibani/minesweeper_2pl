@@ -172,14 +172,14 @@ class CliTest < Minitest::Test
 
   def test_that_it_has_a_show_game_over_message
     out, err = capture_io do
-      @cli.show_game_over_message
+      @cli.show_game_over_message("lost")
     end
     assert_equal("Game over! You lose.\n", out)
   end
 
   def test_that_it_has_a_show_game_won_message
     out, err = capture_io do
-      @cli.show_game_won_message
+      @cli.show_game_over_message("won")
     end
     assert_equal("Game over! You win!\n", out)
   end

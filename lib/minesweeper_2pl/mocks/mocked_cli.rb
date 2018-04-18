@@ -25,9 +25,6 @@ module Minesweeper_2pl
       @input
     end
 
-    def show_game_over_message
-    end
-
     def ask_for_board_size
     end
 

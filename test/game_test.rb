@@ -305,7 +305,7 @@ class GameTest < Minitest::Test
     @game.setup(10,100)
     @game.show_bombs = "won"
 
-    assert_equal("won", @game.bcli.show_bombs) 
+    assert_equal("won", @game.bcli.show_bombs)
   end
 
   def test_that_it_can_check_if_a_game_is_won
@@ -357,6 +357,18 @@ class GameTest < Minitest::Test
     move = [0,0, "move"]
 
     refute(@game.valid_move?(move))
+  end
+
+  def test_that_it_can_check_the_games_status
+    @game.setup(5,0)
+    @game.board.bomb_count = 5
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @game.board.positions = ["X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X",
+                        "BF", "BF", "BF", "BF", "BF",
+                        "X", "X", "X", "X", "X",
+                        "X", "X", "X", "X", "X"]
+    assert("won", @game.check_game_status)
   end
 
 end

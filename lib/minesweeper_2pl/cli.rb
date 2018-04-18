@@ -9,14 +9,14 @@ module Minesweeper_2pl
       result = []
       size = nil
       while size == nil
-        self.ask_for_board_size
-        size = self.get_player_entered_board_size
+        ask_for_board_size
+        size = get_player_entered_board_size
       end
       result << size
       count = nil
       while count == nil
-        self.ask_for_bomb_count(size)
-        count = self.get_player_entered_bomb_count(size * size)
+        ask_for_bomb_count(size)
+        count = get_player_entered_bomb_count(size * size)
       end
       result << count
       result
@@ -24,7 +24,7 @@ module Minesweeper_2pl
 
     def ask_for_move
       string = "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
-      self.print(string)
+      print(string)
     end
 
     def get_player_input(game)
@@ -46,12 +46,12 @@ module Minesweeper_2pl
       coords
     end
 
-    def show_game_over_message
-      puts "Game over! You lose."
-    end
-
-    def show_game_won_message
-      puts "Game over! You win!"
+    def show_game_over_message(result)
+      if result == "won"
+        puts "Game over! You win!"
+      elsif result == "lost"
+        puts "Game over! You lose."
+      end
     end
 
     def ask_for_board_size
