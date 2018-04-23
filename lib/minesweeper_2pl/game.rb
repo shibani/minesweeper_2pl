@@ -66,8 +66,8 @@ module Minesweeper_2pl
     end
 
     def show_bombs=(msg)
-      if msg == true
-        bcli.show_bombs = true
+      if msg == "show"
+        bcli.show_bombs = "show"
       elsif msg == "won"
         bcli.show_bombs = "won"
       else
@@ -79,20 +79,27 @@ module Minesweeper_2pl
       (board.size - board.bomb_count == board.positions.select{|el| el == "X"}.length) && (board.bomb_count == board.positions.select{|el| el.include?("F")}.length)
     end
 
-    def valid_move?(move)
-      get_position(move) != "X"
+    def is_not_valid?(move=nil)
+      move == nil || get_position(move) == "X"
+    end
+
+    def gameloop_check_status
+      if game_over != true
+        print_board
+      end
+      game_over #false
     end
 
     def check_game_status
       if game_over
         if is_won?
-          show_bombs = "won"
+          self.show_bombs = "won"
           print_board
-          result = "won"
+          result = "win"
         else
-          show_bombs = true
+          self.show_bombs = "show"
           print_board
-          result = "lost"
+          result = "lose"
         end
       end
       result

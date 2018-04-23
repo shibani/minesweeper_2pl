@@ -47,9 +47,9 @@ module Minesweeper_2pl
     end
 
     def show_game_over_message(result)
-      if result == "won"
+      if result == "win"
         puts "Game over! You win!"
-      elsif result == "lost"
+      elsif result == "lose"
         puts "Game over! You lose."
       end
     end
@@ -105,6 +105,11 @@ module Minesweeper_2pl
     def start
       welcome
       get_player_params
+    end
+
+    def get_move(game)
+      ask_for_move
+      get_player_input(game)
     end
   end
 end

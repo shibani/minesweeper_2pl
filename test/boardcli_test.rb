@@ -41,7 +41,7 @@ class BoardCliTest < Minitest::Test
     assert @bcli.respond_to?(:print_message)
   end
 
-  def test_that__can_write_to_the_console
+  def test_that_can_write_to_the_console
     out, err = capture_io do
       @bcli.print_message("welcome to minesweeper\n")
     end
@@ -105,7 +105,7 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_show_a_bomb
-    @bcli.show_bombs = true
+    @bcli.show_bombs = "show"
     positions = [ "B", "2", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
@@ -117,7 +117,7 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_show_bombs_1
-    @bcli.show_bombs = true
+    @bcli.show_bombs = "show"
     positions = [ "B", "2", "0", "X", " ",
                   "FB", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",

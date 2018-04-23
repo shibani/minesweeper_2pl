@@ -18,12 +18,10 @@ module Minesweeper_2pl
     end
 
     def play_game
-      while game.game_over != true
-        game.print_board
+      while !game_is_over
         move = nil
-        while move == nil
-          cli.ask_for_move
-          move = cli.get_player_input(game)
+        while game.is_not_valid?(move)
+          move = cli.get_move(game)
         end
         game.place_move(move)
       end
@@ -44,6 +42,10 @@ module Minesweeper_2pl
       game = Game.new
       self.game = game
       game.setup(game_config.first, game_config.last)
+    end
+
+    def game_is_over
+      game.gameloop_check_status
     end
 
   end

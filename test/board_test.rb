@@ -138,7 +138,7 @@ class BoardTest < Minitest::Test
     assert_equal 8, result
   end
 
-  def test_that_it_can_check_if_a_position_is_empty
+  def test_that_it_can_check_if_a_position_is_empty_1
     @board.bomb_count = 14
     @board.bomb_positions = [10, 11, 12, 13, 14, 20, 21, 23, 24, 30, 31, 32, 33, 34]
     @board.set_board_positions(100)

@@ -150,7 +150,7 @@ class CliTest < Minitest::Test
     assert_equal(70, result)
   end
 
-  def test_that_it_can_set_the_board_size_and_bomb_count
+  def test_that_it_can_get_and_set_the_board_size_and_bomb_count
     io = StringIO.new
     io.puts "10"
     io.puts "70"
@@ -170,18 +170,43 @@ class CliTest < Minitest::Test
     assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER          \n===========================================\n\n", out)
   end
 
-  def test_that_it_has_a_show_game_over_message
+  def test_that_it_has_a_show_game_lost_message
     out, err = capture_io do
-      @cli.show_game_over_message("lost")
+      @cli.show_game_over_message("lose")
     end
     assert_equal("Game over! You lose.\n", out)
   end
 
   def test_that_it_has_a_show_game_won_message
     out, err = capture_io do
-      @cli.show_game_over_message("won")
+      @cli.show_game_over_message("win")
     end
     assert_equal("Game over! You win!\n", out)
+  end
+
+  def test_that_it_can_call_the_clis_start_methods
+    io = StringIO.new
+    io.puts "10"
+    io.puts "70"
+    io.rewind
+    $stdin = io
+
+    result = @mock_cli.start
+    $stdin = STDIN
+
+    assert_equal([10,70], result)
+  end
+
+  def test_that_it_can_get_a_player_move
+    io = StringIO.new
+    io.puts "move 5,6"
+    io.rewind
+    $stdin = io
+
+    result = @cli.get_move(@mocked_game)
+    $stdin = STDIN
+
+    assert_equal([5,6, "move"], result)
   end
 
 end

@@ -5,7 +5,6 @@ class GameTest < Minitest::Test
     @game = Minesweeper_2pl::Game.new
     @board = Minesweeper_2pl::Board.new
     @bcli = Minesweeper_2pl::BoardCli.new
-    #@game.setup(10,100)
   end
 
   def test_that_it_has_a_game_class
@@ -70,18 +69,6 @@ class GameTest < Minitest::Test
     mocked_method = MiniTest::Mock.new
 
     @game.bcli.stub(:print_message, mocked_method) do
-      @game.print_board
-    end
-    mocked_method.verify
-  end
-
-  def test_that_print_board_can_call_the_boardclis_print_method
-    @game.bcli = @bcli
-    @game.board = @board
-
-    mocked_method = MiniTest::Mock.new
-
-    @game.bcli.stub(:print, mocked_method) do
       @game.print_board
     end
     mocked_method.verify
@@ -289,9 +276,9 @@ class GameTest < Minitest::Test
 
   def test_that_it_can_set_the_BoardClis_show_bombs_attribute
     @game.setup(10,100)
-    @game.show_bombs = true
+    @game.show_bombs = "show"
 
-    assert @game.bcli.show_bombs
+    assert_equal("show", @game.bcli.show_bombs)
   end
 
   def test_that_it_can_turn_off_the_BoardClis_show_bombs_attribute
@@ -345,7 +332,7 @@ class GameTest < Minitest::Test
     assert(@game.is_won?)
   end
 
-  def test_that_it_can_check_if_a_move_is_valid
+  def test_that_it_can_check_if_a_move_is_valid_1
     @game.setup(4,0)
     @game.set_bomb_count(4)
     @game.board.bomb_positions = [11, 12, 13, 15]
@@ -356,7 +343,21 @@ class GameTest < Minitest::Test
             "BF", "BF", "X", "B"]
     move = [0,0, "move"]
 
-    refute(@game.valid_move?(move))
+    assert(@game.is_not_valid?(move))
+  end
+
+  def test_that_it_can_check_if_a_move_is_valid_2
+    @game.setup(4,0)
+    @game.set_bomb_count(4)
+    @game.board.bomb_positions = [11, 12, 13, 15]
+    @game.board.positions = [
+            "X", "X", "X", "X",
+            "X", "X", "X", "X",
+            "X", "X", "X", "BF",
+            "BF", "BF", "X", "B"]
+    move = nil
+
+    assert(@game.is_not_valid?(move))
   end
 
   def test_that_it_can_check_the_games_status
@@ -368,7 +369,35 @@ class GameTest < Minitest::Test
                         "BF", "BF", "BF", "BF", "BF",
                         "X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X"]
-    assert("won", @game.check_game_status)
+    assert("win", @game.check_game_status)
+  end
+
+  def test_that_gameloop_check_status_can_check_status
+    @game.setup(4,0)
+    @game.board.bomb_count = 4
+    @game.board.bomb_positions = [10, 11, 12, 13]
+    @game.board.positions = ["X", "X", "X", "X",
+                        " ", " ", " ", " ",
+                        "B", "B", "B", "BF",
+                        "X", "X", "X", "X",
+                        "X", "X", "X", "X"]
+    refute(@game.gameloop_check_status)
+  end
+
+  def test_that_gameloop_check_status_can_print_the_board
+    @game.setup(4,0)
+    @game.board.bomb_count = 4
+    @game.board.bomb_positions = [10, 11, 12, 13]
+    @game.board.positions = ["X", "X", "X", "X",
+                        " ", " ", " ", " ",
+                        "B", "B", "B", "BF",
+                        "X", "X", "X", "X",
+                        "X", "X", "X", "X"]
+    out, err = capture_io do
+      @game.gameloop_check_status
+    end
+
+    assert out.end_with?("===+\n")
   end
 
 end
