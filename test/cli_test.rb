@@ -84,7 +84,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_board_size_from_the_player
-    assert_output "You have selected a 10 X 10 board. Generating board.\n" do
+    assert_output "You have selected a 10 x 10 board. Generating board.\n\n" do
       simulate_stdin("10") { @cli.get_player_entered_board_size }
     end
   end
@@ -121,7 +121,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_bomb_count_from_the_player
-    assert_output "You selected 75. Setting bombs!\n" do
+    assert_output "You selected 75. Setting bombs!\n\n" do
       simulate_stdin("75") { @cli.get_player_entered_bomb_count(100) }
     end
   end

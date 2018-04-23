@@ -3,6 +3,7 @@ module Minesweeper
     SIZE = 100
     BOMB_COUNT = 10
     BOMB_PERCENT = 0.75
+    MAX_ROW_NUM = 20
 
     attr_accessor :game, :cli
 
