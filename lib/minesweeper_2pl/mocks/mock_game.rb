@@ -1,5 +1,5 @@
-module Minesweeper_2pl
-  class MockedGame < Game
+module Minesweeper
+  class MockGame < Game
 
     attr_accessor :bcli, :board, :game_over
 

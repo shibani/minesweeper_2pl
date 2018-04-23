@@ -1,5 +1,5 @@
-module Minesweeper_2pl
-  class MockedCli < CLI
+module Minesweeper
+  class MockCli < CLI
     attr_accessor :count
 
     def initialize
@@ -23,10 +23,10 @@ module Minesweeper_2pl
 
     def get_player_params
       result = []
-      size = self.get_player_entered_board_size
+      size = get_player_entered_board_size
       result << size
 
-      count = self.get_player_entered_bomb_count(size * size)
+      count = get_player_entered_bomb_count(size * size)
       result << count
       result
     end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class BoardTest < Minitest::Test
   def setup
-    @board = Minesweeper_2pl::Board.new
+    @board = Minesweeper::Board.new
     @board.size = 100
     @board.bomb_count = 10
     @board.set_positions(100)

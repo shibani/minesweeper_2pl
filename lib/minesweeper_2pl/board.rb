@@ -1,22 +1,17 @@
-module Minesweeper_2pl
+module Minesweeper
 
   class Board
-    attr_accessor :size, :bomb_count, :bomb_positions, :positions, :row_size, :value_hash
+    attr_accessor :size, :bomb_count, :bomb_positions, :positions, :value_hash, :row_size
 
-    def set_positions(positions)
-      set_row_size(positions)
+    def set_positions(board_size)
+      set_row_size(board_size)
       set_bombs
-      set_board_positions(positions)
+      set_board_positions(board_size)
     end
 
-    def set_board_positions(positions)
-      @positions = []
-      positions.times do |position|
-        if bomb_positions.include?(position)
-          @positions << "B"
-        else
-          @positions << " "
-        end
+    def set_board_positions(board_size)
+      @positions = (0...board_size).map do |cell|
+        bomb_positions.include?(cell) ? "B" : " "
       end
     end
 
@@ -29,6 +24,10 @@ module Minesweeper_2pl
     def set_row_size(size)
       @row_size = Math.sqrt(size).to_i
     end
+
+    # def row_size
+    #   Math.sqrt(@size).to_i
+    # end
 
     def show_adjacent_empties(position)
       spaces = spaces_to_clear(position)

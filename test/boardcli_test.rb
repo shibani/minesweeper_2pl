@@ -2,8 +2,8 @@ require "test_helper"
 
 class BoardCliTest < Minitest::Test
   def setup
-    @bcli = Minesweeper_2pl::BoardCli.new
-    @bcli.board = Minesweeper_2pl::Board.new
+    @bcli = Minesweeper::BoardCli.new
+    @bcli.board = Minesweeper::Board.new
   end
 
   def test_that_it_has_a_message_attribute
@@ -28,12 +28,14 @@ class BoardCliTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_board
-    positions = [ "B", "-", "0", "X", " ",
+    @bcli.board.positions =
+                [ "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     assert @bcli.board.end_with?('===+')
   end
 
@@ -66,7 +68,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 8)
     assert_equal("X ", result)
   end
@@ -77,7 +81,9 @@ class BoardCliTest < Minitest::Test
                   "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " ",
                   "B", "-", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 6)
     assert_equal("- ", result)
   end
@@ -88,7 +94,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 11)
     assert_equal("3 ", result)
   end
@@ -99,7 +107,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 7)
     assert_equal("0 ", result)
   end
@@ -111,7 +121,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 10)
     assert_equal("\u{1f4a3}", result)
   end
@@ -123,7 +135,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f4a3}", result)
   end
@@ -135,7 +149,9 @@ class BoardCliTest < Minitest::Test
                   "BF", "X", "X", "X", "X",
                   "BF", "X", "X", "X", "X",
                   "BF", "X", "X", "X", "X"]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 10)
     assert_equal("\u{1f3c6}", result)
   end
@@ -146,7 +162,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f6a9}", result)
   end
@@ -157,7 +175,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 5)
     assert_equal("\u{1f6a9}", result)
   end
@@ -168,7 +188,9 @@ class BoardCliTest < Minitest::Test
                   "B", "3", "0F", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    @bcli.set_board(positions, 5)
+    @bcli.board.positions = positions
+    @bcli.board.row_size = 5
+    @bcli.board_to_string(@bcli.board)
     result = @bcli.get_cell_content(positions, 12)
     assert_equal("\u{1f6a9}", result)
   end

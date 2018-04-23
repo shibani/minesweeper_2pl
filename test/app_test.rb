@@ -2,12 +2,12 @@ require "test_helper"
 
 class AppTest < Minitest::Test
   def setup
-    @app = Minesweeper_2pl::App.new
-    @mocked_app = Minesweeper_2pl::MockedApp.new
-    @mocked_game = Minesweeper_2pl::MockedGame.new
-    @mocked_cli = Minesweeper_2pl::MockedCli.new
-    @app.game = @mocked_game
-    @app.cli = @mocked_cli
+    @app = Minesweeper::App.new
+    @mock_app = Minesweeper::MockApp.new
+    @mock_game = Minesweeper::MockGame.new
+    @mock_cli = Minesweeper::MockCli.new
+    @app.game = @mock_game
+    @app.cli = @mock_cli
     @app.game.setup(100,100)
   end
 
@@ -38,10 +38,10 @@ class AppTest < Minitest::Test
     io.rewind
     $stdin = io
 
-    @mocked_app.setup
+    @mock_app.setup
     $stdin = STDIN
 
-    @mocked_app.cli.instance_of?(Minesweeper_2pl::CLI)
+    @mock_app.cli.instance_of?(Minesweeper::CLI)
   end
 
   def test_setup_calls_clis_get_player_params_method
@@ -70,7 +70,7 @@ class AppTest < Minitest::Test
     @app.setup
     $stdin = STDIN
 
-    assert @app.game.instance_of?(Minesweeper_2pl::Game)
+    assert @app.game.instance_of?(Minesweeper::Game)
   end
 
   def test_play_game_can_check_if_the_game_is_over

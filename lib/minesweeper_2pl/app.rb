@@ -1,10 +1,15 @@
-module Minesweeper_2pl
+module Minesweeper
   class App
     SIZE = 100
     BOMB_COUNT = 10
     BOMB_PERCENT = 0.75
 
     attr_accessor :game, :cli
+
+    # def initialize
+    #   result = ui_setup
+    #   create_game(result)
+    # end
 
     def start
       setup

@@ -1,4 +1,4 @@
-module Minesweeper_2pl
+module Minesweeper
   class CLI
 
     def print(msg)

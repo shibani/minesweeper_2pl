@@ -2,9 +2,9 @@ require "test_helper"
 
 class GameTest < Minitest::Test
   def setup
-    @game = Minesweeper_2pl::Game.new
-    @board = Minesweeper_2pl::Board.new
-    @bcli = Minesweeper_2pl::BoardCli.new
+    @game = Minesweeper::Game.new
+    @board = Minesweeper::Board.new
+    @bcli = Minesweeper::BoardCli.new
   end
 
   def test_that_it_has_a_game_class
@@ -49,9 +49,9 @@ class GameTest < Minitest::Test
     @game.setup(10,100)
     @game.board.bomb_count = 10
     @game.board.size = 36
-    result = @game.set_board_positions(6)
+    board_positions = @game.set_board_positions(6)
 
-    assert_equal 36, result
+    assert_equal 36, board_positions.size
   end
 
   def test_that_it_calls_print_board
@@ -80,7 +80,7 @@ class GameTest < Minitest::Test
 
     mocked_method = MiniTest::Mock.new
 
-    @game.bcli.stub(:set_board, mocked_method) do
+    @game.bcli.stub(:board_to_string, mocked_method) do
       @game.print_board
     end
     mocked_method.verify

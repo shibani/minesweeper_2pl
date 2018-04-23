@@ -6,10 +6,10 @@ class CliTest < Minitest::Test
   include IoTestHelpers
 
   def setup
-    @cli = Minesweeper_2pl::CLI.new
-    @mocked_game = Minesweeper_2pl::MockedGame.new
-    @mocked_game.setup(10, 0)
-    @mock_cli = Minesweeper_2pl::MockedCli.new
+    @cli = Minesweeper::CLI.new
+    @mock_game = Minesweeper::MockGame.new
+    @mock_game.setup(10, 0)
+    @mock_cli = Minesweeper::MockCli.new
   end
 
   def test_that_it_has_a_cli_class
@@ -36,31 +36,31 @@ class CliTest < Minitest::Test
 
   def test_that_it_can_capture_input_from_the_player_1
     assert_output "You selected move 3,9. Placing your move.\n" do
-      simulate_stdin("move 3,9") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("move 3,9") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_capture_input_from_the_player_2
     assert_output "You selected flag 9,0. Placing your flag.\n" do
-      simulate_stdin("flag 9,0") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("flag 9,0") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_1
     assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-      simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("bad input") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_2
     assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-      simulate_stdin("flag A,8") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("flag A,8") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
     assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-      simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("3,12") { @cli.get_player_input(@mock_game) }
     end
   end
 
@@ -70,7 +70,7 @@ class CliTest < Minitest::Test
     io.rewind
     $stdin = io
 
-    result = @cli.get_player_input(@mocked_game)
+    result = @cli.get_player_input(@mock_game)
     $stdin = STDIN
 
     assert_equal([5,6, "flag"], result)
@@ -203,7 +203,7 @@ class CliTest < Minitest::Test
     io.rewind
     $stdin = io
 
-    result = @cli.get_move(@mocked_game)
+    result = @cli.get_move(@mock_game)
     $stdin = STDIN
 
     assert_equal([5,6, "move"], result)

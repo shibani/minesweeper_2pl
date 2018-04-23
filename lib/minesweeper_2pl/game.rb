@@ -1,4 +1,4 @@
-module Minesweeper_2pl
+module Minesweeper
   class Game
     attr_accessor :bcli, :board, :game_over
 
@@ -16,7 +16,7 @@ module Minesweeper_2pl
     def print_board
       positions = board_positions
       rowsize = board.row_size
-      bcli.set_board(positions, rowsize)
+      bcli.board_to_string(self.board)
       bcli.print_message(bcli.board)
     end
 

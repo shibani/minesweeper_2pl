@@ -1,4 +1,4 @@
-module Minesweeper_2pl
+module Minesweeper
   class BoardCli
 
     attr_accessor :message, :board, :show_bombs
@@ -18,65 +18,107 @@ module Minesweeper_2pl
       puts string
     end
 
-    def set_board(positions, rowsize)
+    def board_to_string(game)
       @board = NEWLINE + INTRO
-      rowsize.to_i.times do |count|
+      game.row_size.to_i.times do |count|
         @board += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
       end
       @board += NEWLINE + INTRO
-      rowsize.to_i.times do
+      game.row_size.to_i.times do
         @board += CELL_DIVIDER
       end
       @board += "+"
       @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
-      (0..rowsize.to_i-1).to_a.each do |i|
-        (0..rowsize.to_i-1).to_a.each do |j|
-          if j == rowsize - 1
-            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_END
+      (0..game.row_size.to_i-1).to_a.each do |i|
+        (0..game.row_size.to_i-1).to_a.each do |j|
+          if j == game.row_size - 1
+            @board += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_END
           else
-            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_RIGHT
+            @board += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_RIGHT
           end
         end
         @board += NEWLINE + INTRO
-        rowsize.to_i.times do
+        game.row_size.to_i.times do
           @board += CELL_DIVIDER
         end
         @board += "+"
-        unless i == rowsize - 1
+        unless i == game.row_size - 1
           @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
         end
       end
     end
 
     def get_cell_content(positions, cell)
+      cell = positions[cell]
       if show_bombs == "show"
-        if positions[cell].include? "BF"
-          cell_content = "\u{1f4a3}"
-        elsif positions[cell].include? "B"
-          cell_content = "\u{1f4a3}"
-        elsif positions[cell].include? "F"
-          cell_content = "\u{1f6a9}"
-        elsif positions[cell].length == 1
-          cell_content = positions[cell] + " "
-        end
+        render_lost_view(cell)
       elsif show_bombs == "won"
-        if positions[cell].include? "BF"
-          cell_content = "\u{1f3c6}"
-        elsif positions[cell].include? "F"
-          cell_content = "\u{1f6a9}"
-        elsif positions[cell].length == 1
-          cell_content = positions[cell] + " "
-        end
+        render_won_view(cell)
       else
-        if positions[cell].include? "F"
-          cell_content = "\u{1f6a9}"
-        elsif positions[cell] == "B"
-          cell_content = "  "
-        elsif positions[cell].length == 1
-          cell_content = positions[cell] + " "
-        end
+        render_normal_view(cell)
       end
-      cell_content
+    end
+
+    private
+
+    def render_lost_view(cell)
+      if cell_is_a_bomb_or_flag?(cell)
+        show_bomb_emoji
+      elsif cell_is_a_bomb?(cell)
+        show_bomb_emoji
+      elsif cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def render_won_view(cell)
+      if cell_is_a_bomb_or_flag?(cell)
+        show_trophy_emoji
+      elsif cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def render_normal_view(cell)
+      if cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell_is_a_bomb?(cell)
+        show_empty
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def cell_is_a_bomb?(cell)
+      cell.include? "B"
+    end
+
+    def cell_is_a_flag?(cell)
+      cell.include? "F"
+    end
+
+    def cell_is_a_bomb_or_flag?(cell)
+      cell.include? "BF"
+    end
+
+    def show_bomb_emoji
+      "\u{1f4a3}"
+    end
+
+    def show_trophy_emoji
+      "\u{1f3c6}"
+    end
+
+    def show_flag_emoji
+      "\u{1f6a9}"
+    end
+
+    def show_empty
+      "  "
     end
 
   end
