@@ -69,7 +69,6 @@ class GameTest < Minitest::Test
     move3 = [2,1]
     @game.place_move(move1)
     @game.place_move(move2)
-    puts "positions: " + @game.board.positions.to_s
 
     result = @game.get_position(move3)
 
