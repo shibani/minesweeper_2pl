@@ -4,11 +4,10 @@ class AppTest < Minitest::Test
   def setup
     @app = Minesweeper::App.new
     @mock_app = Minesweeper::MockApp.new
-    @mock_game = Minesweeper::MockGame.new
+    @mock_game = Minesweeper::MockGame.new(100,0)
     @mock_cli = Minesweeper::MockCli.new
     @app.game = @mock_game
     @app.cli = @mock_cli
-    @app.game.setup(100,100)
   end
 
   def test_that_it_has_an_app_class
@@ -31,14 +30,13 @@ class AppTest < Minitest::Test
     refute_nil @app.game
   end
 
-  def test_setup_creates_a_new_cli
+  def test_initialize_creates_a_new_cli
     io = StringIO.new
     io.puts "10"
     io.puts "70"
     io.rewind
     $stdin = io
 
-    @mock_app.setup
     $stdin = STDIN
 
     @mock_app.cli.instance_of?(Minesweeper::CLI)
@@ -74,8 +72,8 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_can_check_if_the_game_is_over
-    @app.game.setup(5,0)
-    @app.game.board.bomb_count = 5
+    @app.game.set_row_size(5)
+    @app.game.set_bomb_count(5)
     @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
     @app.game.board.positions = ["X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X",
@@ -86,8 +84,8 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_runs_the_game_loop_1
-    @app.game.setup(4,0)
-    @app.game.board.bomb_count = 4
+    @app.game.set_row_size(4)
+    @app.game.set_bomb_count(4)
     @app.game.board.bomb_positions = [8, 9, 10, 11]
     @app.game.board.positions = ["X", "X", "X", "X",
                         "X", "X", "3F", "X",
@@ -103,8 +101,8 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_runs_the_game_loop_2
-    @app.game.setup(4,0)
-    @app.game.board.bomb_count = 4
+    @app.game.set_row_size(4)
+    @app.game.set_bomb_count(4)
     @app.game.board.bomb_positions = [8, 9, 10, 11]
     @app.game.board.positions = ["X", "X", "X", "X",
                         "X", "X", "3F", "X",
@@ -120,8 +118,9 @@ class AppTest < Minitest::Test
   end
 
   def test_end_game_calls_the_games_is_won_method_1
-    @app.game.setup(5,0)
-    @app.game.board.bomb_count = 5
+    @app.game.set_row_size(5)
+    @app.game.set_board_size(5)
+    @app.game.set_bomb_count(5)
     @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
     @app.game.board.positions = ["X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X",
@@ -129,15 +128,18 @@ class AppTest < Minitest::Test
                         "X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X"]
     @app.game.game_over = true
+
     out, err = capture_io do
       @app.end_game
     end
+
     assert_equal("Game over! You win!\n", out)
   end
 
   def test_end_game_calls_the_games_is_won_method_2
-    @app.game.setup(5,0)
-    @app.game.board.bomb_count = 5
+    @app.game.set_row_size(5)
+    @app.game.set_board_size(5)
+    @app.game.set_bomb_count(5)
     @app.game.board.bomb_positions = [10, 11, 12, 13, 14]
     @app.game.board.positions = ["X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X",
@@ -145,6 +147,7 @@ class AppTest < Minitest::Test
                         "X", "X", "X", "X", "X",
                         "X", "X", "X", "X", "X"]
     @app.game.game_over = true
+
     assert_equal("win", @app.game.check_game_status)
   end
 

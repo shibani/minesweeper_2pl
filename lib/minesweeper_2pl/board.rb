@@ -4,7 +4,6 @@ module Minesweeper
     attr_accessor :size, :bomb_count, :bomb_positions, :positions, :value_hash, :row_size
 
     def set_positions(board_size)
-      set_row_size(board_size)
       set_bombs
       set_board_positions(board_size)
     end
@@ -20,14 +19,6 @@ module Minesweeper
       bombs = (0..size-1).to_a.shuffle
       @bomb_positions = bombs.first(bomb_count)
     end
-
-    def set_row_size(size)
-      @row_size = Math.sqrt(size).to_i
-    end
-
-    # def row_size
-    #   Math.sqrt(@size).to_i
-    # end
 
     def show_adjacent_empties(position)
       spaces = spaces_to_clear(position)

@@ -6,6 +6,7 @@ class BoardTest < Minitest::Test
     @board.size = 100
     @board.bomb_count = 10
     @board.set_positions(100)
+    @board.row_size = 10
   end
 
   def test_that_it_has_a_board_class

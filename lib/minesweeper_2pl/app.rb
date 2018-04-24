@@ -1,7 +1,5 @@
 module Minesweeper
   class App
-    SIZE = 100
-    BOMB_COUNT = 10
     BOMB_PERCENT = 0.75
     MAX_ROW_NUM = 20
 
@@ -45,9 +43,9 @@ module Minesweeper
     end
 
     def create_game(game_config)
-      game = Game.new
+      game = Game.new(game_config.first, game_config.last)
       self.game = game
-      game.setup(game_config.first, game_config.last)
+      #game.setup(game_config.first, game_config.last)
     end
 
     def game_is_over

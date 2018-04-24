@@ -2,14 +2,15 @@ module Minesweeper
   class Game
     attr_accessor :bcli, :board, :game_over
 
-    def setup(row_size, bomb_count)
+    def initialize(row_size, bomb_count)
       bcli = BoardCli.new
       board = Board.new
 
       self.board = board
-      self.set_board_size(row_size)
-      self.set_bomb_count(bomb_count)
-      self.set_board_positions(row_size)
+      set_row_size(row_size)
+      set_board_size(row_size)
+      set_bomb_count(bomb_count)
+      set_board_positions(row_size)
       self.bcli = bcli
     end
 
@@ -17,15 +18,19 @@ module Minesweeper
       positions = board_positions
       rowsize = board.row_size
       bcli.board_to_string(self.board)
-      bcli.print_message(bcli.board)
+      bcli.print_message(self.bcli.board)
+    end
+
+    def set_row_size(row_size)
+      self.board.row_size = row_size
     end
 
     def set_board_size(row_size)
-      board.size = row_size * row_size
+      self.board.size = row_size * row_size
     end
 
     def set_bomb_count(bomb_count)
-      board.bomb_count = bomb_count
+      self.board.bomb_count = bomb_count
     end
 
     def get_position(move)
@@ -87,7 +92,7 @@ module Minesweeper
       if game_over != true
         print_board
       end
-      game_over #false
+      game_over
     end
 
     def check_game_status
