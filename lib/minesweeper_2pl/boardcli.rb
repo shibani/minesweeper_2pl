@@ -1,7 +1,7 @@
 module Minesweeper
   class BoardCli
 
-    attr_accessor :message, :board, :show_bombs
+    attr_accessor :message, :show_bombs
 
     NEWLINE = "\n"
     ALPHA_LEFT = "  "
@@ -19,33 +19,34 @@ module Minesweeper
     end
 
     def board_to_string(game)
-      @board = NEWLINE + INTRO
+      string = NEWLINE + INTRO
       game.row_size.to_i.times do |count|
-        @board += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
+        string += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
       end
-      @board += NEWLINE + INTRO
+      string += NEWLINE + INTRO
       game.row_size.to_i.times do
-        @board += CELL_DIVIDER
+        string += CELL_DIVIDER
       end
-      @board += "+"
-      @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
+      string += "+"
+      string += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
       (0..game.row_size.to_i-1).to_a.each do |i|
         (0..game.row_size.to_i-1).to_a.each do |j|
           if j == game.row_size - 1
-            @board += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_END
+            string += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_END
           else
-            @board += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_RIGHT
+            string += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_RIGHT
           end
         end
-        @board += NEWLINE + INTRO
+        string += NEWLINE + INTRO
         game.row_size.to_i.times do
-          @board += CELL_DIVIDER
+          string += CELL_DIVIDER
         end
-        @board += "+"
+        string += "+"
         unless i == game.row_size - 1
-          @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
+          string += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
         end
       end
+      string
     end
 
     def get_cell_content(positions, cell)

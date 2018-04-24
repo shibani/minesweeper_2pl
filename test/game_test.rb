@@ -4,6 +4,7 @@ class GameTest < Minitest::Test
   def setup
     @game = Minesweeper::Game.new(0, 0)
     @game2 = Minesweeper::Game.new(10, 100)
+    @game3 = Minesweeper::MockGame.new(4,4)
   end
 
   def test_that_it_has_a_game_class
@@ -16,6 +17,12 @@ class GameTest < Minitest::Test
 
   def test_that_initialize_can_create_a_new_boardcli
     refute_nil @game2.bcli
+  end
+
+  def test_that_initialize_can_set_the_rowsize
+    result = @game2.board.row_size
+
+    assert_equal 10, result
   end
 
   def test_that_initialize_can_set_the_board_size
@@ -31,60 +38,42 @@ class GameTest < Minitest::Test
   end
 
   def test_that_initialize_can_set_the_boards_positions
-
     assert_equal 100, @game2.board_positions.size
   end
 
-  def test_that_setup_can_set_the_rowsize
-    @game.set_row_size(10)
-
-    result = @game.board.row_size
-
-    assert_equal 10, result
-  end
-
   def test_that_it_can_print_the_board
-    # mocked_method = MiniTest::Mock.new
-    # @game.stub(:print_board, mocked_method) do
-    #   @game.print_board
-    # end
-    # mocked_method.verify
+    @game3.set_input!("printed board goes here")
+
+    assert_equal "printed board goes here", @game3.print_board
   end
 
-  def test_that_print_board_can_call_the_boardclis_board_to_string_method
-    # @game.bcli = @bcli
-    # @game.board = @board
-    #
-    # mocked_method = MiniTest::Mock.new
-    #
-    # @game.bcli.stub(:board_to_string, mocked_method) do
-    #   @game.print_board
-    # end
-    # mocked_method.verify
+  def test_that_it_can_get_the_games_board_positions
+    result = @game3.board_positions
+
+    assert_equal 16, result.size
   end
 
-  def test_that_print_board_can_call_the_boardclis_show_bombs_method
-    # @game.bcli = @bcli
-    # @game.board = @board
-    #
-    # mocked_method = MiniTest::Mock.new
-    #
-    # @game.bcli.stub(:show_bombs, mocked_method) do
-    #   @game.print_board
-    # end
-    # mocked_method.verify
-  end
+  def test_that_it_can_show_adjacent_empties_on_the_board
+    @game.set_row_size(5)
+    @game.set_board_size(5)
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    @game.board.positions = [
+            " ", " ", " ", " ", " ",
+            " ", " ", " ", " ", "X",
+            "BF", "BF", "BF", "BF", "BF",
+            "X", "X", "X", "X", "X",
+            "X", "X", "X", "X", "X"]
+    move1 = [0,0,"move"]
+    move2 = [3,1,"move"]
+    move3 = [2,1]
+    @game.place_move(move1)
+    @game.place_move(move2)
+    puts "positions: " + @game.board.positions.to_s
 
-  def test_that_it_gets_the_games_board_positions
-    # @game.bcli = @bcli
-    # @game.board = @board
-    #
-    # mocked_method = MiniTest::Mock.new
-    #
-    # @game.board.stub(:positions, mocked_method) do
-    #   @game.board_positions
-    # end
-    # mocked_method.verify
+    result = @game.get_position(move3)
+
+    assert_equal "3", result
   end
 
   def test_that_it_can_access_position_by_coordinates
@@ -111,22 +100,6 @@ class GameTest < Minitest::Test
     @game.place_move(move)
 
     assert_equal "X", @game.get_position(move)
-  end
-
-  def test_that_it_can_show_adjacent_empties_on_the_board
-    # @game.set_bomb_count(5)
-    # @game.bcli = @bcli
-    # @game.board = @board
-    # @game.board.bomb_positions = [10, 11, 12, 13, 14, 15]
-    # @game.board.set_row_size(100)
-    # @game.board.set_board_positions(100)
-    #
-    # mocked_method = MiniTest::Mock.new
-    #
-    # @game.board.stub(:show_adjacent_empties, mocked_method) do
-    #   @game.place_move([25,25])
-    # end
-    # mocked_method.verify
   end
 
   def test_that_it_has_a_game_over_attribute

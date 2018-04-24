@@ -1,7 +1,7 @@
 module Minesweeper
 
   class Board
-    attr_accessor :size, :bomb_count, :bomb_positions, :positions, :value_hash, :row_size
+    attr_accessor :size, :bomb_count, :bomb_positions, :positions, :row_size
 
     def set_positions(board_size)
       set_bombs
@@ -116,7 +116,7 @@ module Minesweeper
       end
 
       def check_position(position)
-        self.positions[position] == "B" ? 1 : 0
+        (["B", "BF"].include? self.positions[position]) ? 1 : 0
       end
   end
 end

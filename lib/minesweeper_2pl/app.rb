@@ -45,7 +45,6 @@ module Minesweeper
     def create_game(game_config)
       game = Game.new(game_config.first, game_config.last)
       self.game = game
-      #game.setup(game_config.first, game_config.last)
     end
 
     def game_is_over

@@ -17,8 +17,8 @@ module Minesweeper
     def print_board
       positions = board_positions
       rowsize = board.row_size
-      bcli.board_to_string(self.board)
-      bcli.print_message(self.bcli.board)
+      string = bcli.board_to_string(self.board)
+      bcli.print_message(string)
     end
 
     def set_row_size(row_size)
