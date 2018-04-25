@@ -37,7 +37,6 @@ module Minesweeper
         return_coordinates_if_input_is_within_range(input, game)
       else
         puts invalid_player_input_message
-        coords = nil
       end
     end
 
@@ -47,7 +46,6 @@ module Minesweeper
         return_row_size_if_input_is_within_range(input)
       else
         puts invalid_row_size_message
-        row_size = nil
       end
     end
 
@@ -57,7 +55,6 @@ module Minesweeper
         return_bomb_count_if_input_is_within_range(input, board_size)
       else
         puts invalid_bomb_count_message
-        bomb_count = nil
       end
     end
 
