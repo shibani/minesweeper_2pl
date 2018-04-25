@@ -69,23 +69,9 @@ module Minesweeper
     def place_move(move)
       position = move_to_position(move)
       if move.last == "move"
-        if board.bomb_positions.include?(position)
-          self.game_over = true
-        else
-          board.show_adjacent_empties_with_value(position)
-          board.positions[position] = "X"
-        end
+        move_to_board(position)
       elsif move.last == "flag"
-        if board.positions[position] == " "
-          board.positions[position] = "F"
-        elsif board.positions[position] == "F"
-          board.positions[position] = " "
-        elsif board.positions[position].include?("F")
-          el = board.positions[position].gsub("F", "")
-          board.positions[position] = el
-        else
-          board.positions[position] += "F"
-        end
+        flag_to_board(position)
       end
       self.game_over = true if self.is_won?
     end
@@ -145,6 +131,48 @@ module Minesweeper
         (position % board.row_size).to_i,
         (position / board.row_size).to_i
       ]
+    end
+
+    def move_to_board(position)
+      if position_is_a_bomb?(position)
+        self.game_over = true
+      else
+        board.show_adjacent_empties_with_value(position)
+        mark_board(position, "X")
+      end
+    end
+
+    def flag_to_board(position)
+      if position_is_empty?(position)
+        mark_board(position, "F")
+      elsif position_is_flag?(position)
+        mark_board(position, " ")
+      elsif position_includes_a_flag?(position)
+        el = board_positions[position].gsub("F", "")
+        mark_board(position, el)
+      else
+        board_positions[position] += "F"
+      end
+    end
+
+    def position_is_a_bomb?(position)
+      board.bomb_positions.include?(position)
+    end
+
+    def position_is_empty?(position)
+      board.positions[position] == " "
+    end
+
+    def position_is_flag?(position)
+      board.positions[position] == "F"
+    end
+
+    def position_includes_a_flag?(position)
+      board.positions[position].include?("F")
+    end
+
+    def mark_board(position, content)
+      board.positions[position] = content
     end
 
   end
