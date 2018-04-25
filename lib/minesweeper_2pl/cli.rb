@@ -1,6 +1,5 @@
 module Minesweeper
   class CLI
-
     def print(msg)
       puts msg
     end
@@ -18,13 +17,13 @@ module Minesweeper
     def get_player_params
       result = []
       size = nil
-      while size == nil
+      while size.nil?
         ask_for_board_size
         size = get_player_entered_board_size
       end
       result << size
       count = nil
-      while count == nil
+      while count.nil?
         ask_for_bomb_count(size)
         count = get_player_entered_bomb_count(size * size)
       end
@@ -113,6 +112,7 @@ module Minesweeper
         puts invalid_player_input_message
         coords = nil
       end
+      coords
     end
 
     def player_input_success_message(input)
@@ -140,6 +140,7 @@ module Minesweeper
         puts invalid_row_size_message
         row_size = nil
       end
+      row_size
     end
 
     def row_size_success_message(input)
@@ -170,11 +171,11 @@ module Minesweeper
         puts invalid_bomb_count_message
         bomb_count = nil
       end
+      bomb_count
     end
 
     def invalid_bomb_count_message
       "That is not a valid bomb count. Please try again."
     end
-
   end
 end

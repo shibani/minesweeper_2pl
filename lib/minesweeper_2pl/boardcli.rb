@@ -22,7 +22,6 @@ module Minesweeper
       string = build_header(game)
       string += header_formatting
       string += build_rows(game)
-      string
     end
 
     def header_formatting

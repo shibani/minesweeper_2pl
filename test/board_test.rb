@@ -35,10 +35,6 @@ class BoardTest < Minitest::Test
     refute_nil @board.positions
   end
 
-  def test_that_set_positions_sets_the_row_size
-    refute_nil @board.row_size
-  end
-
   def test_that_set_positions_sets_the_bombs
     refute_nil @board.bomb_positions
   end

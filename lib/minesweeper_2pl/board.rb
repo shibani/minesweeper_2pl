@@ -1,5 +1,4 @@
 module Minesweeper
-
   class Board
     attr_accessor :size, :bomb_count, :bomb_positions, :positions, :row_size
 
@@ -23,7 +22,7 @@ module Minesweeper
     def show_adjacent_empties(position)
       spaces = spaces_to_clear(position)
       spaces.each do |space|
-        self.positions[space] = "-"
+        positions[space] = "-"
       end
     end
 
@@ -55,7 +54,7 @@ module Minesweeper
       top_middle = position + row_size
       top_right = position + row_size + 1
 
-      cells_hash = Hash.new
+      cells_hash = {}
 
       cells_hash[left] = middle_row
       cells_hash[right] = middle_row
@@ -89,7 +88,7 @@ module Minesweeper
         empties.concat(neighboring_cells(position, true))
         checked << position
         empties.uniq!
-        empties = empties - checked
+        empties -= checked
       end
       checked.shift
       checked
@@ -99,8 +98,8 @@ module Minesweeper
       if is_empty?(position)
         cells_to_check = neighboring_cells(position)
         sum = 0
-        cells_to_check.each do |position|
-          sum += check_position(position)
+        cells_to_check.each do |cell_position|
+          sum += check_position(cell_position)
         end
       end
       sum
@@ -111,12 +110,13 @@ module Minesweeper
     end
 
     private
+
       def within_bounds(relative_position, row)
-        relative_position >= 0 && relative_position <= size && relative_position >= row && relative_position < row + self.row_size
+        relative_position >= 0 && relative_position <= size && relative_position >= row && relative_position < row + row_size
       end
 
       def check_position(position)
-        (["B", "BF"].include? self.positions[position]) ? 1 : 0
+        (["B", "BF"].include? positions[position]) ? 1 : 0
       end
   end
 end

@@ -19,12 +19,10 @@ module Minesweeper
     end
 
     def play_game
-      while !game_is_over
+      until game_is_over
         move = nil
         while game.is_not_valid?(move)
-          if move != nil
-            cli.invalid_move
-          end
+          cli.invalid_move if move
           move = cli.get_move(game)
         end
         game.place_move(move)
@@ -39,6 +37,5 @@ module Minesweeper
     def game_is_over
       game.gameloop_check_status
     end
-
   end
 end

@@ -14,7 +14,7 @@ class BoardCliTest < Minitest::Test
     assert_equal("Hello World\n", out)
   end
 
-  def test_that_it_has_a_show_bombs_attribute
+  def test_that_it_can_set_the_show_bombs_attribute
     @bcli.show_bombs = true
     refute_nil(@bcli.show_bombs)
   end
