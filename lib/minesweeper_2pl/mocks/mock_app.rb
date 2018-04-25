@@ -7,16 +7,11 @@ module Minesweeper
 
     attr_accessor :game, :cli
 
-    def ui_setup
+    def initialize
       cli = MockCli.new
       self.cli = cli
-      cli.start
-    end
-
-    def create_game(game_config)
-      game = MockGame.new
+      game = MockGame.new(10, 10)
       self.game = game
-      game.setup(10,70)
     end
 
   end

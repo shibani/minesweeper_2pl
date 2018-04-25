@@ -5,26 +5,26 @@ module Minesweeper
 
     attr_accessor :game, :cli
 
-    # def initialize
-    #   result = ui_setup
-    #   create_game(result)
-    # end
-
-    def start
-      setup
-      play_game
-      end_game
+    def initialize
+      cli = CLI.new
+      self.cli = cli
+      game_config = cli.start
+      game = Game.new(game_config.first, game_config.last)
+      self.game = game
     end
 
-    def setup
-      result = ui_setup
-      create_game(result)
+    def start
+      play_game
+      end_game
     end
 
     def play_game
       while !game_is_over
         move = nil
         while game.is_not_valid?(move)
+          if move != nil
+            cli.invalid_move
+          end
           move = cli.get_move(game)
         end
         game.place_move(move)
@@ -32,19 +32,8 @@ module Minesweeper
     end
 
     def end_game
-      result = game.check_game_status
+      result = game.check_win_or_loss
       cli.show_game_over_message(result)
-    end
-
-    def ui_setup
-      cli = CLI.new
-      self.cli = cli
-      cli.start
-    end
-
-    def create_game(game_config)
-      game = Game.new(game_config.first, game_config.last)
-      self.game = game
     end
 
     def game_is_over

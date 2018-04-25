@@ -89,6 +89,10 @@ module Minesweeper
       end
     end
 
+    def invalid_move
+      puts "That was not a valid move. Please try again."
+    end
+
     private
 
     def player_input_has_correct_format(input)

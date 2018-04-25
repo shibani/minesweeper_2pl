@@ -25,12 +25,32 @@ module Minesweeper
       self.board.row_size = row_size
     end
 
+    def row_size
+      self.board.row_size
+    end
+
     def set_board_size(row_size)
       self.board.size = row_size * row_size
     end
 
     def set_bomb_count(bomb_count)
       self.board.bomb_count = bomb_count
+    end
+
+    def bomb_count
+      self.board.bomb_count
+    end
+
+    def set_bomb_positions(array)
+      self.board.bomb_positions = array
+    end
+
+    def bomb_positions
+      self.board.bomb_positions
+    end
+
+    def set_positions(array)
+      self.board.positions = array
     end
 
     def get_position(move)
@@ -95,7 +115,7 @@ module Minesweeper
       game_over
     end
 
-    def check_game_status
+    def check_win_or_loss
       if game_over
         if is_won?
           self.show_bombs = "won"
