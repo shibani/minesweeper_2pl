@@ -26,7 +26,7 @@ module Minesweeper
     end
 
     def row_size
-      self.board.row_size
+      board.row_size
     end
 
     def set_board_size(row_size)
@@ -38,7 +38,7 @@ module Minesweeper
     end
 
     def bomb_count
-      self.board.bomb_count
+      board.bomb_count
     end
 
     def set_bomb_positions(array)
@@ -46,7 +46,7 @@ module Minesweeper
     end
 
     def bomb_positions
-      self.board.bomb_positions
+      board.bomb_positions
     end
 
     def set_positions(array)

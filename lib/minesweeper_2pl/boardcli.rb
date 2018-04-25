@@ -19,6 +19,17 @@ module Minesweeper
     end
 
     def board_to_string(game)
+      string = build_header(game)
+      string += header_formatting
+      string += build_rows(game)
+      string
+    end
+
+    def header_formatting
+      NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
+    end
+
+    def build_header(game)
       string = NEWLINE + INTRO
       game.row_size.to_i.times do |count|
         string += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
@@ -28,23 +39,37 @@ module Minesweeper
         string += CELL_DIVIDER
       end
       string += "+"
-      string += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
-      (0..game.row_size.to_i-1).to_a.each do |i|
-        (0..game.row_size.to_i-1).to_a.each do |j|
-          if j == game.row_size - 1
-            string += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_END
-          else
-            string += CELL_LEFT + get_cell_content(game.positions, (i*game.row_size.to_i)+(j)) + CELL_RIGHT
-          end
+    end
+
+    def build_rows(game)
+      string = ""
+      (0..game.row_size.to_i-1).to_a.each do |row|
+        string += build_cell(game, row)
+        string += build_row_divider(game, row)
+      end
+      string
+    end
+
+    def build_cell(game, row)
+      string = ""
+      (0..game.row_size.to_i-1).to_a.each do |col|
+        if col == game.row_size - 1
+          string += CELL_LEFT + get_cell_content(game.positions, (row*game.row_size.to_i)+(col)) + CELL_END
+        else
+          string += CELL_LEFT + get_cell_content(game.positions, (row*game.row_size.to_i)+(col)) + CELL_RIGHT
         end
-        string += NEWLINE + INTRO
-        game.row_size.to_i.times do
-          string += CELL_DIVIDER
-        end
-        string += "+"
-        unless i == game.row_size - 1
-          string += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
-        end
+      end
+      string
+    end
+
+    def build_row_divider(game, row)
+      string = NEWLINE + INTRO
+      game.row_size.to_i.times do
+        string += CELL_DIVIDER
+      end
+      string += "+"
+      unless row == game.row_size - 1
+        string += NEWLINE + ALPHA_LEFT + sprintf("%2s", (row+1).to_s) + ALPHA_RIGHT
       end
       string
     end
