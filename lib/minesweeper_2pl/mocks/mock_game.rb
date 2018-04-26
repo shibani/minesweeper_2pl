@@ -8,7 +8,7 @@ module Minesweeper
     end
 
     def print_board
-      @input
+      print @input
     end
 
   end

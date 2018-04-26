@@ -4,37 +4,20 @@ module Minesweeper
 
     def initialize(row_size, bomb_count)
       bcli = BoardCli.new
-      board = Board.new
+      board = Board.new(row_size, bomb_count)
 
       self.board = board
-      set_row_size(row_size)
-      set_board_size(row_size)
-      set_bomb_count(bomb_count)
       set_board_positions(row_size)
       self.bcli = bcli
     end
 
     def print_board
-      # positions = board_positions
-      # rowsize = board.row_size
       string = bcli.board_to_string(board)
       bcli.print_message(string)
     end
 
-    def set_row_size(row_size)
-      board.row_size = row_size
-    end
-
     def row_size
       board.row_size
-    end
-
-    def set_board_size(row_size)
-      board.size = row_size * row_size
-    end
-
-    def set_bomb_count(bomb_count)
-      board.bomb_count = bomb_count
     end
 
     def bomb_count

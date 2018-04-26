@@ -3,7 +3,7 @@ require "test_helper"
 class AppTest < Minitest::Test
   def setup
     @mock_app = Minesweeper::MockApp.new
-    @mock_game = Minesweeper::MockGame.new(100,0)
+    @mock_game = Minesweeper::MockGame.new(5,5)
     @mock_cli = Minesweeper::MockCli.new
   end
 
@@ -40,24 +40,18 @@ class AppTest < Minitest::Test
                   "BF", "BF", "BF", "BF", "BF",
                   "X", "X", "X", "X", "X",
                   "X", " ", "X", "X", "X" ]
-    @mock_app.game.set_row_size(5)
-    @mock_app.game.set_board_size(5)
-    @mock_app.game.set_bomb_count(5)
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     refute(@mock_app.game_is_over)
   end
 
   def test_play_game_runs_the_game_loop_and_places_moves
-    bomb_positions = [8, 9, 10, 11]
-    positions = [ "X", "X", "X", "X",
-                  "X", "X", "3F", "X",
-                  "BF", "BF", "BF", "BF",
-                  "X", "X", "X", "X",
-                  "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(4)
-    @mock_app.game.set_board_size(4)
-    @mock_app.game.set_bomb_count(4)
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "3F", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.cli.reset_count
@@ -69,15 +63,12 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_runs_the_game_loop_and_can_check_if_a_move_is_valid
-    bomb_positions = [8, 9, 10, 11]
-    positions = [ "X", "X", "X", "X",
-                  "X", "X", "3F", "X",
-                  "BF", "BF", "BF", "BF",
-                  "X", "X", "X", "X",
-                  "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(4)
-    @mock_app.game.set_board_size(4)
-    @mock_app.game.set_bomb_count(4)
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "3F", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.cli.reset_count
@@ -91,15 +82,12 @@ class AppTest < Minitest::Test
   end
 
   def test_play_game_runs_the_game_loop_and_places_moves_till_the_game_is_over
-    bomb_positions = [8, 9, 10, 11]
-    positions = ["X", "X", "X", "X",
-                        "X", "X", "3F", "X",
-                        "BF", "BF", "BF", "BF",
-                        "X", "X", "X", "X",
-                        "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(4)
-    @mock_app.game.set_board_size(4)
-    @mock_app.game.set_bomb_count(4)
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "3F", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.cli.reset_count
@@ -117,9 +105,6 @@ class AppTest < Minitest::Test
                   "BF", "BF", "BF", "BF", "BF",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(5)
-    @mock_app.game.set_board_size(5)
-    @mock_app.game.set_bomb_count(5)
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.game.game_over = true
@@ -134,9 +119,6 @@ class AppTest < Minitest::Test
                   "BF", "X", "BF", "BF", "B",
                   "X", "X", "X", " ", "X",
                   "X", "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(5)
-    @mock_app.game.set_board_size(5)
-    @mock_app.game.set_bomb_count(5)
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.game.game_over = true
@@ -151,9 +133,6 @@ class AppTest < Minitest::Test
                   "BF", "BF", "BF", "BF", "BF",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(5)
-    @mock_app.game.set_board_size(5)
-    @mock_app.game.set_bomb_count(5)
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.game.game_over = true
@@ -172,9 +151,6 @@ class AppTest < Minitest::Test
                   "BF", "BF", "X", "BF", "BF",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
-    @mock_app.game.set_row_size(5)
-    @mock_app.game.set_board_size(5)
-    @mock_app.game.set_bomb_count(5)
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.game.game_over = true

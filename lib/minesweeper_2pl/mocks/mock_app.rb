@@ -10,7 +10,7 @@ module Minesweeper
     def initialize
       cli = MockCli.new
       self.cli = cli
-      game = MockGame.new(10, 10)
+      game = MockGame.new(5,5)
       self.game = game
     end
 

@@ -1,6 +1,13 @@
 module Minesweeper
   class Board
-    attr_accessor :size, :bomb_count, :bomb_positions, :positions, :row_size
+    attr_accessor :size, :bomb_positions, :positions
+    attr_reader :row_size, :bomb_count
+
+    def initialize(row_size, bomb_count)
+      @row_size = row_size
+      @bomb_count = bomb_count
+      @size = row_size * row_size
+    end
 
     def set_positions(board_size)
       set_bombs
