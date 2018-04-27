@@ -2,14 +2,14 @@ module Minesweeper_2pl
   class Game
     attr_accessor :bcli, :board, :game_over
 
-    def setup(board_size, bomb_count)
+    def setup(row_size, bomb_count)
       bcli = BoardCli.new
       board = Board.new
 
       self.board = board
-      self.set_board_size(board_size)
+      self.set_board_size(row_size)
       self.set_bomb_count(bomb_count)
-      self.set_board_positions(board_size)
+      self.set_board_positions(row_size)
       self.bcli = bcli
     end
 
@@ -20,8 +20,8 @@ module Minesweeper_2pl
       self.bcli.print_message(self.bcli.board)
     end
 
-    def set_board_size(board_size)
-      self.board.size = board_size
+    def set_board_size(row_size)
+      self.board.size = row_size * row_size
     end
 
     def set_bomb_count(bomb_count)
@@ -38,7 +38,7 @@ module Minesweeper_2pl
     end
 
     def set_board_positions(size)
-      self.board.set_positions(size)
+      self.board.set_positions(size * size)
     end
 
     def place_move(move)
@@ -46,7 +46,7 @@ module Minesweeper_2pl
       if self.board.bomb_positions.include?(position)
         self.game_over = true
       else
-        self.board.show_adjacent_empties(position)
+        self.board.show_adjacent_empties_with_value(position)
         self.board.positions[position] = "X"
       end
     end

@@ -1,5 +1,6 @@
 module Minesweeper_2pl
-  class App
+  class MockedApp < App
+
     SIZE = 100
     BOMB_COUNT = 10
     BOMB_PERCENT = 0.75
@@ -12,13 +13,13 @@ module Minesweeper_2pl
     end
 
     def setup
-      cli = CLI.new
+      cli = MockedCli.new
       self.cli = cli
       self.cli.welcome
       result = self.cli.get_player_params
-      game = Game.new
+      game = MockedGame.new
       self.game = game
-      self.game.setup(result.first, result.last)
+      self.game.setup(10, 70)
     end
 
     def play_game

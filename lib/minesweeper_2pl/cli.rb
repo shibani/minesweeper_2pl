@@ -5,6 +5,23 @@ module Minesweeper_2pl
       puts msg
     end
 
+    def get_player_params
+      result = []
+      size = nil
+      while size == nil
+        self.ask_for_board_size
+        size = self.get_player_entered_board_size
+      end
+      result << size
+      count = nil
+      while count == nil
+        self.ask_for_bomb_count(size)
+        count = self.get_player_entered_bomb_count(size * size)
+      end
+      result << count
+      result
+    end
+
     def ask_for_move
       string = "\nPlayer 1, enter one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1: "
       self.print(string)
@@ -31,5 +48,54 @@ module Minesweeper_2pl
     def show_game_over_message
       puts "Game over! You lose."
     end
+
+    def ask_for_board_size
+      puts "Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n"
+    end
+
+    def ask_for_bomb_count(size)
+      puts "Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than #{(size * size * App::BOMB_PERCENT).to_i})"
+    end
+
+    def get_player_entered_board_size
+      input = gets.chomp
+      if input.match(/^(\d)+$/)
+        if input.to_i > 0 && input.to_i <= 20
+          puts "You have selected a #{input} X #{input} board. Generating board."
+          row_size = input.to_i
+        else
+          puts "That is not a valid row size. Please try again."
+          row_size = nil
+        end
+      else
+        puts "That is not a valid row size. Please try again."
+        row_size = nil
+      end
+      row_size
+    end
+
+    def get_player_entered_bomb_count(board_size)
+      input = gets.chomp
+      if input.match(/^(\d)+$/)
+        if input.to_i > 0 && input.to_i <= board_size * App::BOMB_PERCENT
+          puts "You selected #{input}. Setting bombs!"
+          bomb_count = input.to_i
+        else
+          puts "That is not a valid bomb count. Please try again."
+          bomb_count = nil
+        end
+      else
+        puts "That is not a valid bomb count. Please try again."
+        bomb_count = nil
+      end
+      bomb_count
+    end
+
+    def welcome
+      puts "\n==========================================="
+      puts "           WELCOME TO MINESWEEPER          "
+      puts "===========================================\n\n"
+    end
+
   end
 end

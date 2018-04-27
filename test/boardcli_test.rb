@@ -88,7 +88,7 @@ class BoardCliTest < Minitest::Test
     assert_equal("3 ", result)
   end
 
-  def test_that_it_does_not_print_zeroes
+  def test_that_it_does_print_zeroes
     positions = [ "B", 2, 0, "X", " ",
                   "B", 3, 0, "X", " ",
                   "B", 3, 0, "X", " ",
@@ -96,7 +96,7 @@ class BoardCliTest < Minitest::Test
                   "B", 2, 0, "X", " "]
     @bcli.set_board(positions, 5)
     result = @bcli.get_cell_content(positions, 7)
-    assert_equal("  ", result)
+    assert_equal("0 ", result)
   end
 
   def test_that_it_can_show_a_bomb

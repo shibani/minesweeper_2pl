@@ -8,3 +8,4 @@ require "minesweeper_2pl/player"
 
 require "minesweeper_2pl/mocks/mocked_cli"
 require "minesweeper_2pl/mocks/mocked_game"
+require "minesweeper_2pl/mocks/mocked_app"
