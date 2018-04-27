@@ -23,23 +23,24 @@ module Minesweeper_2pl
     end
 
     def ask_for_move
-      string = "\nPlayer 1, enter one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1: "
+      string = "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
       self.print(string)
     end
 
     def get_player_input(game)
       input = gets.chomp
-      if input.include? ","
-        coords = input.split(",")
-        if ((coords[0].match(/^(\d)+$/)) && (coords[1].match(/^(\d)+$/)) && (coords[0].to_i <= game.board.row_size) && (coords[1].to_i <= game.board.row_size))
-          puts "You selected #{input}. Placing your move."
-          coords = [coords[0].to_i, coords[1].to_i]
+      if input =~ (/[flag|move]\s+[(\d){1,2}],\s*[(\d){1,2}]/)
+        move = input.split(" ")
+        coords = move[1].split(",")
+        if ((coords[0].to_i <= game.board.row_size) && (coords[1].to_i <= game.board.row_size))
+          puts "You selected #{input}. Placing your #{move[0]}."
+          coords = [coords[0].to_i, coords[1].to_i, move[0]]
         else
-          puts "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!"
+          puts "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!"
           coords = nil
         end
       else
-        puts "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!"
+        puts "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!"
         coords = nil
       end
       coords
@@ -96,6 +97,5 @@ module Minesweeper_2pl
       puts "           WELCOME TO MINESWEEPER          "
       puts "===========================================\n\n"
     end
-
   end
 end

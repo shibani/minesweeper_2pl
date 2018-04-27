@@ -1,6 +1,10 @@
 module Minesweeper_2pl
   class MockedCli < CLI
 
+    def set_input!(input)
+      @input = input
+    end
+
     def print(msg)
     end
 
@@ -18,7 +22,7 @@ module Minesweeper_2pl
     end
 
     def get_player_input(game)
-      [3,3]
+      @input
     end
 
     def show_game_over_message

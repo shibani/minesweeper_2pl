@@ -43,11 +43,24 @@ module Minesweeper_2pl
 
     def place_move(move)
       position = move_to_position(move)
-      if self.board.bomb_positions.include?(position)
-        self.game_over = true
-      else
-        self.board.show_adjacent_empties_with_value(position)
-        self.board.positions[position] = "X"
+      if move.last == "move"
+        if self.board.bomb_positions.include?(position)
+          self.game_over = true
+        else
+          self.board.show_adjacent_empties_with_value(position)
+          self.board.positions[position] = "X"
+        end
+      elsif move.last == "flag"
+        if self.board.positions[position] == " "
+          self.board.positions[position] = "F"
+        elsif self.board.positions[position] == "F"
+          self.board.positions[position] = " "
+        elsif self.board.positions[position].include?("F")
+          el = self.board.positions[position].gsub("F", "")
+          self.board.positions[position] = el
+        else
+          self.board.positions[position] += "F"
+        end
       end
     end
 

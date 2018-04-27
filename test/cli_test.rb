@@ -31,43 +31,49 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.ask_for_move
     end
-    assert_equal("\nPlayer 1, enter one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1: \n", out)
+    assert_equal("\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n", out)
   end
 
-  def test_that_it_can_capture_input_from_the_player
-    assert_output "You selected 3,9. Placing your move.\n" do
-      simulate_stdin("3,9") { @cli.get_player_input(@mocked_game) }
+  def test_that_it_can_capture_input_from_the_player_1
+    assert_output "You selected move 3,9. Placing your move.\n" do
+      simulate_stdin("move 3,9") { @cli.get_player_input(@mocked_game) }
+    end
+  end
+
+  def test_that_it_can_capture_input_from_the_player_2
+    assert_output "You selected flag 9,0. Placing your flag.\n" do
+      simulate_stdin("flag 9,0") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_1
-    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
-      simulate_stdin("A,8") { @cli.get_player_input(@mocked_game) }
-    end
-  end
-
-  def test_that_it_can_check_if_the_input_is_valid_2
-    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
       simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
     end
   end
 
+  def test_that_it_can_check_if_the_input_is_valid_2
+    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+      simulate_stdin("flag A,8") { @cli.get_player_input(@mocked_game) }
+    end
+  end
+
   def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
-    assert_output "Expecting one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
+    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
       simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
     end
   end
 
   def test_that_it_returns_an_array_if_input_is_valid
     io = StringIO.new
-    io.puts "5,6"
+    io.puts "flag 5,6"
     io.rewind
     $stdin = io
 
     result = @cli.get_player_input(@mocked_game)
     $stdin = STDIN
 
-    assert_equal([5,6], result)
+    assert_equal([5,6, "flag"], result)
   end
 
   def test_that_it_has_a_show_game_over_message

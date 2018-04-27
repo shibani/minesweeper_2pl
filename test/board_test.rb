@@ -143,8 +143,22 @@ class BoardTest < Minitest::Test
     @board.bomb_positions = [10, 11, 12, 13, 14, 20, 21, 23, 24, 30, 31, 32, 33, 34]
     @board.set_board_positions(100)
     position = 64
+
     result = @board.is_empty?(position)
+
     assert result
+  end
+
+  def test_that_it_can_check_if_a_position_is_empty_2
+    @board.bomb_count = 11
+    @board.bomb_positions = [10, 12, 13, 14, 20, 23, 24, 30, 32, 33, 34]
+    @board.set_board_positions(100)
+    position = 64
+    @board.positions[position] = "3F"
+
+    result = @board.is_empty?(position)
+
+    assert(result)
   end
 
   def test_that_it_can_collect_all_adjacent_empty_positions_1
@@ -227,7 +241,7 @@ class BoardTest < Minitest::Test
     position = 21
     result = @board.spaces_to_clear(position)
     @board.show_adjacent_empties_with_value(position)
-    assert_kind_of(Integer, @board.positions[result.last])
+    assert_kind_of(String, @board.positions[result.last])
   end
 
   def test_that_it_can_check_if_the_game_is_not_won

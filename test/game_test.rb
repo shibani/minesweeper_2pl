@@ -5,7 +5,7 @@ class GameTest < Minitest::Test
     @game = Minesweeper_2pl::Game.new
     @board = Minesweeper_2pl::Board.new
     @bcli = Minesweeper_2pl::BoardCli.new
-    @game.setup(10,100)
+    #@game.setup(10,100)
   end
 
   def test_that_it_has_a_game_class
@@ -31,6 +31,7 @@ class GameTest < Minitest::Test
   end
 
   def test_that_setup_can_set_the_board_size
+    @game.setup(10,100)
     result = @game.set_board_size(10)
     result = @game.board.size
 
@@ -38,6 +39,7 @@ class GameTest < Minitest::Test
   end
 
   def test_that_setup_can_set_the_bomb_count
+    @game.setup(10,100)
     result = @game.set_bomb_count(60)
     result = @game.board.bomb_count
 
@@ -45,6 +47,7 @@ class GameTest < Minitest::Test
   end
 
   def test_that_setup_can_set_the_boards_positions
+    @game.setup(10,100)
     @game.board.bomb_count = 10
     @game.board.size = 36
     result = @game.set_board_positions(6)
@@ -157,16 +160,18 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_access_position_by_coordinates
+    @game.setup(10,100)
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [1,3]
+    move = [1,3, "move"]
     assert_equal "B", @game.get_position(move)
   end
 
   def test_that_it_can_place_a_move_on_the_board
+    @game.setup(10,100)
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [7,6]
+    move = [7,6, "move"]
     @game.place_move(move)
     assert_equal "X", @game.get_position(move)
   end
@@ -192,20 +197,57 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_game_to_game_over
+    @game.setup(10,100)
     @game.set_bomb_count(5)
     @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    coords = [3,1]
+    coords = [3,1, "move"]
     @game.place_move(coords)
     assert @game.game_over
   end
 
-  def test_that_it_can_set_the_BoardCLis_show_bombs_attribute
+  def test_that_it_can_set_a_flag
+    @game.setup(10,5)
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    move = [3,7, "flag"]
+
+    @game.place_move(move)
+
+    assert_equal "F", @game.get_position(move)
+  end
+
+  def test_that_it_can_set_a_flag_2
+    @game.setup(10,100)
+    move = [3,1, "flag"]
+
+    @game.place_move(move)
+
+    assert_equal "BF", @game.get_position(move)
+  end
+
+  def test_that_it_can_remove_a_flag
+    @game.setup(10,100)
+    @game.set_bomb_count(5)
+    @game.board.bomb_positions = [10, 11, 12, 13, 14]
+    move = [3,7, "flag"]
+
+    @game.place_move(move)
+    @game.place_move(move)
+
+    assert_equal "B", @game.get_position(move)
+  end
+
+  def test_that_it_can_set_the_BoardClis_show_bombs_attribute
+    @game.setup(10,100)
     @game.show_bombs = true
+
     assert @game.bcli.show_bombs
   end
 
-  def test_that_it_can_turn_off_the_BoardCLis_show_bombs_attribute
+  def test_that_it_can_turn_off_the_BoardClis_show_bombs_attribute
+    @game.setup(10,100)
     @game.show_bombs = "random string"
+
     refute @game.bcli.show_bombs
   end
 end
