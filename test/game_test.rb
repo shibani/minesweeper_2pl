@@ -2,194 +2,140 @@ require "test_helper"
 
 class GameTest < Minitest::Test
   def setup
-    @game = Minesweeper_2pl::Game.new
-    @board = Minesweeper_2pl::Board.new
-    @bcli = Minesweeper_2pl::BoardCli.new
-    #@game.setup(10,100)
+    @game = Minesweeper::MockGame.new(5,5)
   end
 
   def test_that_it_has_a_game_class
     refute_nil @game
   end
 
-  def test_that_it_has_a_print_board_method
-    assert @game.respond_to?(:print_board)
-  end
-
-  def test_that_it_has_a_setup_method
-    assert @game.respond_to?(:setup)
-  end
-
-  def test_that_setup_can_create_a_new_board
-    @game.setup(10, 100)
+  def test_that_initialize_can_create_a_new_board
     refute_nil @game.board
   end
 
-  def test_that_setup_can_create_a_new_boardcli
-    @game.setup(10, 100)
+  def test_that_initialize_creates_a_new_board_with_row_size
+    assert_equal 5, @game.board.row_size
+  end
+
+  def test_that_initialize_creates_a_new_board_with_bomb_count
+    assert_equal 5, @game.board.bomb_count
+  end
+
+  def test_that_initialize_can_create_a_new_boardcli
     refute_nil @game.bcli
   end
 
-  def test_that_setup_can_set_the_board_size
-    @game.setup(10,100)
-    result = @game.set_board_size(10)
+  def test_that_initialize_can_set_the_rowsize
+    result = @game.board.row_size
+
+    assert_equal 5, result
+  end
+
+  def test_that_initialize_can_set_the_board_size
     result = @game.board.size
 
-    assert_equal 100, result
+    assert_equal 25, result
   end
 
-  def test_that_setup_can_set_the_bomb_count
-    @game.setup(10,100)
-    result = @game.set_bomb_count(60)
+  def test_that_initialize_can_set_the_bomb_count
     result = @game.board.bomb_count
 
-    assert_equal 60, result
+    assert_equal 5, result
   end
 
-  def test_that_setup_can_set_the_boards_positions
-    @game.setup(10,100)
-    @game.board.bomb_count = 10
-    @game.board.size = 36
-    result = @game.set_board_positions(6)
-
-    assert_equal 36, result
+  def test_that_initialize_can_set_the_boards_positions
+    assert_equal 25, @game.board_positions.size
   end
 
-  def test_that_it_calls_print_board
-    mocked_method = MiniTest::Mock.new
-    @game.stub(:print_board, mocked_method) do
+  def test_that_it_can_print_the_board
+    @game.set_input!("printed board goes here")
+
+    out, err = capture_io do
       @game.print_board
     end
-    mocked_method.verify
+    assert_equal "printed board goes here", out
   end
 
-  def test_that_print_board_can_call_the_boardclis_print_message_method
-    @game.bcli = @bcli
-    @game.board = @board
+  def test_that_it_can_set_the_bomb_positions_with_an_array
+    bomb_positions = [10, 11, 12, 13, 14]
+    @game.set_bomb_positions(bomb_positions)
 
-    mocked_method = MiniTest::Mock.new
-
-    @game.bcli.stub(:print_message, mocked_method) do
-      @game.print_board
-    end
-    mocked_method.verify
+    assert_matched_arrays bomb_positions, @game.board.bomb_positions
   end
 
-  def test_that_print_board_can_call_the_boardclis_print_method
-    @game.bcli = @bcli
-    @game.board = @board
+  def test_that_it_can_set_the_board_positions_with_an_array
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_positions(positions)
 
-    mocked_method = MiniTest::Mock.new
-
-    @game.bcli.stub(:print, mocked_method) do
-      @game.print_board
-    end
-    mocked_method.verify
+    assert_matched_arrays positions, @game.board_positions
   end
 
-  def test_that_print_board_can_call_the_boardclis_set_board_method
-    @game.bcli = @bcli
-    @game.board = @board
-
-    mocked_method = MiniTest::Mock.new
-
-    @game.bcli.stub(:set_board, mocked_method) do
-      @game.print_board
-    end
-    mocked_method.verify
+  def test_that_it_can_get_the_games_row_size
+    assert_equal 5, @game.row_size
   end
 
-  def test_that_print_board_can_call_the_boardclis_show_bombs_method
-    @game.bcli = @bcli
-    @game.board = @board
-
-    mocked_method = MiniTest::Mock.new
-
-    @game.bcli.stub(:show_bombs, mocked_method) do
-      @game.print_board
-    end
-    mocked_method.verify
+  def test_that_it_can_get_the_games_bomb_count
+    assert_equal 5, @game.bomb_count
   end
 
-  def test_that_it_calls_the_games_set_board_size_method
-    @game.bcli = @bcli
-    @game.board = @board
+  def test_that_it_can_get_the_games_board_positions
+    result = @game.board_positions
 
-    mocked_method = MiniTest::Mock.new
-
-    @game.board.stub(:size, mocked_method) do
-      @game.set_board_size(10)
-    end
-    mocked_method.verify
+    assert_equal 25, result.size
   end
 
-  def test_that_it_calls_the_games_set_bomb_count_method
-    @game.bcli = @bcli
-    @game.board = @board
+  def test_that_it_can_show_adjacent_empties_on_the_board
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move1 = [0,0,"move"]
+    move2 = [3,1,"move"]
+    move3 = [2,1]
+    @game.place_move(move1)
+    @game.place_move(move2)
 
-    mocked_method = MiniTest::Mock.new
+    result = @game.get_position(move3)
 
-    @game.board.stub(:bomb_count, mocked_method) do
-      @game.set_bomb_count(60)
-    end
-    mocked_method.verify
-  end
-
-  def test_that_it_sets_the_games_board_positions
-    @game.bcli = @bcli
-    @game.board = @board
-
-    mocked_method = MiniTest::Mock.new
-
-    @game.board.stub(:set_positions, mocked_method) do
-      @game.set_board_positions(10)
-    end
-    mocked_method.verify
-  end
-
-  def test_that_it_gets_the_games_board_positions
-    @game.bcli = @bcli
-    @game.board = @board
-
-    mocked_method = MiniTest::Mock.new
-
-    @game.board.stub(:positions, mocked_method) do
-      @game.board_positions
-    end
-    mocked_method.verify
+    assert_equal "3", result
   end
 
   def test_that_it_can_access_position_by_coordinates
-    @game.setup(10,100)
-    @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [1,3, "move"]
+    bomb_positions = [13, 15, 16, 18, 19]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "BF", "X",
+                  "BF", "BF", "X", "B", "BF",
+                  "X", "X", "X", "X", "X"]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    move = [3,3, "move"]
+
     assert_equal "B", @game.get_position(move)
   end
 
   def test_that_it_can_place_a_move_on_the_board
-    @game.setup(10,100)
-    @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [7,6, "move"]
-    @game.place_move(move)
-    assert_equal "X", @game.get_position(move)
-  end
+    bomb_positions = [13, 15, 16, 18, 19]
+    positions = [ " ", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "BF", "X",
+                  "BF", "BF", "X", "B", "BF",
+                  "X", "X", "X", "X", "X"]
+    @game.set_bomb_positions(bomb_positions)
+    move = [0,0, "move"]
 
-  def test_that_it_can_show_adjacent_empties_on_the_board
-    # @game.set_bomb_count(5)
-    # @game.bcli = @bcli
-    # @game.board = @board
-    # @game.board.bomb_positions = [10, 11, 12, 13, 14, 15]
-    # @game.board.set_row_size(100)
-    # @game.board.set_board_positions(100)
-    #
-    # mocked_method = MiniTest::Mock.new
-    #
-    # @game.board.stub(:show_adjacent_empties, mocked_method) do
-    #   @game.place_move([25,25])
-    # end
-    # mocked_method.verify
+    @game.place_move(move)
+
+    assert_equal "X", @game.get_position(move)
   end
 
   def test_that_it_has_a_game_over_attribute
@@ -197,19 +143,31 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_set_the_game_to_game_over
-    @game.setup(10,100)
-    @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    coords = [3,1, "move"]
-    @game.place_move(coords)
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", " ", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [3,1, "move"]
+
+    @game.place_move(move)
+
     assert @game.game_over
   end
 
   def test_that_it_can_set_a_flag
-    @game.setup(10,5)
-    @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [3,7, "flag"]
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  " ", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [0,1, "flag"]
 
     @game.place_move(move)
 
@@ -217,8 +175,15 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_set_a_flag_2
-    @game.setup(10,100)
-    move = [3,1, "flag"]
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  " ", "X", "X", "X", "X",
+                  "B", "B", "B", "B", "B",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [3,2, "flag"]
 
     @game.place_move(move)
 
@@ -226,10 +191,15 @@ class GameTest < Minitest::Test
   end
 
   def test_that_it_can_remove_a_flag
-    @game.setup(10,100)
-    @game.set_bomb_count(5)
-    @game.board.bomb_positions = [10, 11, 12, 13, 14]
-    move = [3,7, "flag"]
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  " ", "X", "X", "X", "X",
+                  "BF", "B", "B", "BF", "B",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [1,2, "flag"]
 
     @game.place_move(move)
     @game.place_move(move)
@@ -237,17 +207,181 @@ class GameTest < Minitest::Test
     assert_equal "B", @game.get_position(move)
   end
 
-  def test_that_it_can_set_the_BoardClis_show_bombs_attribute
-    @game.setup(10,100)
-    @game.show_bombs = true
+  def test_that_it_can_check_if_a_game_is_over_1
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [2,2, "flag"]
 
-    assert @game.bcli.show_bombs
+    @game.place_move(move)
+
+    assert @game.is_won?
+  end
+
+  def test_that_it_can_check_if_a_game_is_over_2
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [2,2, "move"]
+
+    @game.place_move(move)
+
+    assert @game.game_over
+  end
+
+  def test_that_it_can_check_if_a_game_is_over_3
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [0,1, "flag"]
+
+    @game.place_move(move)
+
+    refute @game.game_over
+  end
+
+  def test_that_it_can_set_the_BoardClis_show_bombs_attribute
+    @game.show_bombs = "show"
+
+    assert_equal("show", @game.bcli.show_bombs)
   end
 
   def test_that_it_can_turn_off_the_BoardClis_show_bombs_attribute
-    @game.setup(10,100)
     @game.show_bombs = "random string"
 
     refute @game.bcli.show_bombs
   end
+
+  def test_that_it_can_set_the_BoardClis_show_bombs_attribute_to_won
+    @game.show_bombs = "won"
+
+    assert_equal("won", @game.bcli.show_bombs)
+  end
+
+  def test_that_it_can_check_if_a_game_is_won
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [2,2, "flag"]
+
+    @game.place_move(move)
+
+    assert(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_the_game_is_won
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    assert(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_the_game_is_not_won
+    bomb_positions = [10, 11, 12, 13, 14]
+    @game.set_bomb_positions(bomb_positions)
+    @game.board.set_board_positions(5)
+
+    refute(@game.is_won?)
+  end
+
+  def test_that_it_can_check_if_a_move_is_valid_1
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [0,0, "move"]
+
+    assert(@game.is_not_valid?(move))
+  end
+
+  def test_that_it_can_check_if_a_move_is_valid_2
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = nil
+
+    assert(@game.is_not_valid?(move))
+  end
+
+  def test_that_gameloop_check_status_can_check_if_the_game_is_over
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  " ", " ", " ", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    refute(@game.gameloop_check_status)
+  end
+
+  def test_that_gameloop_check_status_can_print_the_board
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    @game.game_over = false
+    @game.set_input!("display board")
+
+    out, err = capture_io do
+      @game.gameloop_check_status
+    end
+
+    assert_equal("display board", out)
+  end
+
+  def test_that_it_can_check_if_the_game_is_won_or_lost
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    @game.game_over = true
+
+    assert_equal("win", @game.check_win_or_loss)
+  end
+
 end

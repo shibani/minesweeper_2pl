@@ -1,31 +1,39 @@
-module Minesweeper_2pl
+module Minesweeper
   class Game
-    attr_accessor :bcli, :board, :game_over
+    attr_accessor :board, :bcli, :game_over
 
-    def setup(row_size, bomb_count)
+    def initialize(row_size, bomb_count)
       bcli = BoardCli.new
-      board = Board.new
+      board = Board.new(row_size, bomb_count)
 
       self.board = board
-      self.set_board_size(row_size)
-      self.set_bomb_count(bomb_count)
-      self.set_board_positions(row_size)
+      set_board_positions(row_size)
       self.bcli = bcli
     end
 
     def print_board
-      positions = self.board_positions
-      rowsize = self.board.row_size
-      self.bcli.set_board(positions, rowsize)
-      self.bcli.print_message(self.bcli.board)
+      string = bcli.board_to_string(board)
+      bcli.print_message(string)
     end
 
-    def set_board_size(row_size)
-      self.board.size = row_size * row_size
+    def row_size
+      board.row_size
     end
 
-    def set_bomb_count(bomb_count)
-      self.board.bomb_count = bomb_count
+    def bomb_count
+      board.bomb_count
+    end
+
+    def set_bomb_positions(array)
+      board.bomb_positions = array
+    end
+
+    def bomb_positions
+      board.bomb_positions
+    end
+
+    def set_positions(array)
+      board.positions = array
     end
 
     def get_position(move)
@@ -34,49 +42,66 @@ module Minesweeper_2pl
     end
 
     def board_positions
-      self.board.positions
+      board.positions
     end
 
     def set_board_positions(size)
-      self.board.set_positions(size * size)
+      board.set_positions(size * size)
     end
 
     def place_move(move)
       position = move_to_position(move)
       if move.last == "move"
-        if self.board.bomb_positions.include?(position)
-          self.game_over = true
-        else
-          self.board.show_adjacent_empties_with_value(position)
-          self.board.positions[position] = "X"
-        end
+        mark_move_on_board(position)
       elsif move.last == "flag"
-        if self.board.positions[position] == " "
-          self.board.positions[position] = "F"
-        elsif self.board.positions[position] == "F"
-          self.board.positions[position] = " "
-        elsif self.board.positions[position].include?("F")
-          el = self.board.positions[position].gsub("F", "")
-          self.board.positions[position] = el
-        else
-          self.board.positions[position] += "F"
-        end
+        mark_flag_on_board(position)
       end
+      self.game_over = true if is_won?
     end
 
     def show_bombs=(msg)
-      if msg == true
-        self.bcli.show_bombs = true
+      if msg == "show"
+        bcli.show_bombs = "show"
+      elsif msg == "won"
+        bcli.show_bombs = "won"
       else
-        self.bcli.show_bombs = false
+        bcli.show_bombs = false
       end
+    end
+
+    def is_won?
+      all_non_bomb_positions_are_marked? && all_bomb_positions_are_flagged?
+    end
+
+    def is_not_valid?(move=nil)
+      move.nil? || get_position(move) == "X"
+    end
+
+    def gameloop_check_status
+      print_board if game_over != true
+      game_over
+    end
+
+    def check_win_or_loss
+      if game_over
+        if is_won?
+          self.show_bombs = "won"
+          print_board
+          result = "win"
+        else
+          self.show_bombs = "show"
+          print_board
+          result = "lose"
+        end
+      end
+      result
     end
 
     private
 
     def move_to_position(move)
       if move.is_a? Array
-        move[0] + self.board.row_size * move[1]
+        move[0] + board.row_size * move[1]
       else
         raise
       end
@@ -89,5 +114,54 @@ module Minesweeper_2pl
       ]
     end
 
+    def mark_move_on_board(position)
+      if position_is_a_bomb?(position)
+        self.game_over = true
+      else
+        board.show_adjacent_empties_with_value(position)
+        mark_board(position, "X")
+      end
+    end
+
+    def mark_flag_on_board(position)
+      if position_is_empty?(position)
+        mark_board(position, "F")
+      elsif position_is_flag?(position)
+        mark_board(position, " ")
+      elsif position_includes_a_flag?(position)
+        el = board_positions[position].delete("F")
+        mark_board(position, el)
+      else
+        board_positions[position] += "F"
+      end
+    end
+
+    def position_is_a_bomb?(position)
+      board.bomb_positions.include?(position)
+    end
+
+    def position_is_empty?(position)
+      board.positions[position] == " "
+    end
+
+    def position_is_flag?(position)
+      board.positions[position] == "F"
+    end
+
+    def position_includes_a_flag?(position)
+      board.positions[position].include?("F")
+    end
+
+    def mark_board(position, content)
+      board.positions[position] = content
+    end
+
+    def all_non_bomb_positions_are_marked?
+      (board.size - board.bomb_count == board.positions.select{ |el| el == "X" }.length)
+    end
+
+    def all_bomb_positions_are_flagged?
+      (board.bomb_count == board.positions.select{ |el| el.include?("F") }.length)
+    end
   end
 end

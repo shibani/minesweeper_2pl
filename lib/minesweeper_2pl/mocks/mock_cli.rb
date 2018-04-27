@@ -1,8 +1,21 @@
-module Minesweeper_2pl
-  class MockedCli < CLI
+module Minesweeper
+  class MockCli < CLI
+    attr_accessor :count
 
-    def set_input!(input)
-      @input = input
+    def initialize
+      @count = 0
+    end
+
+    def reset_count
+      @count = 0
+    end
+
+    def set_input!(*args)
+      @inputs = []
+      args.each do |arg|
+        @inputs << arg
+      end
+      @inputs
     end
 
     def print(msg)
@@ -10,10 +23,10 @@ module Minesweeper_2pl
 
     def get_player_params
       result = []
-      size = self.get_player_entered_board_size
+      size = get_player_entered_board_size
       result << size
 
-      count = self.get_player_entered_bomb_count(size * size)
+      count = get_player_entered_bomb_count(size * size)
       result << count
       result
     end
@@ -22,10 +35,9 @@ module Minesweeper_2pl
     end
 
     def get_player_input(game)
-      @input
-    end
-
-    def show_game_over_message
+      result = @inputs[@count]
+      @count += 1
+      result
     end
 
     def ask_for_board_size

@@ -6,10 +6,9 @@ class CliTest < Minitest::Test
   include IoTestHelpers
 
   def setup
-    @cli = Minesweeper_2pl::CLI.new
-    @mocked_game = Minesweeper_2pl::MockedGame.new
-    @mocked_game.setup(10, 10)
-    @mock_cli = Minesweeper_2pl::MockedCli.new
+    @cli = Minesweeper::CLI.new
+    @mock_game = Minesweeper::MockGame.new(10,0)
+    @mock_cli = Minesweeper::MockCli.new
   end
 
   def test_that_it_has_a_cli_class
@@ -31,36 +30,36 @@ class CliTest < Minitest::Test
     out, err = capture_io do
       @cli.ask_for_move
     end
-    assert_equal("\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit for the row (from left) and one digit for the column (from top) to make your move, eg. 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n", out)
+    assert_equal("\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n", out)
   end
 
   def test_that_it_can_capture_input_from_the_player_1
     assert_output "You selected move 3,9. Placing your move.\n" do
-      simulate_stdin("move 3,9") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("move 3,9") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_capture_input_from_the_player_2
     assert_output "You selected flag 9,0. Placing your flag.\n" do
-      simulate_stdin("flag 9,0") { @cli.get_player_input(@mocked_game) }
+      simulate_stdin("flag 9,0") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_1
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
-      simulate_stdin("bad input") { @cli.get_player_input(@mocked_game) }
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
+      simulate_stdin("bad input") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_input_is_valid_2
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
-      simulate_stdin("flag A,8") { @cli.get_player_input(@mocked_game) }
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
+      simulate_stdin("flag A,8") { @cli.get_player_input(@mock_game) }
     end
   end
 
   def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
-    assert_output "Expecting 'flag' or 'move', with one digit for the row (from left) and one digit for the column (from top). Please try again!\n" do
-      simulate_stdin("3,12") { @cli.get_player_input(@mocked_game) }
+    assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
+      simulate_stdin("3,12") { @cli.get_player_input(@mock_game) }
     end
   end
 
@@ -70,17 +69,10 @@ class CliTest < Minitest::Test
     io.rewind
     $stdin = io
 
-    result = @cli.get_player_input(@mocked_game)
+    result = @cli.get_player_input(@mock_game)
     $stdin = STDIN
 
     assert_equal([5,6, "flag"], result)
-  end
-
-  def test_that_it_has_a_show_game_over_message
-    out, err = capture_io do
-      @cli.show_game_over_message
-    end
-    assert_equal("Game over! You lose.\n", out)
   end
 
   def test_that_it_can_ask_player_to_set_board_size
@@ -91,7 +83,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_board_size_from_the_player
-    assert_output "You have selected a 10 X 10 board. Generating board.\n" do
+    assert_output "You have selected a 10 x 10 board. Generating board.\n\n" do
       simulate_stdin("10") { @cli.get_player_entered_board_size }
     end
   end
@@ -128,7 +120,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_bomb_count_from_the_player
-    assert_output "You selected 75. Setting bombs!\n" do
+    assert_output "You selected 75. Setting bombs!\n\n" do
       simulate_stdin("75") { @cli.get_player_entered_bomb_count(100) }
     end
   end
@@ -157,7 +149,7 @@ class CliTest < Minitest::Test
     assert_equal(70, result)
   end
 
-  def test_that_it_can_set_the_board_size_and_bomb_count
+  def test_that_it_can_get_and_set_the_board_size_and_bomb_count
     io = StringIO.new
     io.puts "10"
     io.puts "70"
@@ -175,6 +167,45 @@ class CliTest < Minitest::Test
       @cli.welcome
     end
     assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER          \n===========================================\n\n", out)
+  end
+
+  def test_that_it_has_a_show_game_lost_message
+    out, err = capture_io do
+      @cli.show_game_over_message("lose")
+    end
+    assert_equal("Game over! You lose.\n", out)
+  end
+
+  def test_that_it_has_a_show_game_won_message
+    out, err = capture_io do
+      @cli.show_game_over_message("win")
+    end
+    assert_equal("Game over! You win!\n", out)
+  end
+
+  def test_that_it_can_call_the_clis_start_methods
+    io = StringIO.new
+    io.puts "10"
+    io.puts "70"
+    io.rewind
+    $stdin = io
+
+    result = @mock_cli.start
+    $stdin = STDIN
+
+    assert_equal([10,70], result)
+  end
+
+  def test_that_it_can_get_a_player_move
+    io = StringIO.new
+    io.puts "move 5,6"
+    io.rewind
+    $stdin = io
+
+    result = @cli.get_move(@mock_game)
+    $stdin = STDIN
+
+    assert_equal([5,6, "move"], result)
   end
 
 end

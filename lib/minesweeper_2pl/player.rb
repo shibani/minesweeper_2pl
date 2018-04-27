@@ -1,4 +1,4 @@
-module Minesweeper_2pl
+module Minesweeper
   class Player
   end
 end

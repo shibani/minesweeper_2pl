@@ -1,7 +1,7 @@
-module Minesweeper_2pl
+module Minesweeper
   class BoardCli
 
-    attr_accessor :message, :board, :show_bombs
+    attr_accessor :message, :show_bombs
 
     NEWLINE = "\n"
     ALPHA_LEFT = "  "
@@ -18,61 +18,132 @@ module Minesweeper_2pl
       puts string
     end
 
-    def set_board(positions, rowsize)
-      @board = NEWLINE + INTRO
-      rowsize.to_i.times do |count|
-        @board += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
+    def board_to_string(board)
+      string = build_header(board)
+      string += header_formatting
+      string += build_rows(board)
+    end
+
+    def header_formatting
+      NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
+    end
+
+    def build_header(board)
+      string = NEWLINE + INTRO
+      board.row_size.to_i.times do |count|
+        string += HEADER_CELL_LEFT + sprintf("%2s", (count).to_s) + HEADER_CELL_RIGHT
       end
-      @board += NEWLINE + INTRO
-      rowsize.to_i.times do
-        @board += CELL_DIVIDER
+      string += NEWLINE + INTRO
+      board.row_size.to_i.times do
+        string += CELL_DIVIDER
       end
-      @board += "+"
-      @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", 0.to_s) + ALPHA_RIGHT
-      (0..rowsize.to_i-1).to_a.each do |i|
-        (0..rowsize.to_i-1).to_a.each do |j|
-          if j == rowsize - 1
-            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_END
-          else
-            @board += CELL_LEFT + get_cell_content(positions, (i*rowsize.to_i)+(j)) + CELL_RIGHT
-          end
-        end
-        @board += NEWLINE + INTRO
-        rowsize.to_i.times do
-          @board += CELL_DIVIDER
-        end
-        @board += "+"
-        unless i == rowsize - 1
-          @board += NEWLINE + ALPHA_LEFT + sprintf("%2s", (i+1).to_s) + ALPHA_RIGHT
+      string += "+"
+    end
+
+    def build_rows(board)
+      string = ""
+      (0..board.row_size.to_i-1).to_a.each do |row|
+        string += build_cell(board, row)
+        string += build_row_divider(board, row)
+      end
+      string
+    end
+
+    def build_cell(board, row)
+      string = ""
+      (0..board.row_size.to_i-1).to_a.each do |col|
+        if col == board.row_size - 1
+          string += CELL_LEFT + get_cell_content(board.positions, (row*board.row_size.to_i)+(col)) + CELL_END
+        else
+          string += CELL_LEFT + get_cell_content(board.positions, (row*board.row_size.to_i)+(col)) + CELL_RIGHT
         end
       end
+      string
+    end
+
+    def build_row_divider(board, row)
+      string = NEWLINE + INTRO
+      board.row_size.to_i.times do
+        string += CELL_DIVIDER
+      end
+      string += "+"
+      unless row == board.row_size - 1
+        string += NEWLINE + ALPHA_LEFT + sprintf("%2s", (row+1).to_s) + ALPHA_RIGHT
+      end
+      string
     end
 
     def get_cell_content(positions, cell)
-      if self.show_bombs
-        if positions[cell].include? "B"
-          cell_content = "\u{1f4a3}"
-        elsif positions[cell].include? "F"
-          cell_content = "\u{1f6a9}"
-        else positions[cell].length == 1
-          cell_content = positions[cell] + " "
-        end
+      cell = positions[cell]
+      if show_bombs == "show"
+        render_lost_view(cell)
+      elsif show_bombs == "won"
+        render_won_view(cell)
       else
-        if positions[cell].include? "F"
-          cell_content = "\u{1f6a9}"
-        elsif positions[cell] == "B"
-          cell_content = "  "
-        elsif positions[cell].length == 1
-          cell_content = positions[cell] + " "
-        # if positions[cell] == "X"
-        #   cell_content = "X "
-        # elsif positions[cell] == "-"
-        #   cell_content = "- "
-        # else
-        #   cell_content = "  "
-        end
+        render_normal_view(cell)
       end
-      cell_content
+    end
+
+    private
+
+    def render_lost_view(cell)
+      if cell_is_a_bomb_or_flag?(cell)
+        show_bomb_emoji
+      elsif cell_is_a_bomb?(cell)
+        show_bomb_emoji
+      elsif cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def render_won_view(cell)
+      if cell_is_a_bomb_or_flag?(cell)
+        show_trophy_emoji
+      elsif cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def render_normal_view(cell)
+      if cell_is_a_flag?(cell)
+        show_flag_emoji
+      elsif cell_is_a_bomb?(cell)
+        show_empty
+      elsif cell.length == 1
+        cell + " "
+      end
+    end
+
+    def cell_is_a_bomb?(cell)
+      cell.include? "B"
+    end
+
+    def cell_is_a_flag?(cell)
+      cell.include? "F"
+    end
+
+    def cell_is_a_bomb_or_flag?(cell)
+      cell.include? "BF"
+    end
+
+    def show_bomb_emoji
+      "\u{1f4a3}"
+    end
+
+    def show_trophy_emoji
+      "\u{1f3c6}"
+    end
+
+    def show_flag_emoji
+      "\u{1f6a9}"
+    end
+
+    def show_empty
+      "  "
     end
 
   end

@@ -1,41 +1,41 @@
-module Minesweeper_2pl
+module Minesweeper
   class App
-    SIZE = 100
-    BOMB_COUNT = 10
     BOMB_PERCENT = 0.75
+    MAX_ROW_NUM = 20
 
     attr_accessor :game, :cli
 
-    def start
-      self.setup
-      self.play_game
-    end
-
-    def setup
+    def initialize
       cli = CLI.new
       self.cli = cli
-      self.cli.welcome
-      result = self.cli.get_player_params
-      game = Game.new
+      game_config = cli.start
+      game = Game.new(game_config.first, game_config.last)
       self.game = game
-      self.game.setup(result.first, result.last)
+    end
+
+    def start
+      play_game
+      end_game
     end
 
     def play_game
-      while self.game.game_over != true
-        self.game.print_board
+      until game_is_over
         move = nil
-        while move == nil
-          self.cli.ask_for_move
-          move = self.cli.get_player_input(self.game)
+        while game.is_not_valid?(move)
+          cli.invalid_move if move
+          move = cli.get_move(game)
         end
-        self.game.place_move(move)
+        game.place_move(move)
       end
-      if self.game.game_over
-        self.game.show_bombs = true
-        self.game.print_board
-        self.cli.show_game_over_message
-      end
+    end
+
+    def end_game
+      result = game.check_win_or_loss
+      cli.show_game_over_message(result)
+    end
+
+    def game_is_over
+      game.gameloop_check_status
     end
   end
 end
