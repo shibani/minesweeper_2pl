@@ -164,9 +164,9 @@ class CliTest < Minitest::Test
 
   def test_that_the_welcome_method_welcomes_the_user
     out, err = capture_io do
-      @cli.welcome
+      @cli.print(@cli.welcome)
     end
-    assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER          \n===========================================\n\n", out)
+    assert_equal("\n===========================================\n           WELCOME TO MINESWEEPER\n===========================================\n\n", out)
   end
 
   def test_that_it_has_a_show_game_lost_message

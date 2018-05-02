@@ -1,11 +1,31 @@
 module Minesweeper
+
+  # class InputGetter
+  # end
+  #
+  # class Printer
+  # end
+  #
+  # class InputValidator
+  #   def self.bomb_count_input_has_correct_format(input)
+  #     input.match(/^(\d)+$/)
+  #   end
+  #
+  #   def self.bomb_count_within_range?(input, board_size)
+  #     input.to_i > 0 && input.to_i <= board_size * App::BOMB_PERCENT
+  #   end
+  # end
+  #
+  # class Messages
+  # end
+
   class CLI
     def print(msg)
       puts msg
     end
 
     def start
-      welcome
+      print(welcome)
       get_player_params
     end
 
@@ -59,9 +79,7 @@ module Minesweeper
     end
 
     def welcome
-      puts "\n==========================================="
-      puts "           WELCOME TO MINESWEEPER          "
-      puts "===========================================\n\n"
+      "\n===========================================\n           WELCOME TO MINESWEEPER\n===========================================\n\n"
     end
 
     def ask_for_move
@@ -79,9 +97,9 @@ module Minesweeper
 
     def show_game_over_message(result)
       if result == "win"
-        puts "Game over! You win!"
+        "Game over! You win!"
       elsif result == "lose"
-        puts "Game over! You lose."
+        "Game over! You lose."
       end
     end
 
@@ -122,8 +140,8 @@ module Minesweeper
     end
 
     def board_size_input_has_correct_format(input)
-      input.match(/^(\d)+$/)
-    end
+      InputValidator.board_size_input_has_correct_format(input)
+        end
 
     def row_size_within_range?(input)
       input.to_i > 0 && input.to_i <= App::MAX_ROW_NUM
