@@ -18,9 +18,6 @@ module Minesweeper
       @inputs
     end
 
-    def print(msg)
-    end
-
     def get_player_params
       result = []
       size = get_player_entered_board_size

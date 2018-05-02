@@ -140,7 +140,8 @@ module Minesweeper
     end
 
     def board_size_input_has_correct_format(input)
-      InputValidator.board_size_input_has_correct_format(input)
+      # InputValidator.board_size_input_has_correct_format(input)
+      input.match(/^(\d)+$/)
         end
 
     def row_size_within_range?(input)
