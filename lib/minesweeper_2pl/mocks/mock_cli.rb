@@ -28,19 +28,14 @@ module Minesweeper
       result
     end
 
-    def ask_for_move
+    def get_move(game)
+      get_player_input(game)
     end
 
     def get_player_input(game)
       result = @inputs[@count]
       @count += 1
       result
-    end
-
-    def ask_for_board_size
-    end
-
-    def ask_for_bomb_count(size)
     end
 
     def get_player_entered_board_size
@@ -51,8 +46,23 @@ module Minesweeper
       70
     end
 
-    def welcome
-    end
+    # def welcome
+    # end
+    #
+    # def ask_for_move
+    # end
+    #
+    # def ask_for_board_size
+    # end
+    #
+    # def ask_for_bomb_count(size)
+    # end
+    #
+    # def show_game_over_message(result)
+    # end
+    #
+    # def invalid_move
+    # end
 
   end
 end

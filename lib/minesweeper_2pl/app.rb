@@ -22,7 +22,7 @@ module Minesweeper
       until game_is_over
         move = nil
         while game.is_not_valid?(move)
-          cli.invalid_move if move
+          Messages.invalid_move if move
           move = cli.get_move(game)
         end
         game.place_move(move)
@@ -31,7 +31,7 @@ module Minesweeper
 
     def end_game
       result = game.check_win_or_loss
-      message = cli.show_game_over_message(result)
+      message = Messages.show_game_over_message(result)
       cli.print(message)
     end
 
