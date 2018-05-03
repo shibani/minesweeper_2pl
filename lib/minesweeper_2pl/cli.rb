@@ -1,18 +1,18 @@
 module Minesweeper
 
-  class InputGetter
-  end
-
-  class Printer
-    def self.print(msg)
-      puts msg
-    end
-  end
+  # class InputGetter
+  # end
+  #
+  # class Printer
+  #   def self.print(msg)
+  #     puts msg
+  #   end
+  # end
 
 
   class CLI
     def print(msg)
-      Printer.print(msg)
+      print(msg)
     end
 
     def start
