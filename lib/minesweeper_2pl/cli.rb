@@ -12,7 +12,7 @@ module Minesweeper
 
   class CLI
     def print(msg)
-      print(msg)
+      puts(msg)
     end
 
     def start
