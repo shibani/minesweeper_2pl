@@ -5,12 +5,6 @@ require "io_test_helpers"
 class MessagesTest < Minitest::Test
   include IoTestHelpers
 
-  # welcome
-  # ask_for_move
-  # ask_for_board_size
-  # ask_for_bomb_count(size)
-  # show_game_over_message(result)
-
   # private methods
   # invalid_move
   # player_input_success_message(input)
