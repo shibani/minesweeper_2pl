@@ -384,4 +384,9 @@ class GameTest < Minitest::Test
     assert_equal("win", @game.check_win_or_loss)
   end
 
+  def test_that_it_can_convert_a_position_to_a_move
+    result = @game.position_to_move(35)
+    assert_equal([0, 7], result)
+  end
+
 end

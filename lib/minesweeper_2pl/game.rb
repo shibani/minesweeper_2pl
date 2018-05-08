@@ -97,6 +97,13 @@ module Minesweeper
       result
     end
 
+    def position_to_move(position)
+      [
+        (position % board.row_size).to_i,
+        (position / board.row_size).to_i
+      ]
+    end
+
     private
 
     def move_to_position(move)
@@ -105,13 +112,6 @@ module Minesweeper
       else
         raise
       end
-    end
-
-    def position_to_move(position)
-      [
-        (position % board.row_size).to_i,
-        (position / board.row_size).to_i
-      ]
     end
 
     def mark_move_on_board(position)
