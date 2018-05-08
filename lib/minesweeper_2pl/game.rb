@@ -97,23 +97,6 @@ module Minesweeper
       result
     end
 
-    def position_to_move(position)
-      [
-        (position % board.row_size).to_i,
-        (position / board.row_size).to_i
-      ]
-    end
-
-    private
-
-    def move_to_position(move)
-      if move.is_a? Array
-        move[0] + board.row_size * move[1]
-      else
-        raise
-      end
-    end
-
     def mark_move_on_board(position)
       if position_is_a_bomb?(position)
         self.game_over = true
@@ -135,6 +118,36 @@ module Minesweeper
         board_positions[position] += "F"
       end
     end
+
+    private
+
+    def move_to_position(move)
+      if move.is_a? Array
+        move[0] + board.row_size * move[1]
+      else
+        raise
+      end
+    end
+
+    def position_to_move(position)
+      [
+        (position % board.row_size).to_i,
+        (position / board.row_size).to_i
+      ]
+    end
+
+    # def mark_flag_on_board(position)
+    #   if position_is_empty?(position)
+    #     mark_board(position, "F")
+    #   elsif position_is_flag?(position)
+    #     mark_board(position, " ")
+    #   elsif position_includes_a_flag?(position)
+    #     el = board_positions[position].delete("F")
+    #     mark_board(position, el)
+    #   else
+    #     board_positions[position] += "F"
+    #   end
+    # end
 
     def position_is_a_bomb?(position)
       board.bomb_positions.include?(position)

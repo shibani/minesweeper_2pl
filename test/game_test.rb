@@ -384,9 +384,21 @@ class GameTest < Minitest::Test
     assert_equal("win", @game.check_win_or_loss)
   end
 
-  def test_that_it_can_convert_a_position_to_a_move
-    result = @game.position_to_move(35)
-    assert_equal([0, 7], result)
+  def test_that_it_can_mark_a_move_on_the_board
+    result = @game.mark_move_on_board(35)
+    assert_equal('X', result)
   end
 
+  def test_that_it_can_mark_a_flag_on_the_board
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "B", "BF",
+                  "X", " ", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    result = @game.mark_flag_on_board(16)
+    assert_equal('F', result)
+  end
 end
