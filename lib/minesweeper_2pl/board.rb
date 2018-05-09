@@ -83,7 +83,6 @@ module Minesweeper
           positions_array << cell_position if within_bounds(cell_position, cell_row)
         end
       end
-
       positions_array
     end
 
@@ -119,7 +118,7 @@ module Minesweeper
     private
 
       def within_bounds(relative_position, row)
-        relative_position >= 0 && relative_position <= size && relative_position >= row && relative_position < row + row_size
+        relative_position >= 0 && relative_position <= size - 1 && relative_position >= row && relative_position < row + row_size
       end
 
       def check_position(position)
