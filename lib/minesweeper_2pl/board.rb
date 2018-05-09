@@ -16,7 +16,7 @@ module Minesweeper
 
     def set_board_positions(board_size)
       @positions = (0...board_size).map do |cell|
-        bomb_positions.include?(cell) ? "B" : " "
+        bomb_positions.include?(cell) ? 'B' : ' '
       end
     end
 
@@ -29,7 +29,7 @@ module Minesweeper
     def show_adjacent_empties(position)
       spaces = spaces_to_clear(position)
       spaces.each do |space|
-        positions[space] = "-"
+        positions[space] = '-'
       end
     end
 
@@ -37,10 +37,10 @@ module Minesweeper
       spaces = spaces_to_clear(position)
       spaces.each do |space|
         result = assign_value(space).to_s
-        if positions[space].nil? || positions[space] == " "
+        if positions[space].nil? || positions[space] == ' '
           positions[space] = result
-        elsif positions[space].include? "F"
-          positions[space] = result + "F"
+        elsif positions[space].include? 'F'
+          positions[space] = result + 'F'
         end
       end
     end
@@ -112,17 +112,17 @@ module Minesweeper
     end
 
     def is_empty?(position)
-      !["B", "X", "BF"].include? positions[position]
+      !['B', 'X', 'BF'].include? positions[position]
     end
 
     private
 
       def within_bounds(relative_position, row)
-        relative_position >= 0 && relative_position <= size - 1 && relative_position >= row && relative_position < row + row_size
+        relative_position >= 0 && relative_position < size && relative_position >= row && relative_position < row + row_size
       end
 
       def check_position(position)
-        (["B", "BF"].include? positions[position]) ? 1 : 0
+        (['B', 'BF'].include? positions[position]) ? 1 : 0
       end
   end
 end

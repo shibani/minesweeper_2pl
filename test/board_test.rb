@@ -224,6 +224,15 @@ class BoardTest < Minitest::Test
     assert_equal("-", @board12.positions[result.last])
   end
 
+  def test_that_setting_empties_returns_a_correctly_sized_array
+    @board12.bomb_positions = [10, 11, 12, 13, 14, 15, 20, 25, 30, 35, 40, 41, 42, 43, 44, 45]
+    @board12.set_board_positions(100)
+    position = 88
+    @board12.spaces_to_clear(position)
+    @board12.show_adjacent_empties_with_value(position)
+    assert_equal(100, @board12.positions.size)
+  end
+
   def test_that_it_can_assign_values_to_empties_in_the_positions_array
     @board12.bomb_positions = [10, 11, 12, 13, 14, 15, 20, 25, 30, 35, 40, 41, 42, 43, 44, 45]
     @board12.set_board_positions(100)
