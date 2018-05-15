@@ -22,7 +22,7 @@ class GameTest < Minitest::Test
   end
 
   def test_that_initialize_can_create_a_new_boardcli
-    refute_nil @game.bcli
+    refute_nil @game.board_formatter
   end
 
   def test_that_initialize_can_set_the_rowsize
@@ -258,19 +258,19 @@ class GameTest < Minitest::Test
   def test_that_it_can_set_the_BoardClis_show_bombs_attribute
     @game.show_bombs = "show"
 
-    assert_equal("show", @game.bcli.show_bombs)
+    assert_equal("show", @game.board_formatter.show_bombs)
   end
 
   def test_that_it_can_turn_off_the_BoardClis_show_bombs_attribute
     @game.show_bombs = "random string"
 
-    refute @game.bcli.show_bombs
+    refute @game.board_formatter.show_bombs
   end
 
   def test_that_it_can_set_the_BoardClis_show_bombs_attribute_to_won
     @game.show_bombs = "won"
 
-    assert_equal("won", @game.bcli.show_bombs)
+    assert_equal("won", @game.board_formatter.show_bombs)
   end
 
   def test_that_it_can_check_if_a_game_is_won

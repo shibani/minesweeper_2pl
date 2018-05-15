@@ -46,23 +46,5 @@ module Minesweeper
       70
     end
 
-    # def welcome
-    # end
-    #
-    # def ask_for_move
-    # end
-    #
-    # def ask_for_board_size
-    # end
-    #
-    # def ask_for_bomb_count(size)
-    # end
-    #
-    # def show_game_over_message(result)
-    # end
-    #
-    # def invalid_move
-    # end
-
   end
 end

@@ -1,19 +1,20 @@
 module Minesweeper
   class Game
-    attr_accessor :board, :bcli, :game_over
+    attr_accessor :board, :board_formatter, :game_over
 
-    def initialize(row_size, bomb_count)
-      bcli = BoardCli.new
+    def initialize(row_size, bomb_count=0)
+      board_formatter = BoardFormatter.new
       board = Board.new(row_size, bomb_count)
 
       self.board = board
       set_board_positions(row_size)
-      self.bcli = bcli
+      self.board_formatter = board_formatter
     end
 
     def print_board
-      string = bcli.board_to_string(board)
-      bcli.print_message(string)
+      board_array = board_formatter.format_board_with_emoji(board)
+      string = board_formatter.board_to_string(board_array, board)
+      board_formatter.print_message(string)
     end
 
     def row_size
@@ -51,9 +52,9 @@ module Minesweeper
 
     def place_move(move)
       position = move_to_position(move)
-      if move.last == "move"
+      if move.last == 'move'
         mark_move_on_board(position)
-      elsif move.last == "flag"
+      elsif move.last == 'flag'
         mark_flag_on_board(position)
       end
       self.game_over = true if is_won?
@@ -61,11 +62,11 @@ module Minesweeper
 
     def show_bombs=(msg)
       if msg == "show"
-        bcli.show_bombs = "show"
+        board_formatter.show_bombs = "show"
       elsif msg == "won"
-        bcli.show_bombs = "won"
+        board_formatter.show_bombs = "won"
       else
-        bcli.show_bombs = false
+        board_formatter.show_bombs = false
       end
     end
 
@@ -135,19 +136,6 @@ module Minesweeper
         (position / board.row_size).to_i
       ]
     end
-
-    # def mark_flag_on_board(position)
-    #   if position_is_empty?(position)
-    #     mark_board(position, "F")
-    #   elsif position_is_flag?(position)
-    #     mark_board(position, " ")
-    #   elsif position_includes_a_flag?(position)
-    #     el = board_positions[position].delete("F")
-    #     mark_board(position, el)
-    #   else
-    #     board_positions[position] += "F"
-    #   end
-    # end
 
     def position_is_a_bomb?(position)
       board.bomb_positions.include?(position)

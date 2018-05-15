@@ -1,5 +1,5 @@
 module Minesweeper
-  class BoardCli
+  class BoardFormatter
 
     attr_accessor :message, :show_bombs
 
@@ -18,10 +18,22 @@ module Minesweeper
       puts string
     end
 
-    def board_to_string(board)
+    def format_board_with_emoji(board)
+      converted = board.positions.map do |cell|
+        if show_bombs == "show"
+          render_lost_view(cell)
+        elsif show_bombs == "won"
+          render_won_view(cell)
+        else
+          render_normal_view(cell)
+        end
+      end
+    end
+
+    def board_to_string(board_array, board)
       string = build_header(board)
       string += header_formatting
-      string += build_rows(board)
+      string += build_rows(board_array, board)
     end
 
     def header_formatting
@@ -40,22 +52,22 @@ module Minesweeper
       string += "+"
     end
 
-    def build_rows(board)
+    def build_rows(board_array, board)
       string = ""
       (0..board.row_size.to_i-1).to_a.each do |row|
-        string += build_cell(board, row)
+        string += build_cell(board_array, row, board)
         string += build_row_divider(board, row)
       end
       string
     end
 
-    def build_cell(board, row)
+    def build_cell(board_array, row, board)
       string = ""
       (0..board.row_size.to_i-1).to_a.each do |col|
         if col == board.row_size - 1
-          string += CELL_LEFT + get_cell_content(board.positions, (row*board.row_size.to_i)+(col)) + CELL_END
+          string += CELL_LEFT + get_cell_content(board_array, (row*board.row_size.to_i)+(col)) + CELL_END
         else
-          string += CELL_LEFT + get_cell_content(board.positions, (row*board.row_size.to_i)+(col)) + CELL_RIGHT
+          string += CELL_LEFT + get_cell_content(board_array, (row*board.row_size.to_i)+(col)) + CELL_RIGHT
         end
       end
       string
@@ -75,13 +87,6 @@ module Minesweeper
 
     def get_cell_content(positions, cell)
       cell = positions[cell]
-      if show_bombs == "show"
-        render_lost_view(cell)
-      elsif show_bombs == "won"
-        render_won_view(cell)
-      else
-        render_normal_view(cell)
-      end
     end
 
     private
@@ -127,7 +132,7 @@ module Minesweeper
     end
 
     def cell_is_a_bomb_or_flag?(cell)
-      cell.include? "BF"
+      cell == "BF"
     end
 
     def show_bomb_emoji
