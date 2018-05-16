@@ -164,11 +164,13 @@ module Minesweeper
     end
 
     def all_non_bomb_positions_are_marked?
-      board.positions.size - board.bomb_positions.size == board.positions.select{ |el| el == "X" }.length
+      (board.size - board.bomb_count == board.positions.select{ |el| el == "X" }.length)
+      # board.positions.size - board.bomb_positions.size == board.positions.select{ |el| el == "X" }.length
     end
 
     def all_bomb_positions_are_flagged?
-      board.bomb_positions.size == board.positions.select{ |el| ['BF', 'FB'].include? el }.length
+      (board.bomb_count == board.positions.select{ |el| el.include?("F") }.length)
+      # board.bomb_positions.size == board.positions.select{ |el| el.include?('F') }.length
     end
   end
 end
