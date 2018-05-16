@@ -168,7 +168,7 @@ module Minesweeper
     end
 
     def all_bomb_positions_are_flagged?
-      (board.bomb_count == board.positions.select{ |el| el.include?("F") }.length)
+      (board.bomb_count == board.positions.select{ |el| ['BF', 'FB'].include? el }.length)
     end
   end
 end
