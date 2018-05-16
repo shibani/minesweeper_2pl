@@ -401,4 +401,30 @@ class GameTest < Minitest::Test
     result = @game.mark_flag_on_board(16)
     assert_equal('F', result)
   end
+
+  def test_that_it_doesnt_mark_a_flag_if_position_contains_a_user_move
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "X", "X",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "B", "BF",
+                  "X", " ", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    result = @game.mark_flag_on_board(4)
+    assert_equal('X', result)
+  end
+
+  def test_that_it_marks_a_flag_if_position_contains_an_integer
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ "X", "X", "X", "0", "1",
+                  "X", "X", "X", "X", "X",
+                  "BF", "BF", "B", "B", "BF",
+                  "X", " ", "X", "X", "X",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    result = @game.mark_flag_on_board(4)
+    assert_equal('1F', result)
+  end
 end

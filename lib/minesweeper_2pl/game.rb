@@ -115,6 +115,8 @@ module Minesweeper
       elsif position_includes_a_flag?(position)
         el = board_positions[position].delete("F")
         mark_board(position, el)
+      elsif position_is_a_user_move?(position)
+        board_positions[position]
       else
         board_positions[position] += "F"
       end
@@ -151,6 +153,10 @@ module Minesweeper
 
     def position_includes_a_flag?(position)
       board.positions[position].include?("F")
+    end
+
+    def position_is_a_user_move?(position)
+      board.positions[position] == "X"
     end
 
     def mark_board(position, content)
