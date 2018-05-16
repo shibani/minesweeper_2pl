@@ -255,19 +255,19 @@ class GameTest < Minitest::Test
     refute @game.game_over
   end
 
-  def test_that_it_can_set_the_BoardFormatters_show_bombs_attribute
+  def test_that_it_can_set_the_BoardFormatter_s_show_bombs_attribute
     @game.show_bombs = "show"
 
     assert_equal("show", @game.board_formatter.show_bombs)
   end
 
-  def test_that_it_can_turn_off_the_BoardFormatters_show_bombs_attribute
+  def test_that_it_can_turn_off_the_BoardFormatter_s_show_bombs_attribute
     @game.show_bombs = "random string"
 
     refute @game.board_formatter.show_bombs
   end
 
-  def test_that_it_can_set_the_BoardFormatters_show_bombs_attribute_to_won
+  def test_that_it_can_set_the_BoardFormatter_s_show_bombs_attribute_to_won
     @game.show_bombs = "won"
 
     assert_equal("won", @game.board_formatter.show_bombs)
