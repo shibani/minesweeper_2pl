@@ -122,6 +122,14 @@ module Minesweeper
       end
     end
 
+    def all_non_bomb_positions_are_marked?
+      board_positions.size - bomb_positions.size == board_positions.select{ |el| el == "X" }.length
+    end
+
+    def all_bomb_positions_are_flagged?
+      bomb_positions.size == board_positions.select{ |el| el.include?('F') }.length
+    end
+
     private
 
     def move_to_position(move)
@@ -163,12 +171,5 @@ module Minesweeper
       board.positions[position] = content
     end
 
-    def all_non_bomb_positions_are_marked?
-      board_positions.size - bomb_positions.size == board_positions.select{ |el| el == "X" }.length
-    end
-
-    def all_bomb_positions_are_flagged?
-      bomb_positions.size == board_positions.select{ |el| el.include?('F') }.length
-    end
   end
 end
