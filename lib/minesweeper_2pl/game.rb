@@ -42,12 +42,20 @@ module Minesweeper
       board_positions[position]
     end
 
+    def set_board_positions(size)
+      board.set_positions(size * size)
+    end
+
     def board_positions
       board.positions
     end
 
-    def set_board_positions(size)
-      board.set_positions(size * size)
+    def board_values
+      board.values
+    end
+
+    def set_board_values
+      board.assign_values_to_all_positions
     end
 
     def place_move(move)
@@ -76,6 +84,8 @@ module Minesweeper
 
     def is_not_valid?(move=nil)
       move.nil? || get_position(move) == "X"
+      # or move is a 'revealed' position
+      # get_position(move).include? 'R'... ??? or add a 'revealed' attr_accessor
     end
 
     def gameloop_check_status
@@ -100,11 +110,18 @@ module Minesweeper
 
     def mark_move_on_board(position)
       if position_is_a_bomb?(position)
+        # if board.all_positions_empty
+          # clear out bomb (update bomb array)
+          # recalculate values array
+          # show adjacent empties
+        # else
         self.game_over = true
+      #elsif position has an value in values array, just show that position
       else
         board.show_adjacent_empties_with_value(position)
         mark_board(position, "X")
       end
+      # add revealed squares to 'revealed'
     end
 
     def mark_flag_on_board(position)
