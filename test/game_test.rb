@@ -48,26 +48,20 @@ class GameTest < Minitest::Test
     assert_equal 25, @game.board_positions.size
   end
 
-  def test_that_initialize_can_set_an_array_that_holds_the_boards_values
-    assert_equal 25, @game.board_values.size
-  end
-
-  def test_that_set_board_values_sets_the_value_of_every_position
+  def test_that_set_positions_sets_the_value_of_every_position
     positions = ' , , , , , , , , , ,B,B,B,B, , '.split(",")
     bomb_positions = [10, 11, 12, 13]
     @game2.set_bomb_positions(bomb_positions)
     @game2.set_positions(positions)
 
-    result = @game2.set_board_values
+    result = @game2.board_positions.map{|cell| cell.value}
     @game2.set_positions(result)
     expected_positions = [
-      '0', '0', '0', '0',
-      '0', '1', '2', '2',
-      '2', '3', 'B', 'B',
-      'B', 'B', '3', '2'
+      0, 0, 0, 0,
+      0, 1, 2, 2,
+      2, 3, 'B', 'B',
+      'B', 'B', 3, 2
     ]
-
-    assert_equal(expected_positions, @game2.board_positions)
 
     assert_equal(expected_positions, result)
   end
@@ -91,12 +85,13 @@ class GameTest < Minitest::Test
   def test_that_it_can_set_the_board_positions_with_an_array
     positions = [ " ", " ", " ", " ", " ",
                   " ", " ", " ", " ", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_positions(positions)
+    content = @game.board_positions.map{ |position| position.content}
 
-    assert_matched_arrays positions, @game.board_positions
+    assert_equal positions, content
   end
 
   def test_that_it_can_get_the_games_row_size
@@ -113,70 +108,72 @@ class GameTest < Minitest::Test
     assert_equal 25, result.size
   end
 
-  def skip test_that_it_can_show_adjacent_empties_on_the_board
-    bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ " ", " ", " ", " ", " ",
-                  " ", " ", " ", " ", "X",
-                  "BF", "BF", "BF", "BF", "BF",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
-    @game.set_bomb_positions(bomb_positions)
-    @game.set_positions(positions)
-    move1 = [0,0,"move"]
-    move2 = [3,1,"move"]
-    move3 = [2,1]
-    @game.place_move(move1)
-    @game.place_move(move2)
-
-    result = @game.get_position(move3)
-
-    assert_equal "3", result
-  end
-
   def test_that_it_can_access_position_by_coordinates
     bomb_positions = [13, 15, 16, 18, 19]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "X", "X", "X", "BF", "X",
-                  "BF", "BF", "X", "B", "BF",
+                  "X", "X", "X", "B", "X",
+                  "B", "B", "X", "B", "B",
                   "X", "X", "X", "X", "X"]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
 
-    move = [3,3, "move"]
+    move = [3,3, 'move']
 
-    assert_equal "B", @game.get_position(move)
+    assert_equal 'B', @game.get_position(move).content
   end
+
+  # def test_that_it_can_show_adjacent_empties_on_the_board
+  #   bomb_positions = [10, 11, 12, 13, 14]
+  #   positions = [ " ", " ", " ", " ", " ",
+  #                 " ", " ", " ", " ", "X",
+  #                 "B", "B", "B", "B", "B",
+  #                 "X", "X", "X", "X", "X",
+  #                 "X", "X", "X", "X", "X" ]
+  #   @game.set_bomb_positions(bomb_positions)
+  #   @game.set_positions(positions)
+  #   flags = [10,11,13,14]
+  #   flags.each { |fl| @game.mark_flag(fl) }
+  #   move1 = [0,0,"move"]
+  #   result = @game.mark_move_on_board(move1)
+  #
+  #   assert_equal [1, 5, 6, 2, 7, 3, 8, 4], result
+  # end
 
   def test_that_it_can_place_a_move_on_the_board
     bomb_positions = [13, 15, 16, 18, 19]
     positions = [ " ", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "X", "X", "X", "BF", "X",
-                  "BF", "BF", "X", "B", "BF",
+                  "X", "X", "X", "B", "X",
+                  "B", "B", "X", "B", "B",
                   "X", "X", "X", "X", "X"]
     @game.set_bomb_positions(bomb_positions)
-    move = [0,0, "move"]
+    move = [0,0, 'move']
 
     @game.place_move(move)
 
-    assert_equal "X", @game.get_position(move)
+    assert_equal 'X', @game.get_position(move).content
   end
 
   def test_that_it_has_a_game_over_attribute
-    @game.respond_to?("game_over")
+    @game.respond_to?('game over')
   end
 
   def test_that_it_can_set_the_game_to_game_over
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", " ", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [3,1, "move"]
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
+    move = [3,1, 'move']
 
     @game.place_move(move)
 
@@ -192,27 +189,11 @@ class GameTest < Minitest::Test
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [0,1, "flag"]
+    move = [0,1, 'flag']
 
     @game.place_move(move)
 
-    assert_equal "F", @game.get_position(move)
-  end
-
-  def test_that_it_can_set_a_flag_2
-    bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  " ", "X", "X", "X", "X",
-                  "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
-    @game.set_bomb_positions(bomb_positions)
-    @game.set_positions(positions)
-    move = [3,2, "flag"]
-
-    @game.place_move(move)
-
-    assert_equal "BF", @game.get_position(move)
+    assert_equal 'F', @game.get_position(move).flag
   end
 
   def test_that_it_can_remove_a_flag
@@ -224,24 +205,29 @@ class GameTest < Minitest::Test
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [1,2, "flag"]
+    move = [1,2, 'flag']
 
     @game.place_move(move)
     @game.place_move(move)
 
-    assert_equal "B", @game.get_position(move)
+    assert_nil @game.get_position(move).flag
   end
 
   def test_that_it_can_check_if_a_game_is_over_1
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [2,2, "flag"]
+    flags = [10,11,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
+    move = [2,2, 'flag']
 
     @game.place_move(move)
 
@@ -252,12 +238,14 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [2,2, "move"]
+    flags = [10,11,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    move = [2,2, 'move']
 
     @game.place_move(move)
 
@@ -268,12 +256,14 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    move = [0,1, "flag"]
+    flags = [10,11,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    move = [0,1, 'flag']
 
     @game.place_move(move)
 
@@ -302,11 +292,16 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
+    flags = [10,11,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
     move = [2,2, "flag"]
 
     @game.place_move(move)
@@ -318,18 +313,29 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
+
     assert(@game.is_won?)
   end
 
   def test_that_it_can_check_if_the_game_is_not_won
     bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
-    @game.board.set_board_positions(5)
+    @game.set_positions(positions)
 
     refute(@game.is_won?)
   end
@@ -338,7 +344,7 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
@@ -352,7 +358,7 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
@@ -366,11 +372,13 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   " ", " ", " ", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
 
     refute(@game.gameloop_check_status)
   end
@@ -379,11 +387,13 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @game.mark_flag(fl) }
 
     @game.game_over = false
     @game.set_input!("display board")
@@ -399,26 +409,76 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
+    bomb_positions.each { |flag| @game.mark_flag(flag) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
     @game.game_over = true
 
     assert_equal("win", @game.check_win_or_loss)
   end
 
   def test_that_it_can_mark_a_move_on_the_board
-    result = @game.mark_move_on_board(35)
-    assert_equal('X', result)
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    @game.mark_move_on_board(9)
+
+    assert_equal('X', @game.board_positions[9].content)
   end
+
+  def test_that_it_sets_a_square_to_revealed_after_marking_a_move
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    @game.mark_move_on_board(9)
+
+    assert_equal('revealed', @game.board_positions[9].status)
+  end
+
+
+  # def test_that_revealed_cells_have_revealed_status
+  #   bomb_positions = [10, 11, 12, 13, 14]
+  #   positions = [ " ", " ", " ", " ", " ",
+  #                 " ", " ", " ", " ", " ",
+  #                 "B", "B", "B", "B", "B",
+  #                 " ", " ", " ", " ", " ",
+  #                 "X", "X", "X", "X", "X" ]
+  #   @game.set_bomb_positions(bomb_positions)
+  #   @game.set_positions(positions)
+  #   result = @game.mark_move_on_board(9)
+  #
+  #   assert_equal('revealed', @game.board_positions[8].status)
+  #   assert_equal('revealed', @game.board_positions[3].status)
+  #   assert_equal('revealed', @game.board_positions[4].status)
+  #   assert_equal('revealed', @game.board_positions[2].status)
+  #   assert_equal('revealed', @game.board_positions[7].status)
+  #   assert_equal('revealed', @game.board_positions[1].status)
+  #   assert_equal('revealed', @game.board_positions[6].status)
+  #   assert_equal('revealed', @game.board_positions[0].status)
+  #   assert_equal('revealed', @game.board_positions[5].status)
+  # end
 
   def test_that_it_can_mark_a_flag_on_the_board
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "B", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", " ", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
@@ -431,25 +491,53 @@ class GameTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "B", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", " ", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    result = @game.mark_flag_on_board(4)
-    assert_equal('X', result)
+    @game.mark_flag_on_board(4)
+    assert_nil @game.board_positions[4].flag
   end
 
   def test_that_it_marks_a_flag_if_position_contains_an_integer
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "0", "1",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "B", "B", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", " ", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     result = @game.mark_flag_on_board(4)
-    assert_equal('1F', result)
+    assert_equal('F', @game.board_positions[4].flag)
+  end
+
+  def test_that_flood_fill_returns_adjacent_empties_1
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    result = @game.flood_fill(9)
+
+    assert_equal([8,3,4,2,7,1,6,0,5], result)
+  end
+
+  def test_that_flood_fill_returns_adjacent_empties_when_position_is_a_bomb
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  "X", "X", "X", "X", "X" ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    result = @game.flood_fill(10)
+
+    assert_equal([5,6,15,16], result)
   end
 end

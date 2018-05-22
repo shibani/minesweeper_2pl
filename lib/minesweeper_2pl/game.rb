@@ -11,12 +11,6 @@ module Minesweeper
       self.board_formatter = board_formatter
     end
 
-    def print_board
-      board_array = board_formatter.format_board_with_emoji(board)
-      string = board_formatter.board_to_string(board_array, board)
-      board_formatter.print_message(string)
-    end
-
     def row_size
       board.row_size
     end
@@ -34,7 +28,18 @@ module Minesweeper
     end
 
     def set_positions(array)
-      board.positions = array
+      array.each.with_index do |position, i|
+        board_positions[i].update_cell_content(position)
+      end
+      board_positions.each.with_index do |position, i|
+        content = board_positions[i].content
+        if ['B', 'X'].include? content
+          board_positions[i].update_cell_value(content)
+        else
+          value = board.assign_value(i)
+          board_positions[i].update_cell_value(value)
+        end
+      end
     end
 
     def get_position(move)
@@ -51,11 +56,17 @@ module Minesweeper
     end
 
     def board_values
-      board.values
+      board_positions(&:value)
     end
 
     def set_board_values
       board.assign_values_to_all_positions
+    end
+
+    def print_board
+      board_array = board_formatter.format_board_with_emoji(board)
+      string = board_formatter.board_to_string(board_array, board)
+      board_formatter.print_message(string)
     end
 
     def place_move(move)
@@ -68,24 +79,32 @@ module Minesweeper
       self.game_over = true if is_won?
     end
 
+    # if board.all_positions_empty?
+      # if position_is_a_bomb?(position)
+        # reassign bomb (update bomb array)
+        # recalculate values array
+      # elsif position is not zero,
+        # ignore non-zero value
+      # end
+      # do floodfill
+    # end
+
     def show_bombs=(msg)
-      if msg == "show"
-        board_formatter.show_bombs = "show"
-      elsif msg == "won"
-        board_formatter.show_bombs = "won"
+      if msg == 'show'
+        board_formatter.show_bombs = 'show'
+      elsif msg == 'won'
+        board_formatter.show_bombs = 'won'
       else
         board_formatter.show_bombs = false
       end
     end
 
     def is_won?
-      all_non_bomb_positions_are_marked? && all_bomb_positions_are_flagged?
+      all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
     end
 
     def is_not_valid?(move=nil)
-      move.nil? || get_position(move) == "X"
-      # or move is a 'revealed' position
-      # get_position(move).include? 'R'... ??? or add a 'revealed' attr_accessor
+      move.nil? || get_position(move).content == 'X' || get_position(move).status == 'revealed'
     end
 
     def gameloop_check_status
@@ -96,13 +115,13 @@ module Minesweeper
     def check_win_or_loss
       if game_over
         if is_won?
-          self.show_bombs = "won"
+          self.show_bombs = 'won'
           print_board
-          result = "win"
+          result = 'win'
         else
-          self.show_bombs = "show"
+          self.show_bombs = 'show'
           print_board
-          result = "lose"
+          result = 'lose'
         end
       end
       result
@@ -110,33 +129,27 @@ module Minesweeper
 
     def mark_move_on_board(position)
       if position_is_a_bomb?(position)
-        # if board.all_positions_empty
-          # clear out bomb (update bomb array)
-          # recalculate values array
-          # show adjacent empties
-        # else
         self.game_over = true
-      #elsif position has an value in values array, just show that position
       else
-        board.show_adjacent_empties_with_value(position)
-        mark_board(position, "X")
+        mark_board(position, 'X')
+        result = flood_fill(position)
       end
-      # add revealed squares to 'revealed'
+      board_positions[position].update_cell_status
+      result
+    end
+
+    def flood_fill(position)
+      cells_to_reveal = []
+      result = board.show_adjacent_empties_with_value(position)
+      result.each do |adj_position|
+        cells_to_reveal << adj_position unless board_positions[adj_position].content == "X"
+        board_positions[adj_position].update_cell_status
+      end
+      cells_to_reveal - [position]
     end
 
     def mark_flag_on_board(position)
-      if position_is_empty?(position)
-        mark_board(position, "F")
-      elsif position_is_flag?(position)
-        mark_board(position, " ")
-      elsif position_includes_a_flag?(position)
-        el = board_positions[position].delete("F")
-        mark_board(position, el)
-      elsif position_is_a_user_move?(position)
-        board_positions[position]
-      else
-        board_positions[position] += "F"
-      end
+      mark_flag(position)
     end
 
     private
@@ -161,31 +174,38 @@ module Minesweeper
     end
 
     def position_is_empty?(position)
-      board.positions[position] == " "
+      board_positions[position].content == ' '
     end
 
     def position_is_flag?(position)
-      board.positions[position] == "F"
+      board_positions[position].flag == 'F'
     end
 
     def position_includes_a_flag?(position)
-      board.positions[position].include?("F")
+      board_positions[position].flag == 'F'
     end
 
     def position_is_a_user_move?(position)
-      board.positions[position] == "X"
+      board_positions[position].content == 'X'
     end
 
     def mark_board(position, content)
-      board.positions[position] = content
+      board_positions[position].update_cell_content(content)
     end
 
-    def all_non_bomb_positions_are_marked?
-      board_positions.size - bomb_positions.size == board_positions.select{ |el| el == "X" }.length
+    def mark_flag(position)
+      board_positions[position].update_flag unless board_positions[position].content == 'X'
+    end
+
+    def all_non_bomb_positions_are_revealed?
+      revealed = board_positions.select{|el| el.status == 'revealed'}
+      non_bombs = board_positions.reject{|el| el.content == 'B'}
+      ((revealed - non_bombs) + (non_bombs - revealed)).empty?
     end
 
     def all_bomb_positions_are_flagged?
-      bomb_positions.size == board_positions.select{ |el| el.include?('F') }.length
+      flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
+      ((flags - bomb_positions) + (bomb_positions - flags)).empty?
     end
   end
 end

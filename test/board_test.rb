@@ -51,6 +51,12 @@ class BoardTest < Minitest::Test
     refute_nil @board.bomb_positions
   end
 
+  def test_that_set_positions_sets_a_cell_for_every_position
+    result = @board.positions[26]
+
+    assert_instance_of Minesweeper::Cell, result
+  end
+
   def test_set_row_size
     assert_equal(10, @board.row_size)
   end
@@ -69,8 +75,8 @@ class BoardTest < Minitest::Test
 
   def test_that_set_positions_can_set_the_bomb_positions_4
     counts = Hash.new(0)
-    @board.positions.each do |position|
-      counts[position] += 1
+    @board.positions.each do |cell|
+      counts['B'] += 1 if cell.value == 'B'
     end
 
     assert_equal(10, counts["B"])
@@ -136,7 +142,7 @@ class BoardTest < Minitest::Test
     assert_equal([58, 48, 49, 68, 69], result)
   end
 
-  def test_that_it_can_check_adjacent_squares_on_the_board_for_positions_bomb_value
+  def test_that_it_can_assign_values_to_board_squares
     @board13.bomb_positions = [10, 11, 12, 13, 14, 20, 23, 24, 30, 31, 32, 33, 34]
     @board13.set_board_positions(100)
     position = 21
@@ -160,14 +166,14 @@ class BoardTest < Minitest::Test
     @board11.bomb_positions = [10, 12, 13, 14, 20, 23, 24, 30, 32, 33, 34]
     @board11.set_board_positions(100)
     position = 64
-    @board11.positions[position] = "3F"
+    @board11.positions[position].update_cell_value(3)
 
     result = @board11.is_empty?(position)
 
     assert(result)
   end
 
-  def test_that_it_can_collect_all_adjacent_empty_positions_1
+  def test_that_it_can_collect_all_neigbhoring_empty_positions_1
     @board13.bomb_positions = [10, 11, 12, 13, 14, 20, 23, 24, 30, 31, 32, 33, 34]
     @board13.set_board_positions(100)
     position = 21
@@ -177,7 +183,7 @@ class BoardTest < Minitest::Test
     assert_equal 1, result.size
   end
 
-  def test_that_it_can_collect_all_adjacent_empty_positions_2
+  def test_that_it_can_collect_all_neighboring_empty_positions_2
     @board11.bomb_positions = [10, 12, 13, 14, 20, 23, 24, 30, 32, 33, 34]
     @board11.set_board_positions(100)
     position = 21
@@ -201,7 +207,7 @@ class BoardTest < Minitest::Test
     @board04.bomb_positions = [2, 7, 8, 15]
     @board04.set_board_positions(16)
 
-    result = @board04.spaces_to_clear(0)
+    result = @board04.show_adjacent_empties_with_value(0)
     expected_positions = [1, 4, 5]
 
     assert_equal(expected_positions, result)
@@ -211,9 +217,32 @@ class BoardTest < Minitest::Test
     @board04.bomb_positions = [10, 11, 12, 13]
     @board04.set_board_positions(16)
 
-    result = @board04.spaces_to_clear(0)
+    result = @board04.show_adjacent_empties_with_value(0)
     expected_positions = [1, 4, 5, 2, 6, 8, 9, 3, 7]
 
+    assert_equal(expected_positions, result)
+  end
+
+  def test_that_it_can_get_the_neighboring_spaces_to_clear
+    @board04.bomb_positions = [10, 11, 12, 13]
+    @board04.set_board_positions(16)
+    result = @board04.show_adjacent_empties_with_value(4)
+    expected_positions = [5, 0, 1, 8, 9, 2, 6, 3, 7]
+
+    assert_equal(expected_positions, result)
+  end
+
+  def  test_that_it_can_assign_a_value_to_each_position_on_the_board
+    @board04.bomb_positions = [10, 11, 12, 13]
+    @board04.set_board_positions(16)
+    @board04.assign_values_to_all_positions
+    result = @board04.positions.map{ |cell| cell.value }
+    expected_positions = [
+      0, 0, 0, 0,
+      0, 1, 2, 2,
+      2, 3, 'B', 'B',
+      'B', 'B', 3, 2
+    ]
     assert_equal(expected_positions, result)
   end
 
@@ -225,28 +254,6 @@ class BoardTest < Minitest::Test
     result = @board04.show_adjacent_empties_with_value(index)
 
     assert_equal([1, 4, 5, 2, 6, 8, 9, 3, 7], result)
-  end
-
-  def test_that_it_can_get_the_neighboring_spaces_to_clear
-    @board04.bomb_positions = [10, 11, 12, 13]
-    @board04.set_board_positions(16)
-    result = @board04.spaces_to_clear(4)
-    expected_positions = [5, 0, 1, 8, 9, 2, 6, 3, 7]
-
-    assert_equal(expected_positions, result)
-  end
-
-  def  test_that_it_can_assign_a_value_to_each_position_on_the_board
-    @board04.bomb_positions = [10, 11, 12, 13]
-    @board04.set_board_positions(16)
-    result = @board04.assign_values_to_all_positions
-    expected_positions = [
-      '0', '0', '0', '0',
-      '0', '1', '2', '2',
-      '2', '3', 'B', 'B',
-      'B', 'B', '3', '2'
-    ]
-    assert_equal(expected_positions, result)
   end
 
   def test_that_it_can_clear_adjacent_spaces
@@ -262,7 +269,7 @@ class BoardTest < Minitest::Test
     @board08.set_board_positions(100)
     position = 21
 
-    result = @board08.spaces_to_clear(position)
+    result = @board08.show_adjacent_empties_with_value(position)
 
     assert_equal([], result)
   end
@@ -272,7 +279,7 @@ class BoardTest < Minitest::Test
     @board.set_board_positions(100)
     position = 21
 
-    result = @board.spaces_to_clear(position)
+    result = @board.show_adjacent_empties_with_value(position)
 
     assert_equal([31], result)
   end
@@ -282,7 +289,7 @@ class BoardTest < Minitest::Test
     @board12.set_board_positions(100)
     position = 21
 
-    result = @board12.spaces_to_clear(position)
+    result = @board12.show_adjacent_empties_with_value(position)
 
     assert_equal([22, 31, 32], result)
   end
@@ -292,7 +299,7 @@ class BoardTest < Minitest::Test
     @board12.set_board_positions(100)
     position = 21
 
-    result = @board12.spaces_to_clear(position)
+    result = @board12.show_adjacent_empties_with_value(position)
 
     assert_equal([22, 31, 32], result)
   end
@@ -302,7 +309,7 @@ class BoardTest < Minitest::Test
     @board12.set_board_positions(100)
     position = 21
 
-    result = @board12.spaces_to_clear(position)
+    result = @board12.show_adjacent_empties_with_value(position)
 
     assert_equal([22, 31, 32], result)
   end
@@ -312,7 +319,6 @@ class BoardTest < Minitest::Test
     @board12.set_board_positions(100)
     position = 88
 
-    @board12.spaces_to_clear(position)
     @board12.show_adjacent_empties_with_value(position)
 
     assert_equal(100, @board12.positions.size)
@@ -323,10 +329,9 @@ class BoardTest < Minitest::Test
     @board12.set_board_positions(100)
     position = 21
 
-    result = @board12.spaces_to_clear(position)
-    @board12.show_adjacent_empties_with_value(position)
+    result =  @board12.show_adjacent_empties_with_value(position)
 
-    assert_kind_of(String, @board12.positions[result.last])
+    assert_kind_of(Integer, @board12.positions[result.last].value)
   end
 
   def test_that_it_can_check_if_all_positions_are_empty

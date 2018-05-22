@@ -11,5 +11,13 @@ module Minesweeper
       print @input
     end
 
+    def mark_flag_on_board(position)
+      mark_flag(position)
+    end
+
+    def mark_flag(position)
+      board_positions[position].update_flag unless board_positions[position].content == 'X'
+    end
+
   end
 end

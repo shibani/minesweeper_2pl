@@ -49,6 +49,7 @@ class BoardFormatterTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 8)
@@ -56,17 +57,17 @@ class BoardFormatterTest < Minitest::Test
   end
 
   def test_that_it_can_show_an_empty_cell
-    positions = [ "B", "-", "0", "X", " ",
-                  "B", "-", "0", "X", " ",
-                  "B", "-", "0", "X", " ",
-                  "B", "-", "0", "X", " ",
-                  "B", "-", "0", "X", " "]
+    positions = [ "B", " ", "0", "X", " ",
+                  "B", " ", "0", "X", " ",
+                  "B", " ", "0", "X", " ",
+                  "B", " ", "0", "X", " ",
+                  "B", " ", "0", "X", " "]
     @game.set_positions(positions)
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 6)
 
-    assert_equal("- ", result)
+    assert_equal("  ", result)
   end
 
   def test_that_it_can_show_a_cell_value_if_given_an_integer
@@ -76,6 +77,7 @@ class BoardFormatterTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 11)
@@ -90,6 +92,7 @@ class BoardFormatterTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 7)
@@ -105,6 +108,7 @@ class BoardFormatterTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 10)
@@ -115,11 +119,12 @@ class BoardFormatterTest < Minitest::Test
   def test_that_it_can_show_bombs_1
     @board_formatter.show_bombs = "show"
     positions = [ "B", "2", "0", "X", " ",
-                  "FB", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 5)
@@ -129,12 +134,18 @@ class BoardFormatterTest < Minitest::Test
 
   def test_that_it_can_show_trophies
     @board_formatter.show_bombs = "won"
-    positions = [ "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X"]
+    positions = [ "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X"]
     @game.set_positions(positions)
+    @game.board_positions[0].update_flag
+    @game.board_positions[5].update_flag
+    @game.board_positions[10].update_flag
+    @game.board_positions[15].update_flag
+    @game.board_positions[20].update_flag
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 10)
@@ -144,11 +155,13 @@ class BoardFormatterTest < Minitest::Test
 
   def test_that_it_can_show_flags_1
     positions = [ "B", "2", "0", "X", " ",
-                  "BF", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(5)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 5)
@@ -158,11 +171,13 @@ class BoardFormatterTest < Minitest::Test
 
   def test_that_it_can_show_flags_2
     positions = [ "B", "2", "0", "X", " ",
-                  "F", "3", "0", "X", " ",
+                  " ", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(5)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 5)
@@ -172,11 +187,14 @@ class BoardFormatterTest < Minitest::Test
 
   def test_that_it_can_show_flags_3
     positions = [ "B", "2", "0", "X", " ",
-                  "F", "3", "0", "X", " ",
-                  "B", "3", "0F", "X", " ",
+                  " ", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(5)
+    @game.mark_flag_on_board(12)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 12)
@@ -186,28 +204,32 @@ class BoardFormatterTest < Minitest::Test
 
   def test_that_it_can_convert_the_board_array_to_show_bomb_emojis
     @board_formatter.show_bombs = "show"
-    positions = [ "B", "2", "0", "X", " ",
-                  "F", "3", "0", "X", " ",
-                  "B", "3", "0F", "X", " ",
+    positions = [ "B", "1", "0", "X", " ",
+                  " ", "2", "0", "X", " ",
+                  "B", "2", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    converted_positions = ["\u{1f4a3}", "2 ", "0 ", "X ", "  ",
-                  "\u{1f6a9}", "3 ", "0 ", "X ", "  ",
-                  "\u{1f4a3}", "3 ", "\u{1f6a9}", "X ", "  ",
-                  "\u{1f4a3}", "3 ", "0 ", "X ", "  ",
-                  "\u{1f4a3}", "2 ", "0 ", "X ", "  "]
+    converted_positions = ["\u{1f4a3}", "1 ", "0 ", "X ", "0 ",
+                  "\u{1f6a9}", "2 ", "0 ", "X ", "0 ",
+                  "\u{1f4a3}", "2 ", "\u{1f6a9}", "X ", "0 ",
+                  "\u{1f4a3}", "3 ", "0 ", "X ", "0 ",
+                  "\u{1f4a3}", "2 ", "0 ", "X ", "0 "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(5)
+    @game.mark_flag_on_board(12)
+    @game.board_positions.each { |cell| cell.update_cell_status }
+
     result = @board_formatter.format_board_with_emoji(@game.board)
     assert_equal(converted_positions, result)
   end
 
   def test_that_it_can_convert_the_board_array_to_show_trophy_emojis
     @board_formatter.show_bombs = "won"
-    positions = [ "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X",
-                  "BF", "X", "X", "X", "X"]
+    positions = [ "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X",
+                  "B", "X", "X", "X", "X"]
     converted_positions = [
                   "\u{1f3c6}", "X ", "X ", "X ", "X ",
                   "\u{1f3c6}", "X ", "X ", "X ", "X ",
@@ -215,23 +237,33 @@ class BoardFormatterTest < Minitest::Test
                   "\u{1f3c6}", "X ", "X ", "X ", "X ",
                   "\u{1f3c6}", "X ", "X ", "X ", "X "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(0)
+    @game.mark_flag_on_board(5)
+    @game.mark_flag_on_board(10)
+    @game.mark_flag_on_board(15)
+    @game.mark_flag_on_board(20)
+    @game.board_positions.each { |cell| cell.update_cell_status }
+
     result = @board_formatter.format_board_with_emoji(@game.board)
     assert_equal(converted_positions, result)
   end
 
   def test_that_it_can_convert_the_board_array_to_show_a_normal_view
     @board_formatter.show_bombs = nil
-    positions = [ "B", "2", "0", "X", " ",
-                  "F", "3", "0", "X", " ",
-                  "B", "3", "0F", "X", " ",
+    positions = [ "B", "1", "0", "X", " ",
+                  " ", "2", "0", "X", " ",
+                  "B", "2", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    converted_positions = ["  ", "2 ", "0 ", "X ", "  ",
-                  "\u{1f6a9}", "3 ", "0 ", "X ", "  ",
-                  "  ", "3 ", "\u{1f6a9}", "X ", "  ",
-                  "  ", "3 ", "0 ", "X ", "  ",
-                  "  ", "2 ", "0 ", "X ", "  "]
+    converted_positions = ["  ", "1 ", "0 ", "X ", "0 ",
+                  "\u{1f6a9}", "2 ", "0 ", "X ", "0 ",
+                  "  ", "2 ", "\u{1f6a9}", "X ", "0 ",
+                  "  ", "3 ", "0 ", "X ", "0 ",
+                  "  ", "2 ", "0 ", "X ", "0 "]
     @game.set_positions(positions)
+    @game.mark_flag_on_board(5)
+    @game.mark_flag_on_board(12)
+    @game.board_positions.each { |cell| cell.update_cell_status }
     result = @board_formatter.format_board_with_emoji(@game.board)
     assert_equal(converted_positions, result)
   end

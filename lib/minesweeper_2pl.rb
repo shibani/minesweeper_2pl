@@ -7,6 +7,7 @@ require "minesweeper_2pl/board_formatter"
 require "minesweeper_2pl/player"
 require "minesweeper_2pl/messages"
 require "minesweeper_2pl/input_validator"
+require "minesweeper_2pl/cell"
 
 require "minesweeper_2pl/mocks/mock_cli"
 require "minesweeper_2pl/mocks/mock_game"

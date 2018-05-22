@@ -1,6 +1,6 @@
 module Minesweeper
   class Board
-    attr_accessor :size, :bomb_positions, :positions, :values
+    attr_accessor :size, :bomb_positions, :positions
     attr_reader :row_size, :bomb_count
 
     def initialize(row_size, bomb_count)
@@ -16,10 +16,15 @@ module Minesweeper
 
     def set_board_positions(board_size)
       self.positions = (0...board_size).map do |cell|
-        bomb_positions.include?(cell) ? 'B' : ' '
+        bomb_positions.include?(cell) ? Cell.new('B') : Cell.new(' ')
       end
-      self.values = @positions.map.with_index do |position, i|
-        position == 'B' ? 'B' : assign_value(i).to_s
+      positions.map.with_index do |cell, i|
+        if ['B', 'X'].include? cell.content
+          cell.update_cell_value(cell.content)
+        else
+          value = assign_value(i)
+          cell.update_cell_value(value)
+        end
       end
     end
 
@@ -30,28 +35,10 @@ module Minesweeper
     end
 
     def assign_values_to_all_positions
-      positions.map.with_index do |position, i|
-        positions[i] = position == 'B' ? 'B' : assign_value(i).to_s
+      positions.each.with_index do |cell, i|
+        value = cell.content == 'B' ? 'B' : assign_value(i)
+        cell.update_cell_value(value)
       end
-    end
-
-    def show_adjacent_empties_with_value(position)
-      # disregard flags
-      # if board.all_positions_empty? empties is this formula
-      # if board.all_positions_empty? and board.postions[position] == 'B', CLEAR OUT bomb (or swap bomb?) and empties is this formula
-      # if this is a move and position is zero, empties is this formula
-      # if position is a number, empties is the number
-      # set position to revealed
-      spaces = spaces_to_clear(position)
-      spaces.each do |space|
-        result = values[space]
-        if positions[space].nil? || positions[space] == ' '
-          positions[space] = result
-        elsif positions[space].include? 'F'
-          positions[space] = result + 'F'
-        end
-      end
-      spaces
     end
 
     def neighboring_cells(position, empty=false)
@@ -97,7 +84,7 @@ module Minesweeper
       positions_array
     end
 
-    def spaces_to_clear(position)
+    def show_adjacent_empties_with_value(position)
       spaces_to_clear = [position]
       cells_to_check = [position]
       checked = []
@@ -105,16 +92,15 @@ module Minesweeper
       while cells_to_check.length.positive?
         cell = cells_to_check.first
         neighboring_cells(cell).each do |cell_position|
-          spaces_to_clear << cell_position unless values[cell_position].include? 'B'
-          cells_to_check << cell_position if values[cell_position] == '0'
+          spaces_to_clear << cell_position unless positions[cell_position].content.include? 'B'
+          cells_to_check << cell_position if positions[cell_position].value == 0
         end
         if checked.empty?
-          spaces_to_clear = spaces_to_clear.uniq
           cells_to_check = cells_to_check.uniq
         else
-          spaces_to_clear = spaces_to_clear.uniq
           cells_to_check = cells_to_check.uniq - checked
         end
+        spaces_to_clear = spaces_to_clear.uniq
         checked << cell
       end
       spaces_to_clear - [position]
@@ -132,11 +118,11 @@ module Minesweeper
     end
 
     def is_empty?(position)
-      !['B', 'X', 'BF'].include? positions[position]
+      !['B', 'X'].include? positions[position].content
     end
 
     def all_positions_empty?
-      !positions.include?('X')
+      !!(positions.detect{ |position| position.content == 'X' }).nil?
     end
 
     private
@@ -146,7 +132,7 @@ module Minesweeper
       end
 
       def check_position(position)
-        (['B', 'BF'].include? positions[position]) ? 1 : 0
+        positions[position].content == 'B' ? 1 : 0
       end
   end
 end

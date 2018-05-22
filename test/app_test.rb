@@ -37,11 +37,17 @@ class AppTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", " ", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
+
     refute(@mock_app.game_is_over)
   end
 
@@ -49,11 +55,16 @@ class AppTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "3F", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.cli.reset_count
     @mock_app.cli.set_input!([2,2,"move"], nil)
 
@@ -65,12 +76,17 @@ class AppTest < Minitest::Test
   def test_play_game_runs_the_game_loop_and_can_check_if_a_move_is_valid
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "3F", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "X", "X", "3", "X", "X",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [7,10,11,12,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.cli.reset_count
     @mock_app.cli.set_input!([2,0,"move"], [2,2,"move"])
 
@@ -95,18 +111,23 @@ class AppTest < Minitest::Test
 
     @mock_app.play_game
 
-    assert_equal("X", @mock_app.game.board.positions[6])
+    assert_equal("X", @mock_app.game.board.positions[6].content)
   end
 
   def test_end_game_can_check_if_the_game_is_won
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.game.game_over = true
 
     assert_equal("win", @mock_app.game.check_win_or_loss)
@@ -116,7 +137,7 @@ class AppTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "X", "BF", "BF", "B",
+                  "B", "X", "B", "B", "B",
                   "X", "X", "X", " ", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
@@ -130,14 +151,19 @@ class AppTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
+                  "B", "B", "B", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [10,11,12,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.game.game_over = true
 
-    out, err = capture_io do
+    out, _err = capture_io do
       @mock_app.end_game
     end
 
@@ -148,11 +174,16 @@ class AppTest < Minitest::Test
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X",
-                  "BF", "BF", "X", "BF", "BF",
+                  "B", "B", "X", "B", "B",
                   "X", "X", "X", "X", "X",
                   "X", "X", "X", "X", "X" ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
+    flags = [10,11,13,14]
+    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    to_reveal = [0,1,2,3,4,5,6,7,8,9,12,15,16,17,18,19,20,21,22,23,24]
+    to_reveal.each { |el|
+      @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.game.game_over = true
 
     out, err = capture_io do
