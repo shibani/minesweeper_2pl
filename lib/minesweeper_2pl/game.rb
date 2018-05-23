@@ -70,21 +70,28 @@ module Minesweeper
     end
 
     def reassign_bomb(position)
-      'reassigned!'
+      new_bomb_array = bomb_positions - [position]
+      new_bomb_location = (((0...row_size ** 2 ).to_a) - bomb_positions).sample
+      new_bomb_array << new_bomb_location
+      set_bomb_positions(new_bomb_array)
+      board.set_board_positions(row_size ** 2)
     end
 
     def place_move(move)
       position = move_to_position(move)
       if move.last == 'move'
-        # if first_move?
-        #   reassign_bomb(position) if position_is_a_bomb?(position)
-        #   flood_fill
-        # else
-        #   #if position is a bomb, game over
-        #   #if position has value reveal position
-        #   #if value == 0, do flood-fill
-        # end
-        mark_move_on_board(position)
+        if first_move?
+          if position_is_a_bomb?(position)
+            reassign_bomb(position)
+          end
+          mark_move_on_board(position)
+        else
+          if position_has_a_non_zero_value?(position)
+            reveal_self(position)
+          else
+            mark_move_on_board(position)
+          end
+        end
       elsif move.last == 'flag'
         mark_flag_on_board(position)
       end
@@ -148,6 +155,10 @@ module Minesweeper
       cells_to_reveal + [position]
     end
 
+    def reveal_self(position)
+      board_positions[position].update_cell_status
+    end
+
     def mark_flag_on_board(position)
       mark_flag(position)
     end
@@ -185,12 +196,21 @@ module Minesweeper
       board_positions[position].flag == 'F'
     end
 
+    def position_has_a_zero_value?(position)
+      (board_positions[position].value.is_a? Integer) && (board_positions[position].value == 0)
+    end
+
+    def position_has_a_non_zero_value?(position)
+      (board_positions[position].value.is_a? Integer) && (board_positions[position].value > 0)
+    end
+
     def mark_board(position, content)
       board_positions[position].update_cell_content(content)
     end
 
     def mark_flag(position)
-      board_positions[position].update_flag unless board_positions[position].status == 'revealed'
+      cell = board_positions[position]
+      cell.update_flag unless cell.status == 'revealed'
     end
 
     def all_non_bomb_positions_are_revealed?

@@ -16,7 +16,8 @@ module Minesweeper
     end
 
     def mark_flag(position)
-      board_positions[position].update_flag unless board_positions[position].content == 'X'
+      cell = board_positions[position]
+      cell.update_flag unless cell.status == 'revealed'
     end
 
   end
