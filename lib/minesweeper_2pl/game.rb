@@ -33,7 +33,7 @@ module Minesweeper
       end
       board_positions.each.with_index do |position, i|
         content = board_positions[i].content
-        if ['B', 'X'].include? content
+        if content == 'B'
           board_positions[i].update_cell_value(content)
         else
           value = board.assign_value(i)
@@ -69,25 +69,27 @@ module Minesweeper
       board_formatter.print_message(string)
     end
 
+    def reassign_bomb(position)
+      'reassigned!'
+    end
+
     def place_move(move)
       position = move_to_position(move)
       if move.last == 'move'
+        # if first_move?
+        #   reassign_bomb(position) if position_is_a_bomb?(position)
+        #   flood_fill
+        # else
+        #   #if position is a bomb, game over
+        #   #if position has value reveal position
+        #   #if value == 0, do flood-fill
+        # end
         mark_move_on_board(position)
       elsif move.last == 'flag'
         mark_flag_on_board(position)
       end
       self.game_over = true if is_won?
     end
-
-    # if board.all_positions_empty?
-      # if position_is_a_bomb?(position)
-        # reassign bomb (update bomb array)
-        # recalculate values array
-      # elsif position is not zero,
-        # ignore non-zero value
-      # end
-      # do floodfill
-    # end
 
     def show_bombs=(msg)
       if msg == 'show'
@@ -104,7 +106,7 @@ module Minesweeper
     end
 
     def is_not_valid?(move=nil)
-      move.nil? || get_position(move).content == 'X' || get_position(move).status == 'revealed'
+      move.nil? || get_position(move).status == 'revealed'
     end
 
     def gameloop_check_status
@@ -131,21 +133,19 @@ module Minesweeper
       if position_is_a_bomb?(position)
         self.game_over = true
       else
-        mark_board(position, 'X')
-        result = flood_fill(position)
+        flood_fill(position)
       end
       board_positions[position].update_cell_status
-      result
     end
 
     def flood_fill(position)
       cells_to_reveal = []
       result = board.show_adjacent_empties_with_value(position)
       result.each do |adj_position|
-        cells_to_reveal << adj_position unless board_positions[adj_position].content == "X"
+        cells_to_reveal << adj_position unless board_positions[adj_position].status == 'revealed'
         board_positions[adj_position].update_cell_status
       end
-      cells_to_reveal - [position]
+      cells_to_reveal + [position]
     end
 
     def mark_flag_on_board(position)
@@ -185,16 +185,12 @@ module Minesweeper
       board_positions[position].flag == 'F'
     end
 
-    def position_is_a_user_move?(position)
-      board_positions[position].content == 'X'
-    end
-
     def mark_board(position, content)
       board_positions[position].update_cell_content(content)
     end
 
     def mark_flag(position)
-      board_positions[position].update_flag unless board_positions[position].content == 'X'
+      board_positions[position].update_flag unless board_positions[position].status == 'revealed'
     end
 
     def all_non_bomb_positions_are_revealed?
@@ -206,6 +202,10 @@ module Minesweeper
     def all_bomb_positions_are_flagged?
       flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
       ((flags - bomb_positions) + (bomb_positions - flags)).empty?
+    end
+
+    def first_move?
+      board.all_positions_empty?
     end
   end
 end

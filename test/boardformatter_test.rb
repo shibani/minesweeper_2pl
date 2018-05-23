@@ -53,7 +53,7 @@ class BoardFormatterTest < Minitest::Test
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 8)
-    assert_equal("X ", result)
+    assert_equal("0 ", result)
   end
 
   def test_that_it_can_show_an_empty_cell
@@ -208,12 +208,12 @@ class BoardFormatterTest < Minitest::Test
                   " ", "2", "0", "X", " ",
                   "B", "2", "0", "X", " ",
                   "B", "3", "0", "X", " ",
-                  "B", "2", "0", "X", " "]
-    converted_positions = ["\u{1f4a3}", "1 ", "0 ", "X ", "0 ",
-                  "\u{1f6a9}", "2 ", "0 ", "X ", "0 ",
-                  "\u{1f4a3}", "2 ", "\u{1f6a9}", "X ", "0 ",
-                  "\u{1f4a3}", "3 ", "0 ", "X ", "0 ",
-                  "\u{1f4a3}", "2 ", "0 ", "X ", "0 "]
+                  "B", "2", "0", "X", " " ]
+    converted_positions = ["\u{1f4a3}", "1 ", "0 ", "0 ", "0 ",
+                  "\u{1f6a9}", "2 ", "0 ", "0 ", "0 ",
+                  "\u{1f4a3}", "2 ", "\u{1f6a9}", "0 ", "0 ",
+                  "\u{1f4a3}", "3 ", "0 ", "0 ", "0 ",
+                  "\u{1f4a3}", "2 ", "0 ", "0 ", "0 "]
     @game.set_positions(positions)
     @game.mark_flag_on_board(5)
     @game.mark_flag_on_board(12)
@@ -231,11 +231,11 @@ class BoardFormatterTest < Minitest::Test
                   "B", "X", "X", "X", "X",
                   "B", "X", "X", "X", "X"]
     converted_positions = [
-                  "\u{1f3c6}", "X ", "X ", "X ", "X ",
-                  "\u{1f3c6}", "X ", "X ", "X ", "X ",
-                  "\u{1f3c6}", "X ", "X ", "X ", "X ",
-                  "\u{1f3c6}", "X ", "X ", "X ", "X ",
-                  "\u{1f3c6}", "X ", "X ", "X ", "X "]
+                  "\u{1f3c6}", "2 ", "0 ", "0 ", "0 ",
+                  "\u{1f3c6}", "3 ", "0 ", "0 ", "0 ",
+                  "\u{1f3c6}", "3 ", "0 ", "0 ", "0 ",
+                  "\u{1f3c6}", "3 ", "0 ", "0 ", "0 ",
+                  "\u{1f3c6}", "2 ", "0 ", "0 ", "0 "]
     @game.set_positions(positions)
     @game.mark_flag_on_board(0)
     @game.mark_flag_on_board(5)
@@ -255,11 +255,11 @@ class BoardFormatterTest < Minitest::Test
                   "B", "2", "0", "X", " ",
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
-    converted_positions = ["  ", "1 ", "0 ", "X ", "0 ",
-                  "\u{1f6a9}", "2 ", "0 ", "X ", "0 ",
-                  "  ", "2 ", "\u{1f6a9}", "X ", "0 ",
-                  "  ", "3 ", "0 ", "X ", "0 ",
-                  "  ", "2 ", "0 ", "X ", "0 "]
+    converted_positions = ["  ", "1 ", "0 ", "0 ", "0 ",
+                  "\u{1f6a9}", "2 ", "0 ", "0 ", "0 ",
+                  "  ", "2 ", "\u{1f6a9}", "0 ", "0 ",
+                  "  ", "3 ", "0 ", "0 ", "0 ",
+                  "  ", "2 ", "0 ", "0 ", "0 "]
     @game.set_positions(positions)
     @game.mark_flag_on_board(5)
     @game.mark_flag_on_board(12)

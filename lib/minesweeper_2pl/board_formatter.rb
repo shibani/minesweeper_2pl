@@ -98,9 +98,9 @@ module Minesweeper
         elsif cell_is_a_flag?(cell)
           show_flag_emoji
         elsif cell.content == 'X'
-          show_user_move
-        else
-          cell.value.to_s + ' '
+          show_cell_value(cell)
+        elsif cell.value.is_a? Integer
+          show_cell_value(cell)
         end
       else
         if cell_is_a_bomb?(cell)
@@ -117,22 +117,22 @@ module Minesweeper
       elsif cell_is_a_flag?(cell)
         show_flag_emoji
       elsif cell.content == 'X'
-        show_user_move
-      else
-        cell.value.to_s + ' '
+        show_cell_value(cell)
+      elsif cell.value.is_a? Integer
+        show_cell_value(cell)
       end
     end
 
     def render_normal_view(cell)
       if cell_is_revealed?(cell)
         if cell.content == 'X'
-          show_user_move
+          show_cell_value(cell)
         elsif cell_is_a_flag?(cell)
           show_flag_emoji
         elsif cell_is_a_bomb?(cell)
           show_empty
-        else
-          cell.value.to_s + ' '
+        elsif cell.value.is_a? Integer
+          show_cell_value(cell)
         end
       else
         if cell_is_a_flag?(cell)
@@ -173,6 +173,10 @@ module Minesweeper
 
     def show_user_move
       "X "
+    end
+
+    def show_cell_value(cell)
+      cell.value.to_s + ' '
     end
 
     def show_empty

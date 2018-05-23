@@ -12,6 +12,7 @@ class CellTest < Minitest::Test
 
   def test_that_the_content_of_the_cell_can_be_updated
     @cell1.update_cell_content('X')
+
     assert_equal 'X', @cell1.content
   end
 

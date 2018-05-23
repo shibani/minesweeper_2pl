@@ -35,11 +35,11 @@ class AppTest < Minitest::Test
 
   def test_play_game_can_check_if_the_game_is_not_over
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X",
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
                   "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", " ", "X", "X", "X" ]
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
@@ -53,11 +53,11 @@ class AppTest < Minitest::Test
 
   def test_play_game_runs_the_game_loop_and_places_moves
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "3F", "X", "X",
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
                   "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
@@ -75,11 +75,11 @@ class AppTest < Minitest::Test
 
   def test_play_game_runs_the_game_loop_and_can_check_if_a_move_is_valid
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "3", "X", "X",
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
                   "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [7,10,11,12,13,14]
@@ -88,7 +88,7 @@ class AppTest < Minitest::Test
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
     @mock_app.cli.reset_count
-    @mock_app.cli.set_input!([2,0,"move"], [2,2,"move"])
+    @mock_app.cli.set_input!([1,0,"move"], [2,2,"move"])
 
     out, err = capture_io do
       @mock_app.play_game
@@ -99,11 +99,11 @@ class AppTest < Minitest::Test
 
   def test_play_game_runs_the_game_loop_and_places_moves_till_the_game_is_over
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "3F", "X", "X",
-                  "BF", "BF", "BF", "BF", "BF",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.cli.reset_count
@@ -111,16 +111,16 @@ class AppTest < Minitest::Test
 
     @mock_app.play_game
 
-    assert_equal("X", @mock_app.game.board.positions[6].content)
+    assert_equal('revealed', @mock_app.game.board.positions[8].status)
   end
 
   def test_end_game_can_check_if_the_game_is_won
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X",
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
                   "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
@@ -135,11 +135,11 @@ class AppTest < Minitest::Test
 
   def test_end_game_can_check_if_the_game_is_lost
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X",
-                  "B", "X", "B", "B", "B",
-                  "X", "X", "X", " ", "X",
-                  "X", "X", "X", "X", "X" ]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     @mock_app.game.game_over = true
@@ -149,11 +149,11 @@ class AppTest < Minitest::Test
 
   def test_end_game_can_check_if_game_is_won_and_outputs_a_message_accordingly
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X",
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
                   "B", "B", "B", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
@@ -172,11 +172,11 @@ class AppTest < Minitest::Test
 
   def test_end_game_can_check_if_game_is_lost_and_outputs_a_message_accordingly
     bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X",
-                  "B", "B", "X", "B", "B",
-                  "X", "X", "X", "X", "X",
-                  "X", "X", "X", "X", "X" ]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,13,14]

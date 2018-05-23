@@ -19,7 +19,7 @@ module Minesweeper
         bomb_positions.include?(cell) ? Cell.new('B') : Cell.new(' ')
       end
       positions.map.with_index do |cell, i|
-        if ['B', 'X'].include? cell.content
+        if cell.content == 'B'
           cell.update_cell_value(cell.content)
         else
           value = assign_value(i)
@@ -118,11 +118,11 @@ module Minesweeper
     end
 
     def is_empty?(position)
-      !['B', 'X'].include? positions[position].content
+      positions[position].content != 'B'
     end
 
     def all_positions_empty?
-      !!(positions.detect{ |position| position.content == 'X' }).nil?
+      !!(positions.detect{ |position| position.status == 'revealed' }).nil?
     end
 
     private
