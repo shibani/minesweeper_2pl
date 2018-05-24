@@ -64,7 +64,6 @@ module Minesweeper
     end
 
     def board_cell_status
-      board_positions.map(&:status)
       board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
     end
 
@@ -230,7 +229,9 @@ module Minesweeper
     end
 
     def first_move?
-      board.all_positions_empty?
+      #board.all_positions_empty?
+      revealed = board_positions.select{|el| el.status == 'revealed'}
+      revealed.empty?
     end
   end
 end
