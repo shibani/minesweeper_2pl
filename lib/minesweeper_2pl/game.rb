@@ -230,12 +230,14 @@ module Minesweeper
       # non_bombs = board_positions.reject{|el| el.content == 'B'}
       revealed = board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
       non_bombs = board_positions.each_index.reject{ |i| board_positions[i].content == 'B' }
-      ((revealed - non_bombs) + (non_bombs - revealed)).empty?
+      # ((revealed - non_bombs) + (non_bombs - revealed)).empty?
+      revealed.sort == non_bombs.sort
     end
 
     def all_bomb_positions_are_flagged?
       flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
-      ((flags - bomb_positions) + (bomb_positions - flags)).empty?
+      # ((flags - bomb_positions) + (bomb_positions - flags)).empty?
+      flags.sort == bomb_positions.sort
     end
 
     def first_move?
