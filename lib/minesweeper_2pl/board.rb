@@ -34,12 +34,12 @@ module Minesweeper
       @bomb_positions = bombs.first(bomb_count)
     end
 
-    def assign_values_to_all_positions
-      positions.each.with_index do |cell, i|
-        value = cell.content == 'B' ? 'B' : assign_value(i)
-        cell.update_cell_value(value)
-      end
-    end
+    # def assign_values_to_all_positions
+    #   positions.each.with_index do |cell, i|
+    #     value = cell.content == 'B' ? 'B' : assign_value(i)
+    #     cell.update_cell_value(value)
+    #   end
+    # end
 
     def neighboring_cells(position, empty=false)
       positions_array = []

@@ -56,11 +56,16 @@ module Minesweeper
     end
 
     def board_values
-      board_positions(&:value)
+      board_positions.map(&:value)
     end
 
     def set_board_values
       board.assign_values_to_all_positions
+    end
+
+    def board_cell_status
+      board_positions.map(&:status)
+      board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
     end
 
     def print_board

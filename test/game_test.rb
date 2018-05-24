@@ -675,4 +675,35 @@ class GameTest < Minitest::Test
 
     assert_equal(revealed, [0,1,2,3,4,5,6,7,8,9,19])
   end
+
+  def test_that_it_can_return_the_board_values
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    expected = [0, 0, 0, 0, 0, 2, 3, 3, 3, 2, 'B', 'B', 'B', 'B', 'B', 2, 3, 3, 3, 2, 0, 0, 0, 0, 0]
+    assert_equal(expected, @game.board_values)
+  end
+
+  def test_that_it_can_return_the_boards_cell_status
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    to_reveal = [20,21,22,23,24]
+    to_reveal.each { |el|
+      @game.board_positions[el].update_cell_status }
+
+    assert_equal(to_reveal, @game.board_cell_status)
+  end
 end
