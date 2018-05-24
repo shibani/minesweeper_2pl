@@ -135,10 +135,12 @@ module Minesweeper
       if game_over
         if is_won?
           self.show_bombs = 'won'
+          set_cell_status(bomb_positions)
           print_board
           result = 'win'
         else
           self.show_bombs = 'show'
+          set_cell_status(bomb_positions)
           print_board
           result = 'lose'
         end
@@ -235,7 +237,6 @@ module Minesweeper
     end
 
     def first_move?
-      #board.all_positions_empty?
       revealed = board_positions.select{|el| el.status == 'revealed'}
       revealed.empty?
     end
