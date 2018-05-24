@@ -63,6 +63,12 @@ module Minesweeper
       board.assign_values_to_all_positions
     end
 
+    def set_cell_status(array)
+      array.each do |el|
+        board_positions[el].update_cell_status
+      end
+    end
+
     def board_cell_status
       board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
     end
