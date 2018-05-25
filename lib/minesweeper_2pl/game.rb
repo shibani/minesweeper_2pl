@@ -120,6 +120,7 @@ module Minesweeper
 
     def is_won?
       all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
+      #all_bomb_positions_are_flagged?
     end
 
     def is_not_valid?(move=nil)
@@ -135,12 +136,10 @@ module Minesweeper
       if game_over
         if is_won?
           self.show_bombs = 'won'
-          set_cell_status(bomb_positions)
           print_board
           result = 'win'
         else
           self.show_bombs = 'show'
-          set_cell_status(bomb_positions)
           print_board
           result = 'lose'
         end
@@ -226,18 +225,14 @@ module Minesweeper
     end
 
     def all_non_bomb_positions_are_revealed?
-      # revealed = board_positions.select{|el| el.status == 'revealed'}
-      # non_bombs = board_positions.reject{|el| el.content == 'B'}
       revealed = board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
       non_bombs = board_positions.each_index.reject{ |i| board_positions[i].content == 'B' }
-      # ((revealed - non_bombs) + (non_bombs - revealed)).empty?
-      revealed.sort == non_bombs.sort
+      ((revealed - non_bombs) + (non_bombs - revealed)).empty?
     end
 
     def all_bomb_positions_are_flagged?
       flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
-      # ((flags - bomb_positions) + (bomb_positions - flags)).empty?
-      flags.sort == bomb_positions.sort
+      ((flags - bomb_positions) + (bomb_positions - flags)).empty?
     end
 
     def first_move?
