@@ -38,24 +38,6 @@ class CliTest < Minitest::Test
     end
   end
 
-  # def test_that_it_can_check_if_the_input_is_valid_1
-  #   assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-  #     simulate_stdin("bad input") { @cli.get_player_input(@mock_game) }
-  #   end
-  # end
-
-  # def test_that_it_can_check_if_the_input_is_valid_2
-  #   assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-  #     simulate_stdin("flag A,8") { @cli.get_player_input(@mock_game) }
-  #   end
-  # end
-
-  # def test_that_it_can_check_if_the_coordinates_are_less_than_the_rowsize
-  #   assert_output "Expecting 'flag' or 'move', with one digit from header and one digit from left column. Please try again!\n" do
-  #     simulate_stdin("3,12") { @cli.get_player_input(@mock_game) }
-  #   end
-  # end
-
   def test_that_it_returns_an_array_if_input_is_valid
     io = StringIO.new
     io.puts "flag 5,6"
@@ -67,24 +49,6 @@ class CliTest < Minitest::Test
 
     assert_equal([5,6, "flag"], result)
   end
-
-  # def test_that_it_can_capture_a_board_size_from_the_player
-  #   assert_output "You have selected a 10 x 10 board. Generating board.\n\n" do
-  #     simulate_stdin("10") { @cli.get_player_entered_board_size }
-  #   end
-  # end
-  #
-  # def test_that_it_can_check_if_entered_board_size_is_not_an_integer
-  #   assert_output "That is not a valid row size. Please try again.\n" do
-  #     simulate_stdin("test") { @cli.get_player_entered_board_size }
-  #   end
-  # end
-  #
-  # def test_that_it_can_check_if_entered_board_size_is_too_large
-  #   assert_output "That is not a valid row size. Please try again.\n" do
-  #     simulate_stdin("35") { @cli.get_player_entered_board_size }
-  #   end
-  # end
 
   def test_that_it_returns_the_bomb_count_if_valid
     io = StringIO.new
@@ -103,18 +67,6 @@ class CliTest < Minitest::Test
       simulate_stdin("75") { @cli.get_player_entered_bomb_count(100) }
     end
   end
-
-  # def test_that_it_can_check_if_entered_bomb_count_is_not_an_integer
-  #   assert_output "That is not a valid bomb count. Please try again.\n" do
-  #     simulate_stdin("test") { @cli.get_player_entered_bomb_count(100) }
-  #   end
-  # end
-
-  # def test_that_it_can_check_if_entered_bomb_count_is_too_large
-  #   assert_output "That is not a valid bomb count. Please try again.\n" do
-  #     simulate_stdin("105") { @cli.get_player_entered_bomb_count(100) }
-  #   end
-  # end
 
   def test_that_it_returns_the_bomb_count_if_valid
     io = StringIO.new
@@ -166,10 +118,13 @@ class CliTest < Minitest::Test
     assert_equal([5,6, "move"], result)
   end
 
-  # def test_that_the_welcome_method_welcomes_the_user
-  #   message = @cli.welcome
-  #   string = "\n===========================================\n           WELCOME TO MINESWEEPER\n===========================================\n\n"
-  #
-  #   assert_equal(string, message)
-  # end
+  def test_that_it_can_return_a_string_if_invalid_move
+    string = puts "That was not a valid move. Please try again."
+    assert_equal(@cli.invalid_move, string)
+  end
+
+  def test_that_it_can_return_the_game_over_message
+    string = "Game over! You win!"
+    assert_equal(@cli.show_game_over_message("win"), string)
+  end
 end

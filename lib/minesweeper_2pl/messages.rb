@@ -9,7 +9,7 @@ module Minesweeper
       print(string)
     end
 
-    def self.ask_for_board_size
+    def self.ask_for_row_size
       puts "Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n"
     end
 

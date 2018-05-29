@@ -14,11 +14,19 @@ module Minesweeper
       get_player_input(game)
     end
 
+    def invalid_move
+      Messages.invalid_move
+    end
+
+    def show_game_over_message(result)
+      Messages.show_game_over_message(result)
+    end
+
     def get_player_params
       result = []
       size = nil
       while size.nil?
-        Messages.ask_for_board_size
+        Messages.ask_for_row_size
         size = get_player_entered_board_size
       end
       result << size

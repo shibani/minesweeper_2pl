@@ -5,15 +5,6 @@ require "io_test_helpers"
 class MessagesTest < Minitest::Test
   include IoTestHelpers
 
-  # private methods
-  # invalid_move
-  # player_input_success_message(input)
-  # invalid_player_input_message
-  # row_size_success_message(input)
-  # invalid_row_size_message
-  # bomb_count_success_message(input)
-  # invalid_bomb_count_message
-
   def setup
     @cli = Minesweeper::Messages
   end
@@ -34,7 +25,7 @@ class MessagesTest < Minitest::Test
 
   def test_that_it_can_ask_player_to_set_board_size
     out, _err = capture_io do
-      @cli.ask_for_board_size
+      @cli.ask_for_row_size
     end
     assert_equal("Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n", out)
   end

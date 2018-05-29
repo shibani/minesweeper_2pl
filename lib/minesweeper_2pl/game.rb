@@ -91,9 +91,7 @@ module Minesweeper
       position = move_to_position(move)
       if move.last == 'move'
         if first_move?
-          if position_is_a_bomb?(position)
-            reassign_bomb(position)
-          end
+          reassign_bomb(position) if position_is_a_bomb?(position)
           mark_move_on_board(position)
         else
           if position_has_a_non_zero_value?(position)
@@ -120,7 +118,6 @@ module Minesweeper
 
     def is_won?
       all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
-      #all_bomb_positions_are_flagged?
     end
 
     def is_not_valid?(move=nil)
