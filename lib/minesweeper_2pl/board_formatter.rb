@@ -100,7 +100,7 @@ module Minesweeper
         else
           show_cell_value(cell)
         end
-      else
+      elsif !cell_is_revealed?(cell)
         if cell_is_a_bomb?(cell)
           show_bomb_emoji
         elsif cell_is_a_flag?(cell)
