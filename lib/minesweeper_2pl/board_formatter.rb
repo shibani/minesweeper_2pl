@@ -96,8 +96,8 @@ module Minesweeper
         show_bomb_emoji
       elsif cell_is_a_flag?(cell)
         show_flag_emoji
-      elsif cell_is_revealed?(cell)
-        if cell.value.is_a? Integer
+      elsif cell.value.is_a? Integer
+        if cell_is_revealed?(cell)
           show_cell_value(cell)
         else
           show_empty
@@ -110,8 +110,8 @@ module Minesweeper
     def render_won_view(cell)
       if cell_is_a_bomb?(cell)
         show_trophy_emoji
-      elsif cell_is_revealed?(cell)
-        if cell.value.is_a? Integer
+      elsif cell.value.is_a? Integer
+        if cell_is_revealed?(cell)
           show_cell_value(cell)
         else
           show_empty
@@ -124,8 +124,8 @@ module Minesweeper
     def render_normal_view(cell)
       if cell_is_a_flag?(cell)
         show_flag_emoji
-      elsif cell_is_revealed?(cell)
-        if cell.value.is_a? Integer
+      elsif cell.value.is_a? Integer
+        if cell_is_revealed?(cell)
           show_cell_value(cell)
         else
           show_empty
