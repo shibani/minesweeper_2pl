@@ -92,27 +92,35 @@ module Minesweeper
     private
 
     def render_lost_view(cell)
-      if cell_is_a_flag?(cell)
-        show_flag_emoji
-      elsif cell_is_a_bomb?(cell)
-        show_bomb_emoji
+      if cell_is_revealed?(cell)
+        if cell_is_a_bomb?(cell)
+          show_bomb_emoji
+        elsif cell_is_a_flag?(cell)
+          show_flag_emoji
+        else
+          show_cell_value(cell)
+        end
       else
-        show_cell_value(cell)
-      # elsif cell.value.is_a? Integer
-      #   if cell_is_revealed?(cell)
-      #     show_cell_value(cell)
-      #   else
-      #     show_empty
-      #   end
+        if cell_is_a_bomb?(cell)
+          show_bomb_emoji
+        elsif cell_is_a_flag?(cell)
+          show_flag_emoji
+        else
+          show_empty
+        end
       end
     end
 
     def render_won_view(cell)
-      if cell_is_a_bomb?(cell)
-        show_trophy_emoji
-      elsif cell.value.is_a? Integer
-        if cell_is_revealed?(cell)
+      if cell_is_revealed?(cell)
+        if cell_is_a_bomb?(cell)
+          show_trophy_emoji
+        else
           show_cell_value(cell)
+        end
+      else
+        if cell_is_a_bomb?(cell)
+          show_trophy_emoji
         else
           show_empty
         end
@@ -120,6 +128,22 @@ module Minesweeper
     end
 
     def render_normal_view(cell)
+      if cell_is_revealed?(cell)
+        if cell_is_a_flag?(cell)
+          show_flag_emoji
+        elsif cell.value.is_a? Integer
+          show_cell_value(cell)
+        else
+          show_empty
+        end
+      else
+        if cell_is_a_flag?(cell)
+          show_flag_emoji
+        else
+          show_empty
+        end
+      end
+
       if cell_is_a_flag?(cell)
         show_flag_emoji
       elsif cell.value.is_a? Integer
