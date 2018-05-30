@@ -102,8 +102,6 @@ module Minesweeper
         else
           show_empty
         end
-      else
-        show_empty
       end
     end
 
@@ -116,8 +114,6 @@ module Minesweeper
         else
           show_empty
         end
-      else
-        show_empty
       end
     end
 
