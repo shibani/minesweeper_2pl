@@ -96,12 +96,14 @@ module Minesweeper
         show_bomb_emoji
       elsif cell_is_a_flag?(cell)
         show_flag_emoji
-      elsif cell.value.is_a? Integer
-        if cell_is_revealed?(cell)
-          show_cell_value(cell)
-        else
-          show_empty
-        end
+      else
+        show_cell_value(cell)
+      # elsif cell.value.is_a? Integer
+      #   if cell_is_revealed?(cell)
+      #     show_cell_value(cell)
+      #   else
+      #     show_empty
+      #   end
       end
     end
 
