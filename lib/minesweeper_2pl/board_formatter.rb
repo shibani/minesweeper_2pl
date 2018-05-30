@@ -92,10 +92,10 @@ module Minesweeper
     private
 
     def render_lost_view(cell)
-      if cell_is_a_bomb?(cell)
-        show_bomb_emoji
-      elsif cell_is_a_flag?(cell)
+      if cell_is_a_flag?(cell)
         show_flag_emoji
+      elsif cell_is_a_bomb?(cell)
+        show_bomb_emoji
       else
         show_cell_value(cell)
       # elsif cell.value.is_a? Integer
