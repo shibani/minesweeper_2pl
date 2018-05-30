@@ -230,7 +230,7 @@ module Minesweeper
 
     def all_bomb_positions_are_flagged?
       flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
-      ((flags - bomb_positions) + (bomb_positions - flags)).empty?
+      ((flags - bomb_positions) + (bomb_positions - flags)).empty? && flags.count == bomb_positions.count
     end
 
     def first_move?

@@ -408,26 +408,9 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     bomb_positions.each { |flag| @game.mark_flag(flag) }
-    to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
-    to_reveal.each { |el|
-      @game.board_positions[el].update_cell_status }
     @game.game_over = true
 
     assert_equal("win", @game.check_win_or_loss)
-  end
-
-  def skip test_that_it_can_mark_a_move_on_the_board
-    bomb_positions = [10, 11, 12, 13, 14]
-    positions = [ " ", " ", " ", " ", " ",
-                  " ", " ", " ", " ", " ",
-                  "B", "B", "B", "B", "B",
-                  " ", " ", " ", " ", " ",
-                  " ", " ", " ", " ", " " ]
-    @game.set_bomb_positions(bomb_positions)
-    @game.set_positions(positions)
-    @game.mark_move_on_board(9)
-
-    assert_equal('X', @game.board_positions[9].content)
   end
 
   def test_that_it_sets_a_square_to_revealed_after_marking_a_move
