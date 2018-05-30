@@ -546,6 +546,22 @@ class GameTest < Minitest::Test
     assert_equal([5,6,15,16,10], result)
   end
 
+  def test_that_flood_fill_does_not_return_flagged_positions
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    flags = [5,6]
+    flags.each { |fl| @game.mark_flag(fl) }
+    result = @game.flood_fill(10)
+
+    assert_equal([15,16,10], result)
+  end
+
   def test_that_reassign_bombs_can_prevent_first_move_from_ending_the_game
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ " ", " ", " ", " ", " ",

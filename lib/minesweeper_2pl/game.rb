@@ -117,7 +117,8 @@ module Minesweeper
     end
 
     def is_won?
-      all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
+      # all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
+      all_bomb_positions_are_flagged?
     end
 
     def is_not_valid?(move=nil)
@@ -157,7 +158,7 @@ module Minesweeper
       cells_to_reveal = []
       result = board.show_adjacent_empties_with_value(position)
       result.each do |adj_position|
-        cells_to_reveal << adj_position unless board_positions[adj_position].status == 'revealed'
+        cells_to_reveal << adj_position unless board_positions[adj_position].status == 'revealed' || board_positions[adj_position].flag == 'F'
         board_positions[adj_position].update_cell_status
       end
       cells_to_reveal + [position]
