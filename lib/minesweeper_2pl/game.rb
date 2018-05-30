@@ -219,7 +219,7 @@ module Minesweeper
 
     def mark_flag(position)
       cell = board_positions[position]
-      cell.update_flag unless cell.status == 'revealed'
+      cell.update_flag
     end
 
     def all_non_bomb_positions_are_revealed?

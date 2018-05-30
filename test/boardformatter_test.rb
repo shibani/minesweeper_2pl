@@ -65,7 +65,7 @@ class BoardFormatterTest < Minitest::Test
     @game.set_positions(positions)
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
-    result = @board_formatter.get_cell_content(board_array, 6)
+    result = @board_formatter.get_cell_content(board_array, 4)
 
     assert_equal("  ", result)
   end
