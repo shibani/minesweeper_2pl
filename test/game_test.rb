@@ -743,6 +743,23 @@ class GameTest < Minitest::Test
     assert_equal(to_reveal, @game.board_cell_status)
   end
 
+  def test_that_it_can_return_an_array_of_the_boards_flag_positions
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+
+    to_flag = [20,21,22,23,24]
+    to_flag.each { |el|
+      @game.board_positions[el].update_flag }
+
+    assert_equal([20,21,22,23,24], @game.board_flags)
+  end
+
   def test_that_it_can_set_the_status_of_an_array_of_cells_to_revealed
 
     bomb_positions = [10, 11, 12, 13, 14]

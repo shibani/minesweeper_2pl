@@ -73,6 +73,10 @@ module Minesweeper
       board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
     end
 
+    def board_flags
+      board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
+    end
+
     def print_board
       board_array = board_formatter.format_board_with_emoji(board)
       string = board_formatter.board_to_string(board_array, board)
@@ -138,7 +142,6 @@ module Minesweeper
           result = 'win'
         else
           self.show_bombs = 'show'
-          set_all_bomb_positions_to_revealed
           print_board
           result = 'lose'
         end
@@ -171,9 +174,6 @@ module Minesweeper
 
     def mark_flag_on_board(position)
       mark_flag(position)
-    end
-
-    def set_all_bomb_positions_to_revealed
     end
 
     private
