@@ -161,7 +161,6 @@ class BoardFormatterTest < Minitest::Test
                   "B", "2", "0", "X", " "]
     @game.set_positions(positions)
     @game.mark_flag_on_board(5)
-    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 5)
@@ -193,7 +192,6 @@ class BoardFormatterTest < Minitest::Test
     @game.set_positions(positions)
     @game.mark_flag_on_board(5)
     @game.mark_flag_on_board(12)
-    @game.board_positions.each { |cell| cell.update_cell_status }
     board_array = @board_formatter.format_board_with_emoji(@game.board)
 
     result = @board_formatter.get_cell_content(board_array, 12)
@@ -292,8 +290,8 @@ class BoardFormatterTest < Minitest::Test
                   "B", "3", "0", "X", " ",
                   "B", "2", "0", "X", " "]
     converted_positions = ["  ", "1 ", "0 ", "0 ", "0 ",
-                  "\u{1f6a9}", "2 ", "0 ", "0 ", "0 ",
-                  "  ", "2 ", "\u{1f6a9}", "0 ", "0 ",
+                  "2 ", "2 ", "0 ", "0 ", "0 ",
+                  "  ", "2 ", "0 ", "0 ", "0 ",
                   "  ", "3 ", "0 ", "0 ", "0 ",
                   "  ", "2 ", "0 ", "0 ", "0 "]
     @game.set_positions(positions)

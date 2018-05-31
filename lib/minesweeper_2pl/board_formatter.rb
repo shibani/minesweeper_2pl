@@ -133,9 +133,9 @@ module Minesweeper
 
     def render_normal_view(cell)
       if cell_is_revealed?(cell)
-        if cell_is_a_flag?(cell)
-          show_flag_emoji
-        elsif cell.value.is_a? Integer
+        # if cell_is_a_flag?(cell)
+        #   show_flag_emoji
+        if cell.value.is_a? Integer
           show_cell_value(cell)
         else
           show_empty

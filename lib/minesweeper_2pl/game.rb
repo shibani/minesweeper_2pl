@@ -226,14 +226,7 @@ module Minesweeper
       cell.update_flag unless cell.status == 'revealed'
     end
 
-    # def all_non_bomb_positions_are_revealed?
-    #   revealed = board_positions.each_index.select{ |i| board_positions[i].status == 'revealed' }
-    #   non_bombs = board_positions.each_index.reject{ |i| board_positions[i].content == 'B' }
-    #   ((revealed - non_bombs) + (non_bombs - revealed)).empty?
-    # end
-
     def all_bomb_positions_are_flagged?
-      # flag_positions = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
       board_flags.sort == bomb_positions.sort
     end
 
