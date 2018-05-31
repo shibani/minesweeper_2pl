@@ -121,7 +121,6 @@ module Minesweeper
     end
 
     def is_won?
-      # all_non_bomb_positions_are_revealed? && all_bomb_positions_are_flagged?
       all_bomb_positions_are_flagged?
     end
 
