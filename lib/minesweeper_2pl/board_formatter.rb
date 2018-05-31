@@ -101,7 +101,9 @@ module Minesweeper
           show_cell_value(cell)
         end
       else
-        if cell_is_a_bomb?(cell)
+        if cell_is_a_bomb?(cell) && cell_is_a_flag?(cell)
+          show_guessed_bomb
+        elsif cell_is_a_bomb?(cell)
           show_bomb_emoji
         elsif cell_is_a_flag?(cell)
           show_flag_emoji
@@ -143,17 +145,6 @@ module Minesweeper
           show_empty
         end
       end
-      # if cell_is_a_flag?(cell)
-      #   show_flag_emoji
-      # elsif cell.value.is_a? Integer
-      #   if cell_is_revealed?(cell)
-      #     show_cell_value(cell)
-      #   else
-      #     show_empty
-      #   end
-      # else
-      #   show_empty
-      # end
     end
 
     def cell_is_revealed?(cell)
@@ -180,12 +171,13 @@ module Minesweeper
       "\u{1f6a9}"
     end
 
-    def show_user_move
-      "X "
-    end
-
     def show_cell_value(cell)
       cell.value.to_s + ' '
+    end
+
+    def show_guessed_bomb
+      'BF'
+      #"\u{274C}"
     end
 
     def show_empty

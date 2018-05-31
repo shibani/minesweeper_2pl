@@ -413,6 +413,43 @@ class GameTest < Minitest::Test
     assert_equal("win", @game.check_win_or_loss)
   end
 
+  def test_that_it_can_check_if_the_game_is_won_or_lost_2
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move = [0,2, 'move']
+
+    @game.place_move(move)
+    @game.game_over = true
+
+    assert_equal('lose', @game.check_win_or_loss)
+  end
+
+  def test_that_it_a_game_is_lost_all_its_bomb_positions_are_set_to_revealed
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    @game.mark_flag_on_board(10)
+    @game.mark_flag_on_board(11)
+    move = [0,2, 'move']
+
+    @game.place_move(move)
+    @game.game_over = true
+    @game.check_win_or_loss
+
+    assert_equal('revealed', @game.board_positions[10].status)
+  end
+
   def test_that_it_sets_a_square_to_revealed_after_marking_a_move
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ " ", " ", " ", " ", " ",

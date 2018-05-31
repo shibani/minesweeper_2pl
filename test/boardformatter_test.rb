@@ -220,6 +220,24 @@ class BoardFormatterTest < Minitest::Test
     assert_equal("\u{1f4a3}", result2)
   end
 
+  def test_that_it_can_show_guessed_bombs_if_the_game_is_lost
+    positions = [ "B", "2", "0", "X", " ",
+                  " ", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "3", "0", "X", " ",
+                  "B", "2", "0", "X", " "]
+    @game.set_positions(positions)
+    @game.mark_flag_on_board(0)
+    @game.mark_flag_on_board(10)
+    @board_formatter.show_bombs = "show"
+    to_reveal = [0,1,2,3,4,5,6]
+    to_reveal.each { |cell| @game.board_positions[cell].update_cell_status }
+    board_array = @board_formatter.format_board_with_emoji(@game.board)
+
+    result = @board_formatter.get_cell_content(board_array, 10)
+    assert_equal('BF', result)
+  end
+
   def test_that_it_can_convert_the_board_array_to_show_bomb_emojis
     @board_formatter.show_bombs = "show"
     positions = [ "B", "1", "0", "X", " ",
