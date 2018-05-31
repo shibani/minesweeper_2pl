@@ -712,6 +712,26 @@ class GameTest < Minitest::Test
     assert_equal(revealed, [0,1,2,3,4,5,6,7,8,9,19])
   end
 
+  def test_that_if_a_move_is_placed_on_a_flagged_square_the_flag_is_removed
+    bomb_positions = [10, 11, 12, 13, 14]
+    positions = [ " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " ",
+                  "B", "B", "B", "B", "B",
+                  " ", " ", " ", " ", " ",
+                  " ", " ", " ", " ", " " ]
+    @game.set_bomb_positions(bomb_positions)
+    @game.set_positions(positions)
+    move1 = [0,0, "move"]
+    move2 = [4,3, "flag"]
+    move3 = [4,3, "move"]
+
+    @game.place_move(move1)
+    @game.place_move(move2)
+    @game.place_move(move3)
+
+    assert_nil(@game.board_positions[19].flag)
+  end
+
   def test_that_it_can_return_the_board_values
     bomb_positions = [10, 11, 12, 13, 14]
     positions = [ " ", " ", " ", " ", " ",
