@@ -159,7 +159,7 @@ module Minesweeper
       result = board.show_adjacent_empties_with_value(position)
       result.each do |adj_position|
         cells_to_reveal << adj_position unless board_positions[adj_position].status == 'revealed' || board_positions[adj_position].flag == 'F'
-        board_positions[adj_position].update_cell_status
+        board_positions[adj_position].update_cell_status unless board_positions[adj_position].flag == 'F'
       end
       cells_to_reveal + [position]
     end
@@ -230,7 +230,7 @@ module Minesweeper
 
     def all_bomb_positions_are_flagged?
       flags = board_positions.each_index.select{ |i| board_positions[i].flag == 'F' }
-      ((flags - bomb_positions) + (bomb_positions - flags)).empty? && flags.count == bomb_positions.count
+      ((flags - bomb_positions) + (bomb_positions - flags)).empty? && (flags.count == bomb_positions.count)
     end
 
     def first_move?
