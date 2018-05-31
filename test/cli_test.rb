@@ -119,8 +119,11 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_return_a_string_if_invalid_move
-    string = puts "That was not a valid move. Please try again."
-    assert_equal(@cli.invalid_move, string)
+    out, _err = capture_io do
+      @cli.invalid_move
+    end
+
+    assert_equal("That was not a valid move. Please try again.\n", out)
   end
 
   def test_that_it_can_return_the_game_over_message
