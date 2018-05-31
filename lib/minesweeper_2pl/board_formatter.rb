@@ -93,7 +93,9 @@ module Minesweeper
 
     def render_lost_view(cell)
       if cell_is_revealed?(cell)
-        if cell_is_a_bomb?(cell)
+        if cell_is_a_bomb?(cell) && cell_is_a_flag?(cell)
+          show_guessed_bomb
+        elsif cell_is_a_bomb?(cell)
           show_bomb_emoji
         elsif cell_is_a_flag?(cell)
           show_flag_emoji
