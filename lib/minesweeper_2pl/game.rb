@@ -103,7 +103,9 @@ module Minesweeper
           else
             mark_move_on_board(position)
           end
-          board_positions[position].update_flag if position_is_flag?(position)
+          if position_is_flag?(position) && !position_is_a_bomb?(position)
+            board_positions[position].update_flag
+          end
         end
       elsif move.last == 'flag'
         mark_flag_on_board(position)
