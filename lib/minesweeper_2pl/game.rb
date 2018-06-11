@@ -93,14 +93,14 @@ module Minesweeper
 
     def place_move(move)
       position = move_to_position(move)
+      if position_is_flag?(position) && !position_is_a_bomb?(position)
+        board_positions[position].update_flag
+      end
       if move.last == 'move'
         if first_move?
           reassign_bomb(position) if position_is_a_bomb?(position)
           mark_move_on_board(position)
         else
-          if position_is_flag?(position) && !position_is_a_bomb?(position)
-            board_positions[position].update_flag
-          end
           if position_has_a_non_zero_value?(position)
             reveal_self(position)
           else
