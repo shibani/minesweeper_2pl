@@ -44,7 +44,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -62,7 +62,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -84,7 +84,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [7,10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -125,7 +125,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -158,7 +158,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -181,7 +181,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,12,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }

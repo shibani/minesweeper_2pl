@@ -152,7 +152,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @game.board_positions[el].update_cell_status }
@@ -206,7 +206,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @game.board_positions[el].update_cell_status }
@@ -227,7 +227,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     move1 = [0,1, 'move']
     move2 = [2,2, 'move']
 
@@ -247,7 +247,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     move = [0,1, 'flag']
 
     @game.place_move(move)
@@ -283,7 +283,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @game.board_positions[el].update_cell_status }
@@ -304,7 +304,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @game.board_positions[el].update_cell_status }
@@ -368,7 +368,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @game.board_positions[el].update_cell_status }
@@ -386,7 +386,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
 
     @game.game_over = false
     @game.set_input!("display board")
@@ -407,7 +407,7 @@ class GameTest < Minitest::Test
                   " ", " ", " ", " ", " " ]
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
-    bomb_positions.each { |flag| @game.mark_flag(flag) }
+    bomb_positions.each { |flag| @game.mark_flag_on_board(flag) }
     @game.game_over = true
 
     assert_equal("win", @game.check_win_or_loss)
@@ -576,7 +576,7 @@ class GameTest < Minitest::Test
     @game.set_bomb_positions(bomb_positions)
     @game.set_positions(positions)
     flags = [5,6]
-    flags.each { |fl| @game.mark_flag(fl) }
+    flags.each { |fl| @game.mark_flag_on_board(fl) }
     result = @game.flood_fill(10)
 
     assert_equal([15,16,10], result)
@@ -775,7 +775,7 @@ class GameTest < Minitest::Test
 
     to_flag = [20,21,22,23,24]
     to_flag.each { |el|
-      @game.board_positions[el].update_flag }
+      @game.board_positions[el].add_flag }
 
     assert_equal([20,21,22,23,24], @game.board_flags)
   end

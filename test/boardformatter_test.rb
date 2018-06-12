@@ -116,11 +116,11 @@ class BoardFormatterTest < Minitest::Test
                   "B", "X", "X", "X", "X",
                   "B", "X", "X", "X", "X"]
     @game.set_positions(positions)
-    @game.board_positions[0].update_flag
-    @game.board_positions[5].update_flag
-    @game.board_positions[10].update_flag
-    @game.board_positions[15].update_flag
-    @game.board_positions[20].update_flag
+    @game.board_positions[0].add_flag
+    @game.board_positions[5].add_flag
+    @game.board_positions[10].add_flag
+    @game.board_positions[15].add_flag
+    @game.board_positions[20].add_flag
     @game.board_positions.each { |cell| cell.update_cell_status }
 
     board_array = @formatter.format_board_with_emoji(@game.board)

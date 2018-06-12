@@ -27,13 +27,13 @@ class CellTest < Minitest::Test
   end
 
   def test_that_the_cell_has_an_updateable_flag_property
-    @cell1.update_flag
+    @cell1.add_flag
     assert_equal 'F', @cell1.flag
   end
 
   def test_that_the_flag_property_can_be_unset
-    @cell1.update_flag
-    @cell1.update_flag
+    @cell1.add_flag
+    @cell1.remove_flag
     assert_nil @cell1.flag
   end
 end
