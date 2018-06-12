@@ -16,6 +16,15 @@ module Minesweeper
       input.to_i > 0 && input.to_i <= App::MAX_ROW_NUM
     end
 
+    def self.emoji_type_has_correct_format(input)
+      ['B', 'b', 'S', 's'].include?(input)
+    end
+
+    def self.return_emoji_type(input)
+      puts Messages.return_emoji_type(input)
+      input
+    end
+
     def self.player_input_has_correct_format(input)
       input =~ (/(flag|move)\s+[(\d){1,2}],\s*[(\d){1,2}]/)
     end

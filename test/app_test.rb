@@ -19,8 +19,9 @@ class AppTest < Minitest::Test
     @mock_app.game.instance_of?(Minesweeper::Game)
   end
 
-  def test_that_initialize_can_get_player_input_and_set_the_rows_and_bomb_count
+  def test_that_initialize_can_get_player_input_and_set_the_formatter_type_and_rows_and_bomb_count
     io = StringIO.new
+    io.puts "s"
     io.puts "10"
     io.puts "70"
     io.rewind
@@ -167,7 +168,7 @@ class AppTest < Minitest::Test
       @mock_app.end_game
     end
 
-    assert_equal("Game over! You win!\n", out)
+    assert_equal("Game over! You win!\n\n", out)
   end
 
   def test_end_game_can_check_if_game_is_lost_and_outputs_a_message_accordingly
@@ -190,7 +191,7 @@ class AppTest < Minitest::Test
       @mock_app.end_game
     end
 
-    assert_equal("Game over! You lose.\n", out)
+    assert_equal("Game over! You lose.\n\n", out)
   end
 
 end

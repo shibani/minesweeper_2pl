@@ -1,14 +1,17 @@
 module Minesweeper
   class Game
-    attr_accessor :board, :board_formatter, :game_over
+    attr_accessor :board, :game_over
+    attr_reader :formatter, :board_printer
 
-    def initialize(row_size, bomb_count=0)
-      board_formatter = BoardFormatter.new
+    def initialize(row_size, bomb_count=0, cat_emoji=nil)
       board = Board.new(row_size, bomb_count)
-
       self.board = board
+
       set_board_positions(row_size)
-      self.board_formatter = board_formatter
+
+      @formatter = cat_emoji ? CatEmojiFormatter.new : BoardFormatter.new
+
+      @board_printer = BoardPrinter.new
     end
 
     def row_size
@@ -78,9 +81,8 @@ module Minesweeper
     end
 
     def print_board
-      board_array = board_formatter.format_board_with_emoji(board)
-      string = board_formatter.board_to_string(board_array, board)
-      board_formatter.print_message(string)
+      board_array = formatter.format_board_with_emoji(board)
+      board_printer.print_board(board_array, board)
     end
 
     def reassign_bomb(position)
@@ -115,11 +117,11 @@ module Minesweeper
 
     def show_bombs=(msg)
       if msg == 'show'
-        board_formatter.show_bombs = 'show'
+        formatter.show_bombs = 'show'
       elsif msg == 'won'
-        board_formatter.show_bombs = 'won'
+        formatter.show_bombs = 'won'
       else
-        board_formatter.show_bombs = false
+        formatter.show_bombs = false
       end
     end
 
@@ -139,11 +141,11 @@ module Minesweeper
     def check_win_or_loss
       if game_over
         if is_won?
-          self.show_bombs = 'won'
+          formatter.show_bombs = 'won'
           print_board
           result = 'win'
         else
-          self.show_bombs = 'show'
+          formatter.show_bombs = 'show'
           print_board
           result = 'lose'
         end

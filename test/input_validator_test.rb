@@ -12,6 +12,13 @@ class InputValidatorTest < Minitest::Test
     @mock_cli = Minesweeper::MockCli.new
   end
 
+  def test_that_it_can_check_if_emoji_type_input_has_correct_format
+    assert @validator.emoji_type_has_correct_format('B')
+    assert @validator.emoji_type_has_correct_format('b')
+    assert @validator.emoji_type_has_correct_format('S')
+    assert @validator.emoji_type_has_correct_format('s')
+  end
+
   def test_that_it_can_check_if_entered_bomb_count_is_not_an_integer
     assert_output "That is not a valid bomb count. Please try again.\n" do
       simulate_stdin("test") { @cli.get_player_entered_bomb_count(100) }
@@ -25,8 +32,9 @@ class InputValidatorTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_board_size_from_the_player
-    assert_output "You have selected a 10 x 10 board. Generating board.\n\n" do
-      simulate_stdin("10") { @cli.get_player_entered_board_size }
+    assert_output "You have selected a 10 x 10 board. Generating board.\n" do
+      simulate_stdin("10") {
+        @cli.get_player_entered_board_size }
     end
   end
 

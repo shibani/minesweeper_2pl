@@ -1,5 +1,5 @@
 module Minesweeper
-  class BoardFormatter
+  class CatEmojiFormatter
 
     attr_accessor :show_bombs
 
@@ -88,15 +88,15 @@ module Minesweeper
     end
 
     def show_lost_emoji
-      "\u{1f4a3}"
+      "\u{1F640}"
     end
 
     def show_won_emoji
-      "\u{1f3c6}"
+      "\u{1F63A}"
     end
 
     def show_flag_emoji
-      "\u{1f6a9}"
+      "\u{1F364}"
     end
 
     def show_cell_value(cell)
