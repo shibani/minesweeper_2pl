@@ -102,10 +102,10 @@ module Minesweeper
         else
           if position_has_a_non_zero_value?(position)
             reveal_self(position)
-            board_positions[position].remove_flag
+            board_positions[position].remove_flag unless position_is_a_bomb?(position)
           else
             mark_move_on_board(position)
-            board_positions[position].remove_flag
+            board_positions[position].remove_flag unless position_is_a_bomb?(position)
           end
         end
       elsif move.last == 'flag'
