@@ -1,10 +1,14 @@
 # Minesweeper2pl
 
+Minesweeper2pl is
+- a command line application that you can run Minesweeper on
+- a gem that you can install and use exposed methods from to build a rails app version of the game.
+
 ## To run as a command line application
 
-Clone from GitHub
-cd into root of minesweeper_2pl directory
-run by typing in:
+- clone from GitHub
+- cd into root of minesweeper_2pl directory
+- run by typing in:
 ruby bin/minesweeper_2pl
 
 ## To install as a gem
@@ -21,7 +25,14 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+Use Minesweeper name-spaced classes to access the gem's methods.
+
+e.g. Minesweeper::Messages will access the Messages class
+and Minesweeper::Game will access the Game class within this gem.
+
+**Useful methods**
+Minesweeper::Messages.welcome
+Minesweeper::Game.new(row_size, bomb_count)
 
 ## Development
 
