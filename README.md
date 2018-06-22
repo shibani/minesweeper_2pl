@@ -7,9 +7,8 @@ Minesweeper2pl is
 ## To run as a command line application
 
 - clone from GitHub
-- cd into root of minesweeper_2pl directory
-- run by typing in:
-ruby bin/minesweeper_2pl
+- in terminal, cd into root of minesweeper_2pl directory
+- run: `ruby bin/minesweeper_2pl`
 
 ## To install as a gem
 
@@ -34,7 +33,7 @@ and Minesweeper::Game will access the Game class within this gem.
 Minesweeper::Messages.welcome
 Minesweeper::Game.new(row_size, bomb_count)
 
-## Development
+## To run tests
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
