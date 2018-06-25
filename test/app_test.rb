@@ -19,8 +19,9 @@ class AppTest < Minitest::Test
     @mock_app.game.instance_of?(Minesweeper::Game)
   end
 
-  def test_that_initialize_can_get_player_input_and_set_the_rows_and_bomb_count
+  def test_that_initialize_can_get_player_input_and_set_the_formatter_type_and_rows_and_bomb_count
     io = StringIO.new
+    io.puts "s"
     io.puts "10"
     io.puts "70"
     io.rewind
@@ -43,7 +44,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -61,7 +62,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -83,7 +84,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [7,10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -124,7 +125,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -157,7 +158,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,12,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -167,7 +168,7 @@ class AppTest < Minitest::Test
       @mock_app.end_game
     end
 
-    assert_equal("Game over! You win!\n", out)
+    assert_equal("Game over! You win!\n\n", out)
   end
 
   def test_end_game_can_check_if_game_is_lost_and_outputs_a_message_accordingly
@@ -180,7 +181,7 @@ class AppTest < Minitest::Test
     @mock_app.game.set_bomb_positions(bomb_positions)
     @mock_app.game.set_positions(positions)
     flags = [10,11,13,14]
-    flags.each { |fl| @mock_app.game.mark_flag(fl) }
+    flags.each { |fl| @mock_app.game.mark_flag_on_board(fl) }
     to_reveal = [0,1,2,3,4,5,6,7,8,9,12,15,16,17,18,19,20,21,22,23,24]
     to_reveal.each { |el|
       @mock_app.game.board_positions[el].update_cell_status }
@@ -190,7 +191,7 @@ class AppTest < Minitest::Test
       @mock_app.end_game
     end
 
-    assert_equal("Game over! You lose.\n", out)
+    assert_equal("Game over! You lose.\n\n", out)
   end
 
 end

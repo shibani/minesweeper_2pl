@@ -19,9 +19,12 @@ module Minesweeper
       @status = 'revealed'
     end
 
-    def update_flag
-      @flag = @flag.nil? ? 'F' : nil
+    def add_flag
+      @flag = 'F'
     end
 
+    def remove_flag
+      @flag = nil
+    end
   end
 end

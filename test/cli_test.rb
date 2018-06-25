@@ -16,7 +16,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_write_to_the_console
-    out, err = capture_io do
+    out, _err = capture_io do
       @cli.print("welcome to minesweeper\n")
     end
     assert_equal("welcome to minesweeper\n", out)
@@ -24,6 +24,24 @@ class CliTest < Minitest::Test
 
   def test_that_it_has_a_print_method
     assert @cli.respond_to?(:print)
+  end
+
+  def test_that_it_can_get_the_emoji_type_from_the_player
+    assert_output "You selected B for bombs.\n" do
+      simulate_stdin("b") { @cli.get_emoji_type }
+    end
+  end
+
+  def test_that_it_can_get_the_emoji_type_from_the_player
+    assert_output "You selected S, prepare for a surprise!\n" do
+      simulate_stdin("s") { @cli.get_emoji_type }
+    end
+  end
+
+  def test_that_it_can_return_message_if_input_is_invalid
+    assert_output "That was not a valid choice. Please try again.\n" do
+      simulate_stdin("y") { @cli.get_emoji_type }
+    end
   end
 
   def test_that_it_can_capture_input_from_the_player_1
@@ -63,7 +81,7 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_capture_a_bomb_count_from_the_player
-    assert_output "You selected 75. Setting bombs!\n\n" do
+    assert_output "You selected 75. Setting bombs!\n" do
       simulate_stdin("75") { @cli.get_player_entered_bomb_count(100) }
     end
   end
@@ -95,6 +113,7 @@ class CliTest < Minitest::Test
 
   def test_that_it_can_call_the_clis_start_methods
     io = StringIO.new
+    io.puts "s"
     io.puts "10"
     io.puts "70"
     io.rewind
@@ -103,7 +122,7 @@ class CliTest < Minitest::Test
     result = @mock_cli.start
     $stdin = STDIN
 
-    assert_equal([10,70], result)
+    assert_equal({ formatter: 'S', row_size: 10, bomb_count: 70 }, result)
   end
 
   def test_that_it_can_get_a_player_move
@@ -127,7 +146,12 @@ class CliTest < Minitest::Test
   end
 
   def test_that_it_can_return_the_game_over_message
-    string = "Game over! You win!"
-    assert_equal(@cli.show_game_over_message("win"), string)
+    string = "Game over! You win!\n"
+
+    out, _err = capture_io do
+      @cli.show_game_over_message("win")
+    end
+
+    assert_equal(out, string)
   end
 end

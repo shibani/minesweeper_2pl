@@ -5,20 +5,35 @@ module Minesweeper
     end
 
     def self.ask_for_move
-      string = "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
-      print(string)
+      "\nPlayer 1, make your move:\n- to place a move: enter the word 'move' followed by one digit from the header and one digit from the left column, eg. move 3,1:\n- to place (or remove) a flag: enter the word 'flag' followed by the desired coordinates eg flag 3,1\n"
+    end
+
+    def self.ask_for_emoji_type
+      "\nPlayer 1 would you like to play with traditional bombs or would you like a surprise?\nEnter B for bombs or S for surprise:\n"
+    end
+
+    def self.return_emoji_type(input)
+      if ['B', 'b'].include?(input)
+        "You selected B for bombs.\n"
+      else
+        "You selected S, prepare for a surprise!\n"
+      end
+    end
+
+    def self.invalid_emoji_type_message
+      "That was not a valid choice. Please try again."
     end
 
     def self.ask_for_row_size
-      puts "Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n"
+      "Player 1 please enter a row size for your board, any number less than or equal to 20. \n(Entering 20 will give you a 20X20 board)\n"
     end
 
     def self.ask_for_bomb_count(size)
-      puts "Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than #{(size * size * App::BOMB_PERCENT).to_i})"
+      "Player 1 please enter the number of bombs there should be on the board. \n(The number should not be more than #{(size * size * App::BOMB_PERCENT).to_i})"
     end
 
     def self.invalid_move
-      puts "That was not a valid move. Please try again."
+      "That was not a valid move. Please try again."
     end
 
     def self.invalid_bomb_count_message
@@ -26,7 +41,7 @@ module Minesweeper
     end
 
     def self.bomb_count_success_message(input)
-      puts "You selected #{input}. Setting bombs!"
+      "You selected #{input}. Setting bombs!"
     end
 
     def self.show_game_over_message(result)
@@ -42,7 +57,7 @@ module Minesweeper
     end
 
     def self.row_size_success_message(input)
-      puts "You have selected a #{input} x #{input} board. Generating board."
+      "You have selected a #{input} x #{input} board. Generating board."
     end
 
     def self.invalid_row_size_message

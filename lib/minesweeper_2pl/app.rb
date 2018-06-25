@@ -9,7 +9,7 @@ module Minesweeper
       cli = CLI.new
       self.cli = cli
       game_config = cli.start
-      game = Game.new(game_config.first, game_config.last)
+      game = Game.new(game_config[:row_size], game_config[:bomb_count], game_config[:formatter])
       self.game = game
     end
 

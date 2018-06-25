@@ -1,30 +1,39 @@
 # Minesweeper2pl
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/minesweeper_2pl`. To experiment with that code, run `bin/console` for an interactive prompt.
+Minesweeper2pl is
+- a command line application that you can run Minesweeper on
+- a gem that you can install and use exposed methods from to build a rails app version of the game.
 
-TODO: Delete this and the text above, and describe your gem
+## To run as a command line application
 
-## Installation
+- clone from GitHub
+- in terminal, cd into root of minesweeper_2pl directory
+- run: `ruby bin/minesweeper_2pl`
+
+## To install as a gem
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'minesweeper_2pl'
+gem 'minesweeper_2pl', git: 'https://github.com/shibani/minesweeper_2pl', branch:'master'
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install minesweeper_2pl
-
 ## Usage
 
-TODO: Write usage instructions here
+Use Minesweeper name-spaced classes to access the gem's methods.
 
-## Development
+e.g. Minesweeper::Messages will access the Messages class
+and Minesweeper::Game will access the Game class within this gem.
+
+**Useful methods**
+Minesweeper::Messages.welcome
+Minesweeper::Game.new(row_size, bomb_count)
+
+## To run tests
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
@@ -32,7 +41,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/minesweeper_2pl. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/shibani/minesweeper_2pl. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
