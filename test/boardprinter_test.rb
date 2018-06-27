@@ -5,7 +5,7 @@ class BoardPrinterTest < Minitest::Test
     @game = Minesweeper::Game.new(4,4)
     @game.board.bomb_positions = [2, 7, 8, 15]
     @game.formatter.show_bombs = 'show'
-    @board_array = @game.formatter.format_board_with_emoji(@game.board)
+    @board_array = @game.formatter.format_board_with_emoji(@game.board, @game.icon_style)
     @board_printer = Minesweeper::BoardPrinter.new
   end
 

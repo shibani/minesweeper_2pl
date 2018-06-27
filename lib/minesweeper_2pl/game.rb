@@ -1,7 +1,7 @@
 module Minesweeper
   class Game
     attr_accessor :board, :game_over
-    attr_reader :formatter, :board_printer
+    attr_reader :formatter, :board_printer, :icon_style
 
     def initialize(row_size, bomb_count=0, cat_emoji=nil)
       board = Board.new(row_size, bomb_count)
@@ -9,8 +9,8 @@ module Minesweeper
 
       set_board_positions(row_size)
 
-      @formatter = cat_emoji ? CatEmojiFormatter.new : BoardFormatter.new
-
+      @icon_style = cat_emoji ? CatEmoji.new : BombEmoji.new
+      @formatter = BoardFormatter.new
       @board_printer = BoardPrinter.new
     end
 
@@ -81,7 +81,7 @@ module Minesweeper
     end
 
     def print_board
-      board_array = formatter.format_board_with_emoji(board)
+      board_array = formatter.format_board_with_emoji(board, icon_style)
       board_printer.print_board(board_array, board)
     end
 

@@ -4,6 +4,7 @@ class GameTest < Minitest::Test
   def setup
     @game = Minesweeper::MockGame.new(5,5)
     @game2 = Minesweeper::MockGame.new(4,0)
+    @game3 = Minesweeper::MockGame.new(4,0,'S')
   end
 
   def test_that_it_has_a_game_class
@@ -24,6 +25,14 @@ class GameTest < Minitest::Test
 
   def test_that_initialize_can_create_a_new_boardcli
     refute_nil @game.formatter
+  end
+
+  def test_that_initialize_creates_the_icon_style
+    refute_nil @game.icon_style
+  end
+
+  def test_that_initialize_creates_the_icon_style_2
+    assert @game3.icon_style.instance_of?(Minesweeper::CatEmoji)
   end
 
   def test_that_initialize_can_set_the_rowsize

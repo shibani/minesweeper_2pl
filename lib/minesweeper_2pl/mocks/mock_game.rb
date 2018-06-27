@@ -1,8 +1,6 @@
 module Minesweeper
   class MockGame < Game
 
-    attr_accessor :board, :board_formatter, :game_over
-
     def set_input!(input)
       @input = input
     end

@@ -3,28 +3,28 @@ module Minesweeper
 
     attr_accessor :show_bombs
 
-    def format_board_with_emoji(board)
+    def format_board_with_emoji(board, emoji)
       board.positions.map do |cell|
         if show_bombs == 'show'
-          render_lost_view(cell)
+          render_lost_view(cell, emoji)
         elsif show_bombs == 'won'
-          render_won_view(cell)
+          render_won_view(cell, emoji)
         else
-          render_normal_view(cell)
+          render_normal_view(cell, emoji)
         end
       end
     end
 
     private
 
-    def render_lost_view(cell)
+    def render_lost_view(cell, emoji)
       if cell_is_revealed?(cell)
         if cell_is_a_bomb?(cell) && cell_is_a_flag?(cell)
           show_guessed_bomb
         elsif cell_is_a_bomb?(cell)
-          show_lost_emoji
+          emoji.show_lost_emoji
         elsif cell_is_a_flag?(cell)
-          show_flag_emoji
+          emoji.show_flag_emoji
         else
           show_cell_value(cell)
         end
@@ -32,32 +32,32 @@ module Minesweeper
         if cell_is_a_bomb?(cell) && cell_is_a_flag?(cell)
           show_guessed_bomb
         elsif cell_is_a_bomb?(cell)
-          show_lost_emoji
+          emoji.show_lost_emoji
         elsif cell_is_a_flag?(cell)
-          show_flag_emoji
+          emoji.show_flag_emoji
         else
           show_empty
         end
       end
     end
 
-    def render_won_view(cell)
+    def render_won_view(cell, emoji)
       if cell_is_revealed?(cell)
         if cell_is_a_bomb?(cell)
-          show_won_emoji
+          emoji.show_won_emoji
         else
           show_cell_value(cell)
         end
       else
         if cell_is_a_bomb?(cell)
-          show_won_emoji
+          emoji.show_won_emoji
         else
           show_empty
         end
       end
     end
 
-    def render_normal_view(cell)
+    def render_normal_view(cell, emoji)
       if cell_is_revealed?(cell)
         if cell_is_a_flag?(cell)
           show_cell_value(cell)
@@ -68,7 +68,7 @@ module Minesweeper
         end
       else
         if cell_is_a_flag?(cell)
-          show_flag_emoji
+          emoji.show_flag_emoji
         else
           show_empty
         end
@@ -85,18 +85,6 @@ module Minesweeper
 
     def cell_is_a_flag?(cell)
       cell.flag == 'F'
-    end
-
-    def show_lost_emoji
-      "\u{1f4a3}"
-    end
-
-    def show_won_emoji
-      "\u{1f3c6}"
-    end
-
-    def show_flag_emoji
-      "\u{1f6a9}"
     end
 
     def show_cell_value(cell)

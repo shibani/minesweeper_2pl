@@ -111,7 +111,7 @@ class CliTest < Minitest::Test
     assert_equal([10,70], result)
   end
 
-  def test_that_it_can_call_the_clis_start_methods
+  def test_that_the_start_method_returns_a_hash_for_the_game_config
     io = StringIO.new
     io.puts "s"
     io.puts "10"
