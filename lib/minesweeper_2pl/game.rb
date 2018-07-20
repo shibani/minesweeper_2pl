@@ -10,8 +10,7 @@ module Minesweeper
       set_board_positions(row_size)
 
       #@icon_style = cat_emoji ? CatEmoji.new : BombEmoji.new
-      emoji_factory = EmojiFactory.new
-      @icon_style = emoji_factory.create_emoji(cat_emoji)
+      @icon_style = EmojiFactory.new.create_emoji(cat_emoji)
 
       @formatter = BoardFormatter.new
       @board_printer = BoardPrinter.new
